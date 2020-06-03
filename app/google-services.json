@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:286456589680:android:244977bd95accee3e5b3b5",
+        "mobilesdk_app_id": "1:286456589680:android:6e0c007f1f989e95e5b3b5",
         "android_client_info": {
-          "package_name": "com.remy.pouzet.go4lunch"
+          "package_name": "remy.pouzet.go4lunch"
         }
       },
       "oauth_client": [
         {
-          "client_id": "286456589680-fv76k16pmurusiog7u4rca8crognp8at.apps.googleusercontent.com",
+          "client_id": "286456589680-mer594s0t0ov6m1sb0igfv7n15rsef0m.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.remy.pouzet.go4lunch",
+            "package_name": "remy.pouzet.go4lunch",
             "certificate_hash": "a1dbac431ce2d0d5504a9fbcb9647a4d3d2e62b1"
           }
         },
