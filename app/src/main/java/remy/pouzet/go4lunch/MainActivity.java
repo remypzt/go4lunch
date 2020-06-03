@@ -6,7 +6,6 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 						.show();
 			}
 		});
-		DrawerLayout         drawer         = findViewById(R.id.drawer_layout);
+		DrawerLayout1        drawer         = findViewById(R.id.drawer_layout);
 		NavigationView       navigationView = findViewById(R.id.nav_view);
 		BottomNavigationView navView        = findViewById(R.id.nav_view_bottom);
 		// Passing each menu ID as a set of Ids because each
