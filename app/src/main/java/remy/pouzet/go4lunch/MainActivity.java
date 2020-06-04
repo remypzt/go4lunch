@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		FloatingActionButton fab = findViewById(R.id.fab);
+		FloatingActionButton fab = findViewById(R.id.myposition);
 		fab.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -40,24 +40,22 @@ public class MainActivity extends AppCompatActivity {
 		DrawerLayout         drawer         = findViewById(R.id.drawer_layout);
 		NavigationView       navigationView = findViewById(R.id.nav_view);
 		BottomNavigationView navView        = findViewById(R.id.nav_view_bottom);
-		// Passing each menu ID as a set of Ids because each
-		// menu should be considered as top level destinations.
-		mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_tools, R.id.nav_share, R.id.nav_send)
+		
+		//Navigation drawer menu
+		mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_your_lunch, R.id.nav_settings, R.id.nav_logout)
 				.setDrawerLayout(drawer)
 				.build();
 		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 		NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 		NavigationUI.setupWithNavController(navigationView, navController);
 		
-		// Passing each menu ID as a set of Ids because each
-		// menu should be considered as top level destinations.
-		mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home, R.id.navigation_dashboard, R.id.navigation_notifications)
+		//Bottom navigation menu
+		mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_map_view, R.id.navigation_list_view, R.id.navigation_workmates)
 				.setDrawerLayout(drawer)
 				.build();
 		NavController navControllerBottom = Navigation.findNavController(this, R.id.nav_host_fragment);
 		NavigationUI.setupActionBarWithNavController(this, navControllerBottom, mAppBarConfiguration);
 		NavigationUI.setupWithNavController(navView, navControllerBottom);
-		
 	}
 	
 	@Override
