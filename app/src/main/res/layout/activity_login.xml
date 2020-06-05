@@ -45,9 +45,10 @@
             android:gravity="bottom"
             android:orientation="vertical">
 
-            <!-- BUTTON LOGIN -->
+
+            <!-- BUTTON EMAIL LOGIN -->
             <Button
-                android:id="@+id/main_activity_button_login"
+                android:id="@+id/main_activity_login_by_email"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -58,9 +59,22 @@
                 android:textColor="#fff"
                 android:textSize="@dimen/default_text_size" />
 
-            <!-- BUTTON CHAT -->
+            <!-- BUTTON FB LOGIN -->
             <Button
-                android:id="@+id/main_activity_button_chat"
+                android:id="@+id/main_activity_login_by_fb"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_large_margin"
+                android:background="@color/colorAccent"
+                android:padding="@dimen/default_large_margin"
+                android:text="@string/sign_in_with_facebook"
+                android:textColor="#fff"
+                android:textSize="@dimen/default_text_size" />
+
+            <!-- BUTTON GOOGLE LOGIN -->
+            <Button
+                android:id="@+id/main_activity_login_by_google"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
