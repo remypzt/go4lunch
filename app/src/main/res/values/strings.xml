@@ -15,5 +15,17 @@
     <string name="title_map_view" translatable="false">Map View</string>
     <string name="title_list_view" translatable="false">List View</string>
     <string name="title_workmates" translatable="false">Workmates</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="Sign_in_with_google">Sign in with google</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="find_a_nice_restaurant_and_invite_your_co_workers_for_lunch">Find a nice restaurant and invite your co-workers for lunch</string>
 </resources>
 
