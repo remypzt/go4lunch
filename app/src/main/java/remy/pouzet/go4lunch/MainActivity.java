@@ -17,13 +17,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
+
 public class MainActivity extends AppCompatActivity {
 	
-	private AppBarConfiguration mAppBarConfiguration;
+	private AppBarConfiguration  mAppBarConfiguration;
+	private ActivityLoginBinding binding;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		binding = ActivityLoginBinding.inflate(getLayoutInflater());
+		View view = binding.getRoot();
+		//setContentView(this.getFragmentLayout());
+		
 		setContentView(R.layout.activity_main);
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);

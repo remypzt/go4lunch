@@ -1,17 +1,42 @@
 package remy.pouzet.go4lunch.ui.login;
 
+import android.os.Bundle;
+import android.view.View;
+
+import androidx.annotation.Nullable;
+
 import com.firebase.ui.auth.AuthUI;
 
 import java.util.Arrays;
 
 import remy.pouzet.go4lunch.BaseActivity;
 import remy.pouzet.go4lunch.R;
+import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends BaseActivity {
+	
+	private ActivityLoginBinding binding;
 	
 	@Override
 	public int getFragmentLayout() {
 		return R.layout.activity_login;
+	}
+	
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		binding = ActivityLoginBinding.inflate(getLayoutInflater());
+		View view = binding.getRoot();
+		setContentView(view);
+		
+		//binding.main_activity_login_by_email.setText(viewModel.main_activity_login_by_email);
+		binding.main_activity_login_by_email.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View parameterView) {
+			
+			}
+			//viewModel.userClicked()
+		});
 	}
 	
 	//FOR DATA
