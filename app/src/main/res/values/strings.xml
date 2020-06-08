@@ -27,5 +27,11 @@
     <string name="Sign_in_with_google">Sign in with google</string>
     <string name="sign_in_with_facebook">Sign in with Facebook</string>
     <string name="find_a_nice_restaurant_and_invite_your_co_workers_for_lunch">Find a nice restaurant and invite your co-workers for lunch</string>
+    <string name="sign_in_with_email">Sign in with email</string>
+
+    <string name="error_authentication_canceled">Authentification annulée&#8230;</string>
+    <string name="error_no_internet">Aucune connexion internet !</string>
+    <string name="error_unknown_error">Une erreur inconnue s\'est produite&#8230;</string>
+    <string name="connection_succeed">Authentification réussie !</string>
 </resources>
 

@@ -13,9 +13,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 
@@ -34,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		FloatingActionButton fab = findViewById(R.id.myposition);
+		
+		// example of snack bar, could be usefull
+		/*
 		fab.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 						.show();
 			}
 		});
+		*/
+		
 		DrawerLayout         drawer         = findViewById(R.id.drawer_layout);
 		NavigationView       navigationView = findViewById(R.id.nav_view);
 		BottomNavigationView navView        = findViewById(R.id.nav_view_bottom);

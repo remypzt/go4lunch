@@ -47,20 +47,20 @@
 
             <!-- BUTTON EMAIL LOGIN -->
             <Button
-                android:id="@+id/main_activity_login_by_email"
+                android:id="@+id/main_activity_login_by_email_button"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/default_large_margin"
                 android:background="@color/colorAccent"
                 android:padding="@dimen/default_large_margin"
-                android:text="@string/fui_sign_in_with_email"
+                android:text="@string/sign_in_with_email"
                 android:textColor="#fff"
                 android:textSize="@dimen/default_text_size" />
 
             <!-- BUTTON FB LOGIN -->
             <Button
-                android:id="@+id/main_activity_login_by_fb"
+                android:id="@+id/main_activity_login_by_fb_button"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
 
             <!-- BUTTON GOOGLE LOGIN -->
             <Button
-                android:id="@+id/main_activity_login_by_google"
+                android:id="@+id/main_activity_login_by_google_button"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
