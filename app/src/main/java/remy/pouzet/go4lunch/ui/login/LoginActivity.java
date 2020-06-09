@@ -36,7 +36,7 @@ public class LoginActivity extends BaseActivity {
 		CoordinatorLayout coordinatorlayout = findViewById(R.id.main_activity_coordinator_layout);
 		
 		loginByEmail();
-		
+		loginByGoogle();
 		// This part of code are commented in waiting to resolve how to use propely view binding for replace fid and butterknife
 		//binding.main_activity_login_by_email.setText(viewModel.main_activity_login_by_email);
 		/*binding.main_activity_login_by_email.setOnClickListener(new View.OnClickListener() {
@@ -56,18 +56,39 @@ public class LoginActivity extends BaseActivity {
 		mButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startSignInActivity();
+				startEmailSignInActivity();
+			}
+		});
+	}
+	
+	public void loginByGoogle() {
+		Button mButton = findViewById(R.id.main_activity_login_by_google_button);
+		mButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startGoogleSignInActivity();
 			}
 		});
 	}
 	
 	// 2 - Launch Sign-In Activity
-	private void startSignInActivity() {
+	private void startEmailSignInActivity() {
 		startActivityForResult(AuthUI
 				                       .getInstance()
 				                       .createSignInIntentBuilder()
 				                       .setTheme(R.style.LoginTheme)
 				                       .setAvailableProviders(Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build()))
+				                       .setIsSmartLockEnabled(false, true)
+				                       .setLogo(R.drawable.ic_logo_auth)
+				                       .build(), RC_SIGN_IN);
+	}
+	
+	private void startGoogleSignInActivity() {
+		startActivityForResult(AuthUI
+				                       .getInstance()
+				                       .createSignInIntentBuilder()
+				                       .setTheme(R.style.LoginTheme)
+				                       .setAvailableProviders(Arrays.asList(new AuthUI.IdpConfig.GoogleBuilder().build()))
 				                       .setIsSmartLockEnabled(false, true)
 				                       .setLogo(R.drawable.ic_logo_auth)
 				                       .build(), RC_SIGN_IN);
