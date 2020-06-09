@@ -53,6 +53,10 @@ public class LoginActivity extends BaseActivity {
 		return R.layout.activity_login;
 	}
 	
+	// --------------------
+	// ACTIONS
+	// --------------------
+	
 	public void loginByEmail() {
 		Button mButton = findViewById(R.id.main_activity_login_by_email_button);
 		mButton.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +87,7 @@ public class LoginActivity extends BaseActivity {
 		});
 	}
 	
-	// 2 - Launch Sign-In Activity
+	//  Launch Sign-In Activity
 	private void startEmailSignInActivity() {
 		startActivityForResult(AuthUI
 				                       .getInstance()
@@ -117,18 +121,9 @@ public class LoginActivity extends BaseActivity {
 				                       .build(), RC_SIGN_IN);
 	}
 	
-	// --------------------
-	// ACTIONS
-	// --------------------
 	
 	
 	
-	/*@OnClick(R.id.main_activity_login_by_email_button)
-		public void onClick(View parameterView) {
-			// 3 - Launch Sign-In Activity when user clicked on Login Button
-		Toast.makeText(this, "test1",Toast.LENGTH_LONG);
-		this.startSignInActivity();
-	}*/
 	
 	// --------------------
 	// NAVIGATION
@@ -139,7 +134,7 @@ public class LoginActivity extends BaseActivity {
 	                                int resultCode,
 	                                Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		// 4 - Handle SignIn Activity response on activity result
+		//  Handle SignIn Activity response on activity result
 		this.handleResponseAfterSignIn(requestCode, resultCode, data);
 	}
 	
@@ -147,7 +142,7 @@ public class LoginActivity extends BaseActivity {
 	// UI
 	// --------------------
 	
-	// 3 - Method that handles response after SignIn Activity close
+	//  Method that handles response after SignIn Activity close
 	private void handleResponseAfterSignIn(int requestCode,
 	                                       int resultCode,
 	                                       Intent data) {

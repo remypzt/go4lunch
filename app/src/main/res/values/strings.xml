@@ -37,5 +37,6 @@
     <!-- FACEBOOK PURPOSE -->
     <string name="facebook_application_id" translatable="false">1384391111948556</string>
     <string name="facebook_login_protocol_scheme" ignore="UnusedResources" translatable="false">fb1384391111948556</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
 
