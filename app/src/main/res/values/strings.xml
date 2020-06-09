@@ -33,5 +33,9 @@
     <string name="error_no_internet">Aucune connexion internet !</string>
     <string name="error_unknown_error">Une erreur inconnue s\'est produite&#8230;</string>
     <string name="connection_succeed">Authentification réussie !</string>
+
+    <!-- FACEBOOK PURPOSE -->
+    <string name="facebook_application_id" translatable="false">1384391111948556</string>
+    <string name="facebook_login_protocol_scheme" ignore="UnusedResources" translatable="false">fb1384391111948556</string>
 </resources>
 
