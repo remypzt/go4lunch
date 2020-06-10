@@ -16,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Arrays;
 
 import remy.pouzet.go4lunch.BaseActivity;
+import remy.pouzet.go4lunch.MainActivity;
 import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 
@@ -138,10 +139,6 @@ public class LoginActivity extends BaseActivity {
 		this.handleResponseAfterSignIn(requestCode, resultCode, data);
 	}
 	
-	// --------------------
-	// UI
-	// --------------------
-	
 	//  Method that handles response after SignIn Activity close
 	private void handleResponseAfterSignIn(int requestCode,
 	                                       int resultCode,
@@ -152,6 +149,8 @@ public class LoginActivity extends BaseActivity {
 		if (requestCode == RC_SIGN_IN) {
 			if (resultCode == RESULT_OK) { // SUCCESS
 				showSnackBar(coordinatorlayout, getString(R.string.connection_succeed));
+				startMainActivity();
+				
 			} else { // ERRORS
 				if (response == null) {
 					showSnackBar(coordinatorlayout, getString(R.string.error_authentication_canceled));
@@ -166,6 +165,15 @@ public class LoginActivity extends BaseActivity {
 				}
 			}
 		}
+	}
+	
+	// --------------------
+	// UI
+	// --------------------
+	
+	private void startMainActivity() {
+		Intent mainAcitvityIntent = new Intent(this, MainActivity.class);
+		startActivity(mainAcitvityIntent);
 	}
 	
 	// --------------------
