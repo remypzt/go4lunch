@@ -28,7 +28,7 @@ public class YourLunchFragment extends Fragment {
 		final TextView textView = root.findViewById(R.id.text_map_view);
 		mYourLunchViewModel
 				.getText()
-				.observe(this, new Observer<String>() {
+				.observe(requireActivity(), new Observer<String>() {
 					@Override
 					public void onChanged(@Nullable String s) {
 						textView.setText(s);

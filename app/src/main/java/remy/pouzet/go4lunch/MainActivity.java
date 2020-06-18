@@ -31,13 +31,14 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
-import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
+import remy.pouzet.go4lunch.databinding.ActivityMainBinding;
 import remy.pouzet.go4lunch.ui.mapview.MapViewFragment;
 
 public class MainActivity extends AppCompatActivity {
 	
-	private AppBarConfiguration  mAppBarConfiguration;
-	private ActivityLoginBinding binding;
+	private AppBarConfiguration mAppBarConfiguration;
+	//private ActivityLoginBinding binding;
+	private ActivityMainBinding bindingMainActivity;
 	
 	int                         PERMISSION_ID = 44;
 	FusedLocationProviderClient mFusedLocationClient;
@@ -56,10 +57,9 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		binding = ActivityLoginBinding.inflate(getLayoutInflater());
-		View view = binding.getRoot();
-		//setContentView(this.getFragmentLayout());
-		setContentView(R.layout.activity_main);
+		bindingMainActivity = ActivityMainBinding.inflate(getLayoutInflater());
+		View view = bindingMainActivity.getRoot();
+		setContentView(view);
 		
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -69,26 +69,17 @@ public class MainActivity extends AppCompatActivity {
 		getLastLocation();
 		
 		// example of snack bar, could be usefull
-		/*
-		fab.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				Snackbar
-						.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-						.setAction("Action", null)
-						.show();
-			}
-		});
-		*/
-		
-		Bundle bundle = new Bundle();
-		
-		double lat = latDouble;
-		double lon = 33;
-		bundle.putDouble("lat", lat);
-		bundle.putDouble("lon", lon);
-		MapViewFragment fragInfo = new MapViewFragment();
-		fragInfo.setArguments(bundle);
+      /*
+      fab.setjava-scriptListener(new View.java-scriptListener() {
+         @Override
+         public void java-script(View view) {
+            Snackbar
+                  .make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                  .setAction("Action", null)
+                  .show();
+         }
+      });
+      */
 		
 		DrawerLayout         drawer         = findViewById(R.id.drawer_layout);
 		NavigationView       navigationView = findViewById(R.id.nav_view);
@@ -124,10 +115,6 @@ public class MainActivity extends AppCompatActivity {
 		return true;
 	}
 	
-	// --------------------
-	// Maps permissions
-	// --------------------
-	
 	//create a method named getLastLocation() which will use to API and return the last recorder location information of the device.
 	// Also this method will check first if our permission is granted or not and if the location setting is turned on.
 	@SuppressLint("MissingPermission")
@@ -142,27 +129,30 @@ public class MainActivity extends AppCompatActivity {
 								// Logic to handle location object
 								latDouble = location.getLatitude();
 								lonDouble = location.getLongitude();
+								
+								Bundle bundle = new Bundle();
+								
+							/*	String lat = Double.toString(latDouble);
+								String lon = Double.toString(lonDouble);
+								bundle.putString("lat", lat);
+								bundle.putString("lon", lon);*/
+								
+								double lat = latDouble;
+								double lon = lonDouble;
+								bundle.putDouble("lat", lat);
+								bundle.putDouble("lon", lon);
+								
+								MapViewFragment fragInfo = new MapViewFragment();
+								// fragInfo.setArguments(bundle);
+								
+								updateView(location);
 							}
 							// Got last known location. In some rare situations this can be null.
 							else {
 								requestNewLocationData();
+								
 							}
 						});
-				
-				/*mFusedLocationClient
-						.getLastLocation()
-						.addOnCompleteListener(this, new OnCompleteListener<Location>() {
-							@Override
-							public void onComplete(@NonNull Task<Location> task) {
-								Location location = task.getResult();
-								if (location == null) {
-									requestNewLocationData();
-								} else {
-									latDouble = location.getLatitude();
-									lonDouble = location.getLongitude();
-								}
-							}
-						});*/
 			} else {
 				Toast
 						.makeText(this, "Turn on location", Toast.LENGTH_LONG)
@@ -173,6 +163,18 @@ public class MainActivity extends AppCompatActivity {
 		} else {
 			requestPermissions();
 		}
+	}
+	
+	// --------------------
+	// Maps permissions
+	// --------------------
+	
+	private void updateView(Location location) {
+		Context      context;
+		CharSequence text;
+		Toast        ma = Toast.makeText(this, "text", Toast.LENGTH_SHORT);
+		// bindingMainActivity.latTextView.setText(Double.toString(location.getLatitude()));
+		
 	}
 	
 	// This method will tell us whether or not the user grant us to access ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION.
@@ -228,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
 		if (requestCode == PERMISSION_ID) {
 			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 				// Granted. Start getting the location information
+				//getLastLocation();
 			}
 		}
 	}
