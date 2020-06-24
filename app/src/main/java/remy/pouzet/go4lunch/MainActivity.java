@@ -1,85 +1,50 @@
 package remy.pouzet.go4lunch;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Looper;
-import android.provider.Settings;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
-import remy.pouzet.go4lunch.databinding.ActivityMainBinding;
-import remy.pouzet.go4lunch.ui.mapview.MapViewFragment;
+import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 
 public class MainActivity extends AppCompatActivity {
 	
-	private AppBarConfiguration mAppBarConfiguration;
-	//private ActivityLoginBinding binding;
-	private ActivityMainBinding bindingMainActivity;
-	
-	int                         PERMISSION_ID = 44;
-	FusedLocationProviderClient mFusedLocationClient;
-	
-	double latDouble, lonDouble;
-	// get the location update, we set the latitude and longitude values in our TextViews.
-	private LocationCallback mLocationCallback = new LocationCallback() {
-		@Override
-		public void onLocationResult(LocationResult locationResult) {
-			Location mLastLocation = locationResult.getLastLocation();
-			latDouble = mLastLocation.getLatitude();
-			lonDouble = mLastLocation.getLongitude();
-		}
-	};
+	private AppBarConfiguration  mAppBarConfiguration;
+	private ActivityLoginBinding binding;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		bindingMainActivity = ActivityMainBinding.inflate(getLayoutInflater());
-		View view = bindingMainActivity.getRoot();
-		setContentView(view);
+		binding = ActivityLoginBinding.inflate(getLayoutInflater());
+		View view = binding.getRoot();
+		// setContentView(this.getFragmentLayout());
 		
+		setContentView(R.layout.activity_main);
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		
-		mFusedLocationClient = LocationServices.getFusedLocationProviderClient(MainActivity.this);
-		
-		getLastLocation();
-		
 		// example of snack bar, could be usefull
-      /*
-      fab.setjava-scriptListener(new View.java-scriptListener() {
-         @Override
-         public void java-script(View view) {
-            Snackbar
-                  .make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                  .setAction("Action", null)
-                  .show();
-         }
-      });
-      */
+		/*
+		fab.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Snackbar
+						.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+						.setAction("Action", null)
+						.show();
+			}
+		});
+		*/
 		
 		DrawerLayout         drawer         = findViewById(R.id.drawer_layout);
 		NavigationView       navigationView = findViewById(R.id.nav_view);
@@ -113,125 +78,5 @@ public class MainActivity extends AppCompatActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.bottom_nav_menu, menu);
 		return true;
-	}
-	
-	//create a method named getLastLocation() which will use to API and return the last recorder location information of the device.
-	// Also this method will check first if our permission is granted or not and if the location setting is turned on.
-	@SuppressLint("MissingPermission")
-	private void getLastLocation() {
-		if (checkPermissions()) {
-			if (isLocationEnabled()) {
-				mFusedLocationClient
-						.getLastLocation()
-						.addOnSuccessListener(MainActivity.this, location -> {
-							
-							if (location != null) {
-								// Logic to handle location object
-								latDouble = location.getLatitude();
-								lonDouble = location.getLongitude();
-								
-								Bundle bundle = new Bundle();
-								
-							/*	String lat = Double.toString(latDouble);
-								String lon = Double.toString(lonDouble);
-								bundle.putString("lat", lat);
-								bundle.putString("lon", lon);*/
-								
-								double lat = latDouble;
-								double lon = lonDouble;
-								bundle.putDouble("lat", lat);
-								bundle.putDouble("lon", lon);
-								
-								MapViewFragment fragInfo = new MapViewFragment();
-								// fragInfo.setArguments(bundle);
-								
-								updateView(location);
-							}
-							// Got last known location. In some rare situations this can be null.
-							else {
-								requestNewLocationData();
-								
-							}
-						});
-			} else {
-				Toast
-						.makeText(this, "Turn on location", Toast.LENGTH_LONG)
-						.show();
-				Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-				startActivity(intent);
-			}
-		} else {
-			requestPermissions();
-		}
-	}
-	
-	// --------------------
-	// Maps permissions
-	// --------------------
-	
-	private void updateView(Location location) {
-		Context      context;
-		CharSequence text;
-		Toast        ma = Toast.makeText(this, "text", Toast.LENGTH_SHORT);
-		// bindingMainActivity.latTextView.setText(Double.toString(location.getLatitude()));
-		
-	}
-	
-	// This method will tell us whether or not the user grant us to access ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION.
-	private boolean checkPermissions() {
-		return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-	}
-	
-	// This will check if the user has turned on location from the setting, Cause user may grant the app to user location but if the location setting is off then it'll be of no use.
-	private boolean isLocationEnabled() {
-		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-	}
-	
-	// cases when the location == null, we called a new method requestNewLocationData() which will record the location information in runtime.
-	@SuppressLint("MissingPermission")
-	private void requestNewLocationData() {
-		
-		LocationRequest mLocationRequest = new LocationRequest();
-		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-		mLocationRequest.setInterval(0);
-		mLocationRequest.setFastestInterval(0);
-		mLocationRequest.setNumUpdates(1);
-		
-		mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-		mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-		
-	}
-	
-	// --------------------
-	// Get location
-	// --------------------
-	
-	// This method will request our necessary permissions to the user if they are not already granted.
-	private void requestPermissions() {
-		ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
-	}
-	
-	@Override
-	public void onResume() {
-		super.onResume();
-		if (checkPermissions()) {
-			getLastLocation();
-		}
-		
-	}
-	
-	// This method is called when a user Allow or Deny our requested permissions. So it will help us to move forward if the permissions are granted.
-	@Override
-	public void onRequestPermissionsResult(int requestCode,
-	                                       String[] permissions,
-	                                       int[] grantResults) {
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		if (requestCode == PERMISSION_ID) {
-			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-				// Granted. Start getting the location information
-				//getLastLocation();
-			}
-		}
 	}
 }
