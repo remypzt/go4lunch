@@ -1,9 +1,9 @@
 package remy.pouzet.go4lunch.ui.mapview;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
+import android.annotation.SuppressLint;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,28 +11,37 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
+import remy.pouzet.go4lunch.GetNearbyPlaces;
 import remy.pouzet.go4lunch.R;
 
-public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener, OnMapReadyCallback {
+public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener
+		//   , OnMapReadyCallback
+{
 	
-	double latDouble;
-	double lonDouble;
+	// ------------------ Variables ------------------- //
+	
 	private MapViewViewModel mMapViewViewModel;
-	private GoogleMap        mMap;
-	private MapView          mapView;
+	FusedLocationProviderClient mFusedLocationClient;
+	String                      restaurant = "restaurant";
+	private GoogleMap mMap;
+	private MapView   mapView;
+	private int       ProximityRadius = 100;
+	private double    latitude, longitude;
 	
-	private OnMapReadyCallback callback = new OnMapReadyCallback() {
+	// ------------------ LifeCycle ------------------- //
+	private OnMapReadyCallback callback         = new OnMapReadyCallback() {
 		
 		//
 		//Manipulates the map once available.
@@ -43,18 +52,33 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
 		//install it inside the SupportMapFragment. This method will only be triggered once the
 		//user has installed Google Play services and returned to the app.
 		//
+		
+		@SuppressLint("MissingPermission")
+		//TODO ask for permission
 		@Override
-		public void onMapReady(GoogleMap googleMap) {
+		public void onMapReady(GoogleMap map) {
+			mMap = map;
+			map.setMyLocationEnabled(true);
 			
-			latDouble = 25;
-			lonDouble = 22;
-			
-			LatLng userLocation = new LatLng(lonDouble, latDouble);
-			
-			googleMap.addMarker(new MarkerOptions()
-					                    .position(userLocation)
-					                    .title("Marker in user location"));
-			googleMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
+		}
+	};
+	private LocationCallback   locationCallback = new LocationCallback() {
+		@Override
+		public void onLocationResult(LocationResult locationResult) {
+			if (locationResult == null) {
+				return;
+			}
+			for (Location location : locationResult.getLocations()) {
+				if (location != null) {
+					Log.e("MapViewFragment", "latitude: " + location.getLatitude() + " - longitude: " + location.getLongitude());
+					latitude  = location.getLatitude();
+					longitude = location.getLongitude();
+					
+					// clear all previous markers
+					mMap.clear();
+					DisplaysNearbyRestaurant();
+				}
+			}
 		}
 	};
 	
@@ -64,16 +88,14 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
 	                         @Nullable ViewGroup container,
 	                         @Nullable Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.fragment_map_view, container, false);
-
 		
-		
-		
+		//TODO understand if I still need this part of code
 	/*	mMapViewViewModel = ViewModelProviders
 				.of(this)
 				.get(MapViewViewModel.class);
 		View           root     = inflater.inflate(R.layout.fragment_map_view, container, false);
 		final TextView textView = root.findViewById(R.id.text_map_view);
-		
+
 		mMapViewViewModel
 				.getText()
 				.observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -86,25 +108,32 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
 		
 	}
 	
+	// ------------------ Functions ------------------- //
+	
+	@SuppressLint("MissingPermission")
+	//TODO ask for permission
 	@Override
-	public void onMapReady(GoogleMap map) {
-		mMap = map;
-		// TODO: Before enabling the My Location layer, you must request
-		// location permission from the user. This sample does not include
-		// a request for location permission.
-		if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-			// TODO: Consider calling
-			//    ActivityCompat#requestPermissions
-			// here to request the missing permissions, and then overriding
-			//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-			//                                          int[] grantResults)
-			// to handle the case where the user grants the permission. See the documentation
-			// for ActivityCompat#requestPermissions for more details.
-			return;
+	public void onViewCreated(@NonNull View view,
+	                          @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+		if (mapFragment != null) {
+			mapFragment.getMapAsync(callback);
 		}
-		mMap.setMyLocationEnabled(true);
-		mMap.setOnMyLocationButtonClickListener(this);
-		mMap.setOnMyLocationClickListener(this);
+		
+		mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
+		LocationRequest locationRequest = LocationRequest.create();
+		locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+		locationRequest.setInterval(20 * 1000);
+		
+		mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+	}
+	
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		
+		mFusedLocationClient.removeLocationUpdates(locationCallback);
 	}
 	
 	@Override
@@ -124,14 +153,32 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
 		return false;
 	}
 	
-	@Override
-	public void onViewCreated(@NonNull View view,
-	                          @Nullable Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-		if (mapFragment != null) {
-			mapFragment.getMapAsync(callback);
-		}
+	// ------------------ Callbacks ------------------- //
+	
+	public void DisplaysNearbyRestaurant() {
+		Object[]        transferData    = new Object[2];
+		String          url             = getUrl(latitude, longitude, restaurant);
+		GetNearbyPlaces getNearbyPlaces = new GetNearbyPlaces();
+		transferData[0] = mMap;
+		transferData[1] = url;
+		getNearbyPlaces.execute(transferData);
+		Toast
+				.makeText(requireContext(), "passing by DisplaysNearbyRestaurant", Toast.LENGTH_SHORT)
+				.show();
+		
+	}
+	
+	// use for DisplaysNearbyRestaurant
+	private String getUrl(double latitude,
+	                      double longitude,
+	                      String restaurant) {
+		StringBuilder googleURL = new StringBuilder("https://maps.googleapis.com/maps/api/place/textsearch/json?");
+		googleURL.append("location=" + latitude + "," + longitude);
+		googleURL.append("&radius=" + ProximityRadius);
+		googleURL.append("&type=" + restaurant);
+		googleURL.append("&sensor=true");
+		googleURL.append("&key=" + "AIzaSyCwOvrDss4VieCkqr-66cV3FOVNLa20yNs");
+		return googleURL.toString();
 	}
 	
 }
