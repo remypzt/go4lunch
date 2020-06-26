@@ -28,12 +28,12 @@ public class MainActivity extends AppCompatActivity {
 	//------------------------------------------------------//
 	// ------------------   Variables   ------------------- //
 	//------------------------------------------------------//
-	DrawerLayout drawer;
+	
 	private ActivityLoginBinding binding;
+	DrawerLayout drawer;
+	private AppBarConfiguration mAppBarConfiguration;
 	NavigationView       navigationView;
 	BottomNavigationView navView;
-	
-	private AppBarConfiguration mAppBarConfiguration;
 	
 	//------------------------------------------------------//
 	// ------------------   LifeCycle   ------------------- //
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 		navigationDrawerNavigationInitialize();
 		bottomNavigationInitialize();
 	}
+	
 	//------------------------------------------------------//
 	// ------------------Navigation & UI------------------- //
 	//------------------------------------------------------//
