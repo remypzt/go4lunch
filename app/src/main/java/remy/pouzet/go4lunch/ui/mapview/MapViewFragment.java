@@ -25,17 +25,18 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 import remy.pouzet.go4lunch.GetNearbyPlaces;
 import remy.pouzet.go4lunch.R;
-
+//------------------------------------------------------//
 // ------------------    Adapter    ------------------- //
 // ------------------      Menu     ------------------- //
 // ------------------ Miscellaneous ------------------- //
 // ------------------     Intent    ------------------- //
-// ------------------     Navigation & UI    ------------------- //
+// ------------------Navigation & UI------------------- //
+//------------------------------------------------------//
 
 public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
-	
-	// ------------------   Variables   ------------------- //
-	
+	//--------------------------------------------------//
+	// ------------------   Variables   --------------- //
+	//--------------------------------------------------//
 	private MapViewViewModel mMapViewViewModel;
 	FusedLocationProviderClient mFusedLocationClient;
 	String                      restaurant = "restaurant";
@@ -44,8 +45,9 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
 	private int       ProximityRadius = 100;
 	private double    latitude, longitude;
 	
+	//--------------------------------------------------//
 	// ------------------ LifeCycle ------------------- //
-	
+	//--------------------------------------------------//
 	@Nullable
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater,
@@ -71,7 +73,6 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
 		return root;*/
 		
 	}
-	
 
 	@SuppressLint("MissingPermission")
 	//TODO ask for permission
@@ -99,9 +100,10 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
 		mFusedLocationClient.removeLocationUpdates(locationCallback);
 	}
 	
-	// ------------------ Functions ------------------- //
+	//------------------------------------------------------//
+	// ------------------   Callbacks   ------------------- //
+	//------------------------------------------------------//
 	
-	// ------------------ Callbacks ------------------- //
 	private OnMapReadyCallback callback         = new OnMapReadyCallback() {
 		
 		//
@@ -143,6 +145,9 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
 		}
 	};
 	
+	//------------------------------------------------------//
+	// ------------------   Functions   ------------------- //
+	//------------------------------------------------------//
 	@Override
 	public void onMyLocationClick(@NonNull Location location) {
 		Toast

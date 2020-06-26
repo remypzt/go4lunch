@@ -21,12 +21,14 @@ import remy.pouzet.go4lunch.R;
 // ------------------ Miscellaneous ------------------- //
 
 public class LogoutFragment extends Fragment {
-	
+	//------------------------------------------------------//
 	// ------------------   Variables   ------------------- //
+	//------------------------------------------------------//
 	
 	private LogoutViewModel mLogoutViewModel;
-	
+	//------------------------------------------------------//
 	// ------------------   LifeCycle   ------------------- //
+	//------------------------------------------------------//
 	
 	public View onCreateView(@NonNull LayoutInflater inflater,
 	                         ViewGroup container,

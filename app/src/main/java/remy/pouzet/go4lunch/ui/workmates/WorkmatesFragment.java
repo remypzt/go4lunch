@@ -20,15 +20,17 @@ import remy.pouzet.go4lunch.R;
 // ------------------      Menu     ------------------- //
 // ------------------ Miscellaneous ------------------- //
 // ------------------     Intent    ------------------- //
-// ------------------     Navigation & UI    ------------------- //
+// ------------------Navigation & UI------------------- //
 
 public class WorkmatesFragment extends Fragment {
-	
+	//------------------------------------------------------//
 	// ------------------   Variables   ------------------- //
+	//------------------------------------------------------//
 	
 	private WorkmatesViewModel mWorkmatesViewModel;
-	
+	//------------------------------------------------------//
 	// ------------------   LifeCycle   ------------------- //
+	//------------------------------------------------------//
 	
 	public View onCreateView(@NonNull LayoutInflater inflater,
 	                         ViewGroup container,

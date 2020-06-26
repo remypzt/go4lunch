@@ -17,6 +17,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 
+//------------------------------------------------------//
 // ------------------   Functions   ------------------- //
 // ------------------   Callbacks   ------------------- //
 // ------------------    Adapter    ------------------- //
@@ -24,14 +25,19 @@ import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 
 public class MainActivity extends AppCompatActivity {
 	
+	//------------------------------------------------------//
+	// ------------------   Variables   ------------------- //
+	//------------------------------------------------------//
 	DrawerLayout drawer;
 	private ActivityLoginBinding binding;
 	NavigationView       navigationView;
 	BottomNavigationView navView;
-	// ------------------   Variables   ------------------- //
+	
 	private AppBarConfiguration mAppBarConfiguration;
 	
+	//------------------------------------------------------//
 	// ------------------   LifeCycle   ------------------- //
+	//------------------------------------------------------//
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,8 +52,10 @@ public class MainActivity extends AppCompatActivity {
 		navigationDrawerNavigationInitialize();
 		bottomNavigationInitialize();
 	}
+	//------------------------------------------------------//
+	// ------------------Navigation & UI------------------- //
+	//------------------------------------------------------//
 	
-	// ------------------     Navigation & UI    ------------------- //
 	@Override
 	public boolean onSupportNavigateUp() {
 		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -79,7 +87,9 @@ public class MainActivity extends AppCompatActivity {
 		NavigationUI.setupWithNavController(navView, navControllerBottom);
 	}
 	
+	//------------------------------------------------------//
 	// ------------------      Menu     ------------------- //
+	//------------------------------------------------------//
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -87,7 +97,10 @@ public class MainActivity extends AppCompatActivity {
 		return true;
 	}
 	
+	//------------------------------------------------------//
 	// ------------------ Miscellaneous ------------------- //
+	//------------------------------------------------------//
+	
 	// example of snack bar, could be usefull
 //
 //		fab.setOnClickListener(new View.OnClickListener() {

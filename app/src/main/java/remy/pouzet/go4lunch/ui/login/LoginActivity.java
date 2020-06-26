@@ -20,24 +20,29 @@ import remy.pouzet.go4lunch.MainActivity;
 import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 
+//------------------------------------------------------//
 // ------------------   Functions   ------------------- //
 // ------------------   Callbacks   ------------------- //
 // ------------------    Adapter    ------------------- //
 // ------------------      Menu     ------------------- //
 // ------------------ Miscellaneous ------------------- //
 // ------------------     Intent    ------------------- //
-// ------------------     Navigation & UI    ------------------- //
+// ------------------Navigation & UI------------------- //
 
 public class LoginActivity extends BaseActivity {
 
+//------------------------------------------------------//
 // ------------------   Variables   ------------------- //
+// ------------------------------------------------------//
 	
 	//FOR DATA
 	private static final int RC_SIGN_IN = 123;
 	
 	private ActivityLoginBinding binding;
 
+//------------------------------------------------------//
 // ------------------   LifeCycle   ------------------- //
+//------------------------------------------------------//
 	
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,12 +66,15 @@ public class LoginActivity extends BaseActivity {
 		});*/
 	}
 	
+	//TODO is that a lifecycle part ?
 	@Override
 	public int getFragmentLayout() {
 		return R.layout.activity_login;
 	}
 
+//------------------------------------------------------//
 // ------------------   Functions   ------------------- //
+//------------------------------------------------------//
 	
 	public void loginByEmail() {
 		Button mButton = findViewById(R.id.main_activity_login_by_email_button);
@@ -98,7 +106,9 @@ public class LoginActivity extends BaseActivity {
 		});
 	}
 
+//------------------------------------------------------//
 // ------------------     Intent    ------------------- //
+//------------------------------------------------------//
 	
 	//  Launch Sign-In Activity
 	private void startEmailSignInActivity() {
@@ -139,8 +149,9 @@ public class LoginActivity extends BaseActivity {
 		Intent mainAcitvityIntent = new Intent(this, MainActivity.class);
 		startActivity(mainAcitvityIntent);
 	}
-
-// ------------------     Navigation & UI    ------------------- //
+//------------------------------------------------------//
+// ------------------Navigation & UI------------------- //
+//------------------------------------------------------//
 	
 	@Override
 	protected void onActivityResult(int requestCode,
@@ -179,7 +190,9 @@ public class LoginActivity extends BaseActivity {
 		}
 	}
 	
+	//------------------------------------------------------//
 	// ------------------ Miscellaneous ------------------- //
+	//------------------------------------------------------//
 	
 	// --------------------
 	// UTILS

@@ -12,6 +12,8 @@ import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 /**
  * Created by Rémy on 12/01/2018.
  */
+
+//------------------------------------------------------//
 // ------------------   Variables   ------------------- //
 // ------------------   LifeCycle   ------------------- //
 // ------------------   Functions   ------------------- //
@@ -20,7 +22,8 @@ import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 // ------------------      Menu     ------------------- //
 // ------------------ Miscellaneous ------------------- //
 // ------------------     Intent    ------------------- //
-// ------------------     Navigation & UI    ------------------- //
+// ------------------Navigation & UI------------------- //
+//------------------------------------------------------//
 
 public abstract class BaseActivity extends AppCompatActivity {
     

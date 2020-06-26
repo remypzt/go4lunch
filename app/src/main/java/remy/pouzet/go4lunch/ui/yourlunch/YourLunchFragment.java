@@ -20,14 +20,16 @@ import remy.pouzet.go4lunch.R;
 // ------------------      Menu     ------------------- //
 // ------------------ Miscellaneous ------------------- //
 // ------------------     Intent    ------------------- //
-// ------------------     Navigation & UI    ------------------- //
+// ------------------Navigation & UI------------------- //
 
 public class YourLunchFragment extends Fragment {
-	
+	//------------------------------------------------------//
 	// ------------------   Variables   ------------------- //
+	//------------------------------------------------------//
 	private YourLunchViewModel mYourLunchViewModel;
-	
+	//------------------------------------------------------//
 	// ------------------   LifeCycle   ------------------- //
+	//------------------------------------------------------//
 	
 	public View onCreateView(@NonNull LayoutInflater inflater,
 	                         ViewGroup container,
