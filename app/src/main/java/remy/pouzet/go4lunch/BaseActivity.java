@@ -26,12 +26,14 @@ import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 //------------------------------------------------------//
 
 public abstract class BaseActivity extends AppCompatActivity {
-    
+    //------------------------------------------------------//
     // ------------------   Variables   ------------------- //
+    //------------------------------------------------------//
     
     private ActivityLoginBinding binding;
-    
+    //------------------------------------------------------//
     // ------------------   LifeCycle   ------------------- //
+    //------------------------------------------------------//
     
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,8 +46,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     
     //TODO what's this method ?
     public abstract int getFragmentLayout();
-    
+    //------------------------------------------------------//
     // ------------------      Menu     ------------------- //
+    //------------------------------------------------------//
     
     protected void configureToolbar() {
         ActionBar ab = getSupportActionBar();
