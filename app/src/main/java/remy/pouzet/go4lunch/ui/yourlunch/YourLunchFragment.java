@@ -14,9 +14,20 @@ import androidx.lifecycle.ViewModelProviders;
 
 import remy.pouzet.go4lunch.R;
 
+// ------------------   Functions   ------------------- //
+// ------------------   Callbacks   ------------------- //
+// ------------------    Adapter    ------------------- //
+// ------------------      Menu     ------------------- //
+// ------------------ Miscellaneous ------------------- //
+// ------------------     Intent    ------------------- //
+// ------------------     Navigation & UI    ------------------- //
+
 public class YourLunchFragment extends Fragment {
 	
+	// ------------------   Variables   ------------------- //
 	private YourLunchViewModel mYourLunchViewModel;
+	
+	// ------------------   LifeCycle   ------------------- //
 	
 	public View onCreateView(@NonNull LayoutInflater inflater,
 	                         ViewGroup container,

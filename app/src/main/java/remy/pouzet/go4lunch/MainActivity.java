@@ -17,11 +17,21 @@ import com.google.android.material.navigation.NavigationView;
 
 import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 
+// ------------------   Functions   ------------------- //
+// ------------------   Callbacks   ------------------- //
+// ------------------    Adapter    ------------------- //
+// ------------------     Intent    ------------------- //
+
 public class MainActivity extends AppCompatActivity {
 	
-	private AppBarConfiguration  mAppBarConfiguration;
+	DrawerLayout drawer;
 	private ActivityLoginBinding binding;
+	NavigationView       navigationView;
+	BottomNavigationView navView;
+	// ------------------   Variables   ------------------- //
+	private AppBarConfiguration mAppBarConfiguration;
 	
+	// ------------------   LifeCycle   ------------------- //
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,32 +43,34 @@ public class MainActivity extends AppCompatActivity {
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		
-		// example of snack bar, could be usefull
-		/*
-		fab.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				Snackbar
-						.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-						.setAction("Action", null)
-						.show();
-			}
-		});
-		*/
-		
-		DrawerLayout         drawer         = findViewById(R.id.drawer_layout);
-		NavigationView       navigationView = findViewById(R.id.nav_view);
-		BottomNavigationView navView        = findViewById(R.id.nav_view_bottom);
+		navigationDrawerNavigationInitialize();
+		bottomNavigationInitialize();
+	}
+	
+	// ------------------     Navigation & UI    ------------------- //
+	@Override
+	public boolean onSupportNavigateUp() {
+		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+		return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
+	}
+	
+	public void navigationDrawerNavigationInitialize() {
 		
 		//Navigation drawer menu
+		drawer               = findViewById(R.id.drawer_layout);
+		navigationView       = findViewById(R.id.nav_view);
 		mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_your_lunch, R.id.nav_settings, R.id.nav_logout)
 				.setDrawerLayout(drawer)
 				.build();
 		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 		NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 		NavigationUI.setupWithNavController(navigationView, navController);
-		
+	}
+	
+	public void bottomNavigationInitialize() {
 		//Bottom navigation menu
+		drawer               = findViewById(R.id.drawer_layout);
+		navView              = findViewById(R.id.nav_view_bottom);
 		mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_map_view, R.id.navigation_list_view, R.id.navigation_workmates)
 				.setDrawerLayout(drawer)
 				.build();
@@ -67,16 +79,25 @@ public class MainActivity extends AppCompatActivity {
 		NavigationUI.setupWithNavController(navView, navControllerBottom);
 	}
 	
-	@Override
-	public boolean onSupportNavigateUp() {
-		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-		return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
-	}
-	
+	// ------------------      Menu     ------------------- //
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.bottom_nav_menu, menu);
 		return true;
 	}
+	
+	// ------------------ Miscellaneous ------------------- //
+	// example of snack bar, could be usefull
+//
+//		fab.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View view) {
+//				Snackbar
+//						.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//						.setAction("Action", null)
+//						.show();
+//			}
+//		});
+//
 }

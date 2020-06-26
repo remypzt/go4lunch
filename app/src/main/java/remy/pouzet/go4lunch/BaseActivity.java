@@ -10,16 +10,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 
 /**
- * Created by Philippe on 12/01/2018.
+ * Created by Rémy on 12/01/2018.
  */
+// ------------------   Variables   ------------------- //
+// ------------------   LifeCycle   ------------------- //
+// ------------------   Functions   ------------------- //
+// ------------------   Callbacks   ------------------- //
+// ------------------    Adapter    ------------------- //
+// ------------------      Menu     ------------------- //
+// ------------------ Miscellaneous ------------------- //
+// ------------------     Intent    ------------------- //
+// ------------------     Navigation & UI    ------------------- //
 
 public abstract class BaseActivity extends AppCompatActivity {
     
-    // --------------------
-    // LIFE CYCLE
-    // --------------------
+    // ------------------   Variables   ------------------- //
     
     private ActivityLoginBinding binding;
+    
+    // ------------------   LifeCycle   ------------------- //
     
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,11 +39,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         
     }
     
+    //TODO what's this method ?
     public abstract int getFragmentLayout();
     
-    // --------------------
-    // UI
-    // --------------------
+    // ------------------      Menu     ------------------- //
     
     protected void configureToolbar() {
         ActionBar ab = getSupportActionBar();

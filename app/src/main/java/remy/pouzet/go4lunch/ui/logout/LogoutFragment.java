@@ -14,9 +14,19 @@ import androidx.lifecycle.ViewModelProviders;
 
 import remy.pouzet.go4lunch.R;
 
+// ------------------   Functions   ------------------- //
+// ------------------   Callbacks   ------------------- //
+// ------------------    Adapter    ------------------- //
+// ------------------      Menu     ------------------- //
+// ------------------ Miscellaneous ------------------- //
+
 public class LogoutFragment extends Fragment {
 	
+	// ------------------   Variables   ------------------- //
+	
 	private LogoutViewModel mLogoutViewModel;
+	
+	// ------------------   LifeCycle   ------------------- //
 	
 	public View onCreateView(@NonNull LayoutInflater inflater,
 	                         ViewGroup container,

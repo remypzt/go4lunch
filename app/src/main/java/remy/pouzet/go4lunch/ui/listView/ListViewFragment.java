@@ -14,10 +14,21 @@ import androidx.lifecycle.ViewModelProviders;
 
 import remy.pouzet.go4lunch.R;
 
+// ------------------   Functions   ------------------- //
+// ------------------   Callbacks   ------------------- //
+// ------------------    Adapter    ------------------- //
+// ------------------      Menu     ------------------- //
+// ------------------ Miscellaneous ------------------- //
+// ------------------     Intent    ------------------- //
+// ------------------     Navigation & UI    ------------------- //
+
 public class ListViewFragment extends Fragment {
+
+// ------------------   Variables   ------------------- //
 	
 	private ListViewViewModel mListViewViewModel;
 	
+	// ------------------   LifeCycle   ------------------- //
 	public View onCreateView(@NonNull LayoutInflater inflater,
 	                         ViewGroup container,
 	                         Bundle savedInstanceState) {

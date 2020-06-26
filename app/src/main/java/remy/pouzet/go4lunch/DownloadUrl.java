@@ -9,7 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Created by Coding Cafe on 7/18/2018.
+ * get from this tuto https://www.youtube.com/watch?v=Iz4y0ofVTk4
  */
 
 public class DownloadUrl {
