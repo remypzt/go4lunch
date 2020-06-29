@@ -7,6 +7,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 
 /**
@@ -14,15 +17,17 @@ import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
  */
 
 //------------------------------------------------------//
-// ------------------   Variables   ------------------- //
-// ------------------   LifeCycle   ------------------- //
-// ------------------   Functions   ------------------- //
-// ------------------   Callbacks   ------------------- //
-// ------------------    Adapter    ------------------- //
-// ------------------      Menu     ------------------- //
-// ------------------ Miscellaneous ------------------- //
-// ------------------     Intent    ------------------- //
-// ------------------Navigation & UI------------------- //
+// 1-----------------   Variables   ------------------- //
+// 2-----------------   LifeCycle   ------------------- //
+// 3-----------------   Functions   ------------------- //
+// 4-----------------   Callbacks   ------------------- //
+// 5-----------------    Adapter    ------------------- //
+// 6-----------------     Intent    ------------------- //
+// 7-----------------      Menu     ------------------- //
+// 8-----------------Navigation & UI------------------- //
+// 9-----------------      Data     ------------------- //
+// 10---------------- Miscellaneous ------------------- //
+
 //------------------------------------------------------//
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -54,4 +59,20 @@ public abstract class BaseActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
     }
+    
+    // --------------------
+    // UTILS
+    // --------------------
+    
+    protected Boolean isCurrentUserLogged() {
+        return (this.getCurrentUser() != null);
+    }
+    
+    @Nullable
+    protected FirebaseUser getCurrentUser() {
+        return FirebaseAuth
+                .getInstance()
+                .getCurrentUser();
+    }
+    
 }

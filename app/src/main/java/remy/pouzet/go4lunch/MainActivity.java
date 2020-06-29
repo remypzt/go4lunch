@@ -1,10 +1,10 @@
 package remy.pouzet.go4lunch;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -12,6 +12,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -23,7 +25,7 @@ import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 // ------------------    Adapter    ------------------- //
 // ------------------     Intent    ------------------- //
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 	
 	//------------------------------------------------------//
 	// ------------------   Variables   ------------------- //
@@ -51,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
 		
 		navigationDrawerNavigationInitialize();
 		bottomNavigationInitialize();
+	}
+	
+	@Override
+	public int getFragmentLayout() {
+		return R.layout.activity_main;
 	}
 	
 	//------------------------------------------------------//
@@ -88,6 +95,47 @@ public class MainActivity extends AppCompatActivity {
 		NavigationUI.setupWithNavController(navView, navControllerBottom);
 	}
 	
+	//TODO modify UI with user datas
+	
+	private void updateUIWhenCreating() {
+		
+		if (this.getCurrentUser() != null) {
+			
+			//Get picture URL from Firebase
+			if (this
+					    .getCurrentUser()
+					    .getPhotoUrl() != null) {
+				Glide
+						.with(this)
+						.load(this
+								      .getCurrentUser()
+								      .getPhotoUrl())
+						.apply(RequestOptions.circleCropTransform())
+						.into(imageViewProfile);
+			}
+			
+			//Get email & username from Firebase
+			String email = TextUtils.isEmpty(this
+					                                 .getCurrentUser()
+					                                 .getEmail())
+			               ? getString(R.string.info_no_email_found)
+			               : this
+					               .getCurrentUser()
+					               .getEmail();
+			String username = TextUtils.isEmpty(this
+					                                    .getCurrentUser()
+					                                    .getDisplayName())
+			                  ? getString(R.string.info_no_username_found)
+			                  : this
+					                  .getCurrentUser()
+					                  .getDisplayName();
+			
+			//Update views with data
+			this.textInputEditTextUsername.setText(username);
+			this.textViewEmail.setText(email);
+		}
+	}
+	
 	//------------------------------------------------------//
 	// ------------------      Menu     ------------------- //
 	//------------------------------------------------------//
@@ -97,6 +145,10 @@ public class MainActivity extends AppCompatActivity {
 		getMenuInflater().inflate(R.menu.bottom_nav_menu, menu);
 		return true;
 	}
+	
+	//------------------------------------------------------//
+	// 9-----------------      Data     ------------------- //
+	//------------------------------------------------------//
 	
 	//------------------------------------------------------//
 	// ------------------ Miscellaneous ------------------- //

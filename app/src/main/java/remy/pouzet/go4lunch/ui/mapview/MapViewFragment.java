@@ -42,7 +42,7 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
 	String                      restaurant = "restaurant";
 	private GoogleMap mMap;
 	private MapView   mapView;
-	private int       ProximityRadius = 100;
+	private int       proximityRadius = 100;
 	private double    latitude, longitude;
 	
 	//--------------------------------------------------//
@@ -171,7 +171,7 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
 	                      String restaurant) {
 		StringBuilder googleURL = new StringBuilder("https://maps.googleapis.com/maps/api/place/textsearch/json?");
 		googleURL.append("location=" + latitude + "," + longitude);
-		googleURL.append("&radius=" + ProximityRadius);
+		googleURL.append("&radius=" + proximityRadius);
 		googleURL.append("&type=" + restaurant);
 		googleURL.append("&sensor=true");
 		googleURL.append("&key=" + "AIzaSyCwOvrDss4VieCkqr-66cV3FOVNLa20yNs");
