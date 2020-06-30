@@ -4,7 +4,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -12,11 +16,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+import butterknife.BindView;
 import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 
 //------------------------------------------------------//
@@ -25,7 +31,15 @@ import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 // ------------------    Adapter    ------------------- //
 // ------------------     Intent    ------------------- //
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends AppCompatActivity {
+	
+	//------------------------------------------------------//
+	// 0------------------   Binding    ------------------- //
+	//------------------------------------------------------//
+	
+	@BindView(R.id.profile_activity_imageview_profile)  ImageView         imageViewProfile;
+	@BindView(R.id.profile_activity_edit_text_username) TextInputEditText textInputEditTextUsername;
+	@BindView(R.id.profile_activity_text_view_email)    TextView          textViewEmail;
 	
 	//------------------------------------------------------//
 	// ------------------   Variables   ------------------- //
@@ -45,19 +59,16 @@ public class MainActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		binding = ActivityLoginBinding.inflate(getLayoutInflater());
 		View view = binding.getRoot();
-		// setContentView(this.getFragmentLayout());
 		
 		setContentView(R.layout.activity_main);
+		
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		
 		navigationDrawerNavigationInitialize();
 		bottomNavigationInitialize();
-	}
-	
-	@Override
-	public int getFragmentLayout() {
-		return R.layout.activity_main;
+		
+		this.updateUIWhenCreating();
 	}
 	
 	//------------------------------------------------------//
@@ -95,24 +106,22 @@ public class MainActivity extends BaseActivity {
 		NavigationUI.setupWithNavController(navView, navControllerBottom);
 	}
 	
-	//TODO modify UI with user datas
-	
 	private void updateUIWhenCreating() {
 		
 		if (this.getCurrentUser() != null) {
 			
 			//Get picture URL from Firebase
-			if (this
-					    .getCurrentUser()
-					    .getPhotoUrl() != null) {
-				Glide
-						.with(this)
-						.load(this
-								      .getCurrentUser()
-								      .getPhotoUrl())
-						.apply(RequestOptions.circleCropTransform())
-						.into(imageViewProfile);
-			}
+//			if (this
+//					    .getCurrentUser()
+//					    .getPhotoUrl() != null) {
+//				Glide
+//						.with(this)
+//						.load(this
+//								      .getCurrentUser()
+//								      .getPhotoUrl())
+//						.apply(RequestOptions.circleCropTransform())
+//						.into(imageViewProfile);
+//			}
 			
 			//Get email & username from Firebase
 			String email = TextUtils.isEmpty(this
@@ -131,11 +140,13 @@ public class MainActivity extends BaseActivity {
 					                  .getDisplayName();
 			
 			//Update views with data
-			this.textInputEditTextUsername.setText(username);
+//			this.textInputEditTextUsername.setText(username);
+			
+			//Why textViewEmail is considering like null object references  ??
 			this.textViewEmail.setText(email);
+			
 		}
 	}
-	
 	//------------------------------------------------------//
 	// ------------------      Menu     ------------------- //
 	//------------------------------------------------------//
@@ -149,6 +160,13 @@ public class MainActivity extends BaseActivity {
 	//------------------------------------------------------//
 	// 9-----------------      Data     ------------------- //
 	//------------------------------------------------------//
+	
+	@Nullable
+	protected FirebaseUser getCurrentUser() {
+		return FirebaseAuth
+				.getInstance()
+				.getCurrentUser();
+	}
 	
 	//------------------------------------------------------//
 	// ------------------ Miscellaneous ------------------- //
