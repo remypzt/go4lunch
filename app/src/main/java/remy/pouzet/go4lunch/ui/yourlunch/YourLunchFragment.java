@@ -37,8 +37,8 @@ public class YourLunchFragment extends Fragment {
 		mYourLunchViewModel = ViewModelProviders
 				.of(this)
 				.get(YourLunchViewModel.class);
-		View           root     = inflater.inflate(R.layout.fragment_map_view, container, false);
-		final TextView textView = root.findViewById(R.id.text_map_view);
+		View           root     = inflater.inflate(R.layout.fragment_your_lunch, container, false);
+		final TextView textView = root.findViewById(R.id.text_your_lunch);
 		mYourLunchViewModel
 				.getText()
 				.observe(requireActivity(), new Observer<String>() {

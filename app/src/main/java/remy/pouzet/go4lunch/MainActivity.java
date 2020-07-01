@@ -3,30 +3,28 @@ package remy.pouzet.go4lunch;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import butterknife.BindView;
-import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
+import remy.pouzet.go4lunch.databinding.ActivityMainBinding;
+import remy.pouzet.go4lunch.databinding.NavHeaderMainBinding;
 
 //------------------------------------------------------//
-// ------------------   Functions   ------------------- //
+
 // ------------------   Callbacks   ------------------- //
 // ------------------    Adapter    ------------------- //
 // ------------------     Intent    ------------------- //
@@ -37,19 +35,14 @@ public class MainActivity extends AppCompatActivity {
 	// 0------------------   Binding    ------------------- //
 	//------------------------------------------------------//
 	
-	@BindView(R.id.profile_activity_imageview_profile)  ImageView         imageViewProfile;
-	@BindView(R.id.profile_activity_edit_text_username) TextInputEditText textInputEditTextUsername;
-	@BindView(R.id.profile_activity_text_view_email)    TextView          textViewEmail;
-	
 	//------------------------------------------------------//
 	// ------------------   Variables   ------------------- //
 	//------------------------------------------------------//
 	
-	private ActivityLoginBinding binding;
-	DrawerLayout drawer;
-	private AppBarConfiguration mAppBarConfiguration;
-	NavigationView       navigationView;
-	BottomNavigationView navView;
+	private static final int                 SIGN_OUT_TASK    = 10;
+	private static final int                 DELETE_USER_TASK = 20;
+	private              ActivityMainBinding binding;
+	private              AppBarConfiguration mAppBarConfiguration;
 	
 	//------------------------------------------------------//
 	// ------------------   LifeCycle   ------------------- //
@@ -57,18 +50,32 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		binding = ActivityLoginBinding.inflate(getLayoutInflater());
-		View view = binding.getRoot();
-		
-		setContentView(R.layout.activity_main);
+		binding = ActivityMainBinding.inflate(getLayoutInflater());
+		setContentView(binding.getRoot());
 		
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		
 		navigationDrawerNavigationInitialize();
 		bottomNavigationInitialize();
+		signOut();
 		
 		this.updateUIWhenCreating();
+	}
+	
+	//------------------------------------------------------//
+	// ------------------   Functions   ------------------- //
+	//------------------------------------------------------//
+	
+	public void navigationDrawerNavigationInitialize() {
+		
+		//Navigation drawer menu
+		mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_your_lunch, R.id.nav_settings, R.id.nav_logout)
+				.setDrawerLayout(binding.drawerLayout)
+				.build();
+		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+		NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+		NavigationUI.setupWithNavController(binding.navView, navController);
 	}
 	
 	//------------------------------------------------------//
@@ -81,47 +88,45 @@ public class MainActivity extends AppCompatActivity {
 		return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
 	}
 	
-	public void navigationDrawerNavigationInitialize() {
-		
-		//Navigation drawer menu
-		drawer               = findViewById(R.id.drawer_layout);
-		navigationView       = findViewById(R.id.nav_view);
-		mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_your_lunch, R.id.nav_settings, R.id.nav_logout)
-				.setDrawerLayout(drawer)
-				.build();
-		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-		NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-		NavigationUI.setupWithNavController(navigationView, navController);
-	}
-	
 	public void bottomNavigationInitialize() {
 		//Bottom navigation menu
-		drawer               = findViewById(R.id.drawer_layout);
-		navView              = findViewById(R.id.nav_view_bottom);
 		mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_map_view, R.id.navigation_list_view, R.id.navigation_workmates)
-				.setDrawerLayout(drawer)
+				.setDrawerLayout(binding.drawerLayout)
 				.build();
 		NavController navControllerBottom = Navigation.findNavController(this, R.id.nav_host_fragment);
 		NavigationUI.setupActionBarWithNavController(this, navControllerBottom, mAppBarConfiguration);
-		NavigationUI.setupWithNavController(navView, navControllerBottom);
+		NavigationUI.setupWithNavController(binding.navView, navControllerBottom);
+	}
+	
+	public void signOut() {
+		//TODO how to use View Binding here ?
+		NavigationView navigationView = findViewById(R.id.nav_view);
+		navigationView
+				.getMenu()
+				.findItem(R.id.nav_logout)
+				.setOnMenuItemClickListener(menuItem -> {
+					signOutUserFromFirebase();
+					return true;
+				});
 	}
 	
 	private void updateUIWhenCreating() {
+		// Binding header xml element with viewbinding
+		NavHeaderMainBinding header = NavHeaderMainBinding.bind(binding.navView.getHeaderView(0));
 		
 		if (this.getCurrentUser() != null) {
-			
 			//Get picture URL from Firebase
-//			if (this
-//					    .getCurrentUser()
-//					    .getPhotoUrl() != null) {
-//				Glide
-//						.with(this)
-//						.load(this
-//								      .getCurrentUser()
-//								      .getPhotoUrl())
-//						.apply(RequestOptions.circleCropTransform())
-//						.into(imageViewProfile);
-//			}
+			if (this
+					    .getCurrentUser()
+					    .getPhotoUrl() != null) {
+				Glide
+						.with(this)
+						.load(this
+								      .getCurrentUser()
+								      .getPhotoUrl())
+						.apply(RequestOptions.circleCropTransform())
+						.into(header.profileActivityImageviewProfile);
+			}
 			
 			//Get email & username from Firebase
 			String email = TextUtils.isEmpty(this
@@ -139,14 +144,19 @@ public class MainActivity extends AppCompatActivity {
 					                  .getCurrentUser()
 					                  .getDisplayName();
 			
-			//Update views with data
-//			this.textInputEditTextUsername.setText(username);
-			
-			//Why textViewEmail is considering like null object references  ??
-			this.textViewEmail.setText(email);
-			
+			//Update views with data's user
+			header.profileActivityEditTextUsername.setText(username);
+			header.profileActivityTextViewEmail.setText(email);
 		}
 	}
+	
+	private void signOutUserFromFirebase() {
+		AuthUI
+				.getInstance()
+				.signOut(this)
+				.addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
+	}
+	
 	//------------------------------------------------------//
 	// ------------------      Menu     ------------------- //
 	//------------------------------------------------------//
@@ -166,6 +176,34 @@ public class MainActivity extends AppCompatActivity {
 		return FirebaseAuth
 				.getInstance()
 				.getCurrentUser();
+	}
+	
+	// Create OnCompleteListener called after tasks ended
+	private OnSuccessListener<Void> updateUIAfterRESTRequestsCompleted(final int origin) {
+		return new OnSuccessListener<Void>() {
+			@Override
+			public void onSuccess(Void aVoid) {
+				switch (origin) {
+					case SIGN_OUT_TASK:
+						finish();
+						break;
+					case DELETE_USER_TASK:
+						finish();
+						break;
+					default:
+						break;
+				}
+			}
+		};
+	}
+	
+	//------------------------------------------------------//
+	// ------------------   Callbacks   ------------------- //
+	//------------------------------------------------------//
+	
+	public void onClickSignOutButton() {
+		
+		this.signOutUserFromFirebase();
 	}
 	
 	//------------------------------------------------------//
