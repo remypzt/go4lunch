@@ -67,6 +67,16 @@ public class MainActivity extends AppCompatActivity {
 	// ------------------   Functions   ------------------- //
 	//------------------------------------------------------//
 	
+	//------------------------------------------------------//
+	// ------------------Navigation & UI------------------- //
+	//------------------------------------------------------//
+	
+	@Override
+	public boolean onSupportNavigateUp() {
+		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+		return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
+	}
+	
 	public void navigationDrawerNavigationInitialize() {
 		
 		//Navigation drawer menu
@@ -78,16 +88,6 @@ public class MainActivity extends AppCompatActivity {
 		NavigationUI.setupWithNavController(binding.navView, navController);
 	}
 	
-	//------------------------------------------------------//
-	// ------------------Navigation & UI------------------- //
-	//------------------------------------------------------//
-	
-	@Override
-	public boolean onSupportNavigateUp() {
-		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-		return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
-	}
-	
 	public void bottomNavigationInitialize() {
 		//Bottom navigation menu
 		mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_map_view, R.id.navigation_list_view, R.id.navigation_workmates)
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 				.build();
 		NavController navControllerBottom = Navigation.findNavController(this, R.id.nav_host_fragment);
 		NavigationUI.setupActionBarWithNavController(this, navControllerBottom, mAppBarConfiguration);
-		NavigationUI.setupWithNavController(binding.navView, navControllerBottom);
+		NavigationUI.setupWithNavController(binding.navViewBottom, navControllerBottom);
 	}
 	
 	public void signOut() {
