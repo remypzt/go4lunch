@@ -16,7 +16,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -99,9 +98,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 	
 	public void signOut() {
-		//TODO how to use View Binding here ?
-		NavigationView navigationView = findViewById(R.id.nav_view);
-		navigationView
+		binding.navView
 				.getMenu()
 				.findItem(R.id.nav_logout)
 				.setOnMenuItemClickListener(menuItem -> {

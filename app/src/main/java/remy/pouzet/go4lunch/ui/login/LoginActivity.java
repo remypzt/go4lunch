@@ -73,8 +73,8 @@ public class LoginActivity extends BaseActivity {
 	}
 	
 	//------------------------------------------------------//
-// ------------------   Functions   ------------------- //
-//------------------------------------------------------//
+	// ------------------   Functions   ------------------- //
+	//------------------------------------------------------//
 	
 	public void loginByEmail() {
 		Button mButton = findViewById(R.id.main_activity_login_by_email_button);

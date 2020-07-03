@@ -157,7 +157,8 @@ public class MapViewFragment extends Fragment implements GoogleMap.OnMyLocationB
 		mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
 		LocationRequest locationRequest = LocationRequest.create();
 		locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-		locationRequest.setInterval(20 * 1000);
+		//TODO location request
+//		locationRequest.setInterval(20 * 1000);
 		
 		if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 			// TODO: Consider calling
