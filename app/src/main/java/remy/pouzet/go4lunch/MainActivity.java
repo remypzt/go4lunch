@@ -180,30 +180,18 @@ public class MainActivity extends AppCompatActivity {
 	
 	// Create OnCompleteListener called after tasks ended
 	private OnSuccessListener<Void> updateUIAfterRESTRequestsCompleted(final int origin) {
-		return new OnSuccessListener<Void>() {
-			@Override
-			public void onSuccess(Void aVoid) {
-				switch (origin) {
-					case SIGN_OUT_TASK:
-						finish();
-						break;
-					case DELETE_USER_TASK:
-						finish();
-						break;
-					default:
-						break;
-				}
+		return aVoid -> {
+			switch (origin) {
+				case SIGN_OUT_TASK:
+					finish();
+					break;
+				case DELETE_USER_TASK:
+					finish();
+					break;
+				default:
+					break;
 			}
 		};
-	}
-	
-	//------------------------------------------------------//
-	// ------------------   Callbacks   ------------------- //
-	//------------------------------------------------------//
-	
-	public void onClickSignOutButton() {
-		
-		this.signOutUserFromFirebase();
 	}
 	
 	//------------------------------------------------------//
