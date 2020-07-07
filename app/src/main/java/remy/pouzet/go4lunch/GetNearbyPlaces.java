@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * get from this tuto https://www.youtube.com/watch?v=Iz4y0ofVTk4
@@ -54,13 +55,16 @@ public class GetNearbyPlaces extends AsyncTask<Object, String, String> {
 			HashMap<String, String> googleNearbyPlace = nearByPlacesList.get(i);
 			String                  nameOfPlace       = googleNearbyPlace.get("place_name");
 			String                  vicinity          = googleNearbyPlace.get("vicinity");
-			double                  lat               = Double.parseDouble(googleNearbyPlace.get("lat"));
-			double                  lng               = Double.parseDouble(googleNearbyPlace.get("lng"));
+			double                  lat               = Double.parseDouble(Objects.requireNonNull(googleNearbyPlace.get("lat")));
+			double                  lng               = Double.parseDouble(Objects.requireNonNull(googleNearbyPlace.get("lng")));
 			
 			LatLng latLng = new LatLng(lat, lng);
-			markerOptions.position(latLng);
-			markerOptions.title(nameOfPlace + " : " + vicinity);
-			markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+			markerOptions
+					.position(latLng)
+					.title(nameOfPlace + " : " + vicinity)
+//			.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_your_lunch))
+					.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+			
 			mMap.addMarker(markerOptions);
 			mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 			mMap.animateCamera(CameraUpdateFactory.zoomTo(10));

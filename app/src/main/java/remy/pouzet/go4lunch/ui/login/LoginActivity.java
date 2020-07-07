@@ -16,7 +16,6 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Arrays;
 
 import remy.pouzet.go4lunch.BaseActivity;
-import remy.pouzet.go4lunch.MainActivity;
 import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 
@@ -146,8 +145,7 @@ public class LoginActivity extends BaseActivity {
 	}
 	
 	private void startMainActivity() {
-		Intent mainAcitvityIntent = new Intent(this, MainActivity.class);
-		startActivity(mainAcitvityIntent);
+		finish();
 	}
 //------------------------------------------------------//
 // ------------------Navigation & UI------------------- //
@@ -172,7 +170,8 @@ public class LoginActivity extends BaseActivity {
 		if (requestCode == RC_SIGN_IN) {
 			if (resultCode == RESULT_OK) { // SUCCESS
 				showSnackBar(coordinatorlayout, getString(R.string.connection_succeed));
-				startMainActivity();
+				// if authentification is success finish this activity because it's not usefull anymore and if I need by an intent it'll make a "millefeuille"
+				finish();
 				
 			} else { // ERRORS
 				if (response == null) {

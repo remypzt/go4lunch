@@ -1,5 +1,6 @@
 package remy.pouzet.go4lunch;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -21,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import remy.pouzet.go4lunch.databinding.ActivityMainBinding;
 import remy.pouzet.go4lunch.databinding.NavHeaderMainBinding;
+import remy.pouzet.go4lunch.ui.login.LoginActivity;
 
 //------------------------------------------------------//
 
@@ -51,20 +53,27 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		binding = ActivityMainBinding.inflate(getLayoutInflater());
 		setContentView(binding.getRoot());
-		
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		
 		navigationDrawerNavigationInitialize();
 		bottomNavigationInitialize();
-		signOut();
+		updateWithUserStatus();
+		signOutButton();
 		
-		this.updateUIWhenCreating();
 	}
 	
 	//------------------------------------------------------//
 	// ------------------   Functions   ------------------- //
 	//------------------------------------------------------//
+	
+	private void updateWithUserStatus() {
+		// Binding header xml element with viewbinding
+		if (this.getCurrentUser() != null) {
+			updateUIWhenCreating();
+		} else {
+			passByLoginActivity();
+		}
+	}
 	
 	//------------------------------------------------------//
 	// ------------------Navigation & UI------------------- //
@@ -97,54 +106,56 @@ public class MainActivity extends AppCompatActivity {
 		NavigationUI.setupWithNavController(binding.navViewBottom, navControllerBottom);
 	}
 	
-	public void signOut() {
+	public void signOutButton() {
 		binding.navView
 				.getMenu()
 				.findItem(R.id.nav_logout)
 				.setOnMenuItemClickListener(menuItem -> {
 					signOutUserFromFirebase();
+					passByLoginActivity();
 					return true;
 				});
 	}
 	
-	private void updateUIWhenCreating() {
-		// Binding header xml element with viewbinding
+	public void updateUIWhenCreating() {
 		NavHeaderMainBinding header = NavHeaderMainBinding.bind(binding.navView.getHeaderView(0));
-		
-		if (this.getCurrentUser() != null) {
-			//Get picture URL from Firebase
-			if (this
-					    .getCurrentUser()
-					    .getPhotoUrl() != null) {
-				Glide
-						.with(this)
-						.load(this
-								      .getCurrentUser()
-								      .getPhotoUrl())
-						.apply(RequestOptions.circleCropTransform())
-						.into(header.profileActivityImageviewProfile);
-			}
-			
-			//Get email & username from Firebase
-			String email = TextUtils.isEmpty(this
-					                                 .getCurrentUser()
-					                                 .getEmail())
-			               ? getString(R.string.info_no_email_found)
-			               : this
-					               .getCurrentUser()
-					               .getEmail();
-			String username = TextUtils.isEmpty(this
-					                                    .getCurrentUser()
-					                                    .getDisplayName())
-			                  ? getString(R.string.info_no_username_found)
-			                  : this
-					                  .getCurrentUser()
-					                  .getDisplayName();
-			
-			//Update views with data's user
-			header.profileActivityEditTextUsername.setText(username);
-			header.profileActivityTextViewEmail.setText(email);
+		//Get picture URL from Firebase
+		if (this
+				    .getCurrentUser()
+				    .getPhotoUrl() != null) {
+			Glide
+					.with(this)
+					.load(this
+							      .getCurrentUser()
+							      .getPhotoUrl())
+					.apply(RequestOptions.circleCropTransform())
+					.into(header.profileActivityImageviewProfile);
 		}
+		
+		//Get email & username from Firebase
+		String email = TextUtils.isEmpty(this
+				                                 .getCurrentUser()
+				                                 .getEmail())
+		               ? getString(R.string.info_no_email_found)
+		               : this
+				               .getCurrentUser()
+				               .getEmail();
+		String username = TextUtils.isEmpty(this
+				                                    .getCurrentUser()
+				                                    .getDisplayName())
+		                  ? getString(R.string.info_no_username_found)
+		                  : this
+				                  .getCurrentUser()
+				                  .getDisplayName();
+		
+		//Update views with data's user
+		header.profileActivityEditTextUsername.setText(username);
+		header.profileActivityTextViewEmail.setText(email);
+	}
+	
+	public void passByLoginActivity() {
+		Intent loginActivityIntent = new Intent(this, LoginActivity.class);
+		startActivity(loginActivityIntent);
 	}
 	
 	private void signOutUserFromFirebase() {
