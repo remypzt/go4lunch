@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(binding.getRoot());
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
+		
 		navigationDrawerNavigationInitialize();
 		bottomNavigationInitialize();
 		updateWithUserStatus();

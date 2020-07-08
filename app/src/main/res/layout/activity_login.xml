@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
+        android:background="@drawable/flou"
         android:orientation="vertical">
 
         <!-- IMAGE VIEW FIREBASE OC -->
@@ -18,16 +19,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_large_margin"
-            android:background="@drawable/ic_menu_camera" />
+            android:background="@drawable/go4" />
 
-        <!-- TITLE FIREBASE OC -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/default_margin"
-            android:text="@string/app_name"
-            android:textSize="@dimen/default_title_size"
-            android:textStyle="bold" />
+        <!--        &lt;!&ndash; TITLE FIREBASE OC &ndash;&gt;-->
+        <!--        <TextView-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_margin="@dimen/default_margin"-->
+        <!--            android:text="@string/app_name"-->
+        <!--            android:textSize="@dimen/default_title_size"-->
+        <!--            android:textStyle="bold" />-->
 
         <!-- DESCRIPTION FIREBASE OC -->
         <TextView
@@ -35,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_margin"
             android:text="@string/find_a_nice_restaurant_and_invite_your_co_workers_for_lunch"
+            android:textColor="@color/quantum_white_100"
             android:textSize="@dimen/default_text_size" />
 
         <!-- BUTTONS CONTAINER -->
@@ -48,34 +50,27 @@
             <!-- BUTTON EMAIL LOGIN -->
             <Button
                 android:id="@+id/main_activity_login_by_email_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="match_parent"
+                style="@style/FirebaseUI.Button.AccountChooser.EmailButton"
+                android:layout_width="@dimen/default_width_button"
                 android:layout_height="wrap_content"
+
+                android:layout_gravity="center_horizontal"
+
                 android:layout_margin="@dimen/default_large_margin"
-                android:background="@color/colorAccent"
+                android:background="@color/colorPrimary"
                 android:padding="@dimen/default_large_margin"
                 android:text="@string/sign_in_with_email"
-                android:textColor="#fff"
-                android:textSize="@dimen/default_text_size" />
 
-            <!-- BUTTON FB LOGIN -->
-            <Button
-                android:id="@+id/main_activity_login_by_fb_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/default_large_margin"
-                android:background="@color/colorAccent"
-                android:padding="@dimen/default_large_margin"
-                android:text="@string/sign_in_with_facebook"
                 android:textColor="#fff"
                 android:textSize="@dimen/default_text_size" />
 
             <!-- BUTTON GOOGLE LOGIN -->
             <Button
                 android:id="@+id/main_activity_login_by_google_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="match_parent"
+                style="@style/FirebaseUI.Button.AccountChooser.GoogleButton"
+                android:layout_width="@dimen/default_width_button"
+
+                android:layout_gravity="center_horizontal"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/default_large_margin"
                 android:background="@color/colorAccent"
@@ -83,6 +78,23 @@
                 android:text="@string/Sign_in_with_google"
                 android:textColor="#fff"
                 android:textSize="@dimen/default_text_size" />
+
+            <!-- BUTTON FB LOGIN -->
+            <Button
+                android:id="@+id/main_activity_login_by_fb_button"
+                style="@style/FirebaseUI.Button.AccountChooser.FacebookButton"
+                android:layout_width="@dimen/default_width_button"
+
+                android:layout_gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_large_margin"
+                android:background="#507CC0"
+                android:padding="@dimen/default_large_margin"
+                android:text="@string/sign_in_with_facebook"
+                android:textColor="#fff"
+                android:textColorLink="#507CC0"
+                android:textSize="@dimen/default_text_size" />
+
 
         </LinearLayout>
 
