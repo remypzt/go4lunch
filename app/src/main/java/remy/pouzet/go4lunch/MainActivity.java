@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
 				});
 	}
 	
+	//TODO this method could be share with SettingsFragment
 	public void updateUIWhenCreating() {
 		NavHeaderMainBinding header = NavHeaderMainBinding.bind(binding.navView.getHeaderView(0));
 		//Get picture URL from Firebase
@@ -187,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
 				.getCurrentUser();
 	}
 	
+	//TODO could be share with SettingsFragment
 	// Create OnCompleteListener called after tasks ended
 	private OnSuccessListener<Void> updateUIAfterRESTRequestsCompleted(final int origin) {
 		return aVoid -> {

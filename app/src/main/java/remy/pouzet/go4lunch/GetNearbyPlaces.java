@@ -6,6 +6,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
@@ -61,13 +62,26 @@ public class GetNearbyPlaces extends AsyncTask<Object, String, String> {
 			LatLng latLng = new LatLng(lat, lng);
 			markerOptions
 					.position(latLng)
-					.title(nameOfPlace + " : " + vicinity)
+					.title(nameOfPlace
+//					       TODO check how fix vicinity
+//					       + " : " + vicinity
+					      )
 //			.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_your_lunch))
 					.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 			
 			mMap.addMarker(markerOptions);
 			mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 			mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+			mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+				@Override
+				public void onInfoWindowClick(Marker parameterMarker) {
+					//TODO make an intent to launch listview activity focus on this restaurant
+					markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+					mMap.addMarker(markerOptions);
+				}
+			});
 		}
+		
 	}
+	
 }

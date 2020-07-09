@@ -255,6 +255,7 @@ public class MapViewFragment extends Fragment
 			Log.e("Exception: %s", e.getMessage());
 		}
 	}
+	
 	// [END maps_current_place_show_current_place]
 	
 	/**
