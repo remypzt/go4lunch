@@ -8,6 +8,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +40,10 @@ public class SettingsFragment extends Fragment {
 	
 	private static final int SIGN_OUT_TASK = 10;
 	
+	private static final String                  LOGTAG           = "SeekBarDemo";
+	private static       int                     DELTA_VALUE      = 5;
+	private              SeekBar                 mSeekBar;
+	private              TextView                mTextViewSeekBar;
 	private              SettingsViewModel       mSettingsViewModel;
 	private static final int                     DELETE_USER_TASK = 20;
 	private              FragmentSettingsBinding binding;
@@ -52,6 +58,7 @@ public class SettingsFragment extends Fragment {
 		binding = FragmentSettingsBinding.inflate(inflater, container, false);
 		View view = binding.getRoot();
 		updateUIWhenCreating();
+		seekBarManagement();
 		return view;
 
 //		mSettingsViewModel = ViewModelProviders
@@ -106,6 +113,35 @@ public class SettingsFragment extends Fragment {
 						})
 						.setNegativeButton(R.string.popup_message_choice_no, null)
 						.show();
+			}
+		});
+	}
+	
+	public void seekBarManagement() {
+		binding.seekBar2.setMax(5000);
+		
+		binding.customizeRadiusTextView.setText(getString(R.string.rayon_de_recherche) + binding.seekBar2.getProgress() + getString(R.string.metres));
+		binding.seekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			int progress = 0;
+			
+			@Override
+			public void onProgressChanged(SeekBar seekBar,
+			                              int progress,
+			                              boolean fromUser) {
+				progress = binding.seekBar2.getProgress();
+				binding.customizeRadiusTextView.setText(getString(R.string.rayon_de_recherche) + binding.seekBar2.getProgress() + getString(R.string.metres));
+				
+			}
+			
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			
+			}
+			
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				binding.customizeRadiusTextView.setText(getString(R.string.rayon_de_recherche) + binding.seekBar2.getProgress() + getString(R.string.metres));
+				
 			}
 		});
 	}

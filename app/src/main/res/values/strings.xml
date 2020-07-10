@@ -61,6 +61,8 @@
     <string name="popup_message_confirmation_delete_account">Es-tu sûr(e) de vouloir supprimer ton compte ?</string>
     <string name="popup_message_choice_yes">Oui !</string>
     <string name="popup_message_choice_no">Non</string>
+    <string name="rayon_de_recherche">\"Rayon de recherche = \"</string>
+    <string name="metres">\" metres\"</string>
 
 
 </resources>

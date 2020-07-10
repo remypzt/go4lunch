@@ -46,6 +46,7 @@ public class MapViewFragment extends Fragment
 	FusedLocationProviderClient mFusedLocationClient;
 	String                      restaurant = "restaurant";
 	
+	//TODO radius
 	private int    ProximityRadius = 100;
 	private double latitude, longitude;
 	private static final int       PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -206,6 +207,7 @@ public class MapViewFragment extends Fragment
 	                      String restaurant) {
 		StringBuilder googleURL = new StringBuilder("https://maps.googleapis.com/maps/api/place/textsearch/json?");
 		googleURL.append("location=" + latitude + "," + longitude);
+		
 		googleURL.append("&radius=" + ProximityRadius);
 		googleURL.append("&type=" + restaurant);
 		googleURL.append("&sensor=true");

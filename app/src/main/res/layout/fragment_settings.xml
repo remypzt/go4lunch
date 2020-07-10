@@ -77,10 +77,31 @@
                 android:paddingLeft="@dimen/default_margin"
                 android:textSize="@dimen/default_text_size" />
 
+
         </LinearLayout>
 
 
+        <TextView
+            android:id="@+id/customize_radius_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_margin"
+            android:text="Rayon de recherche :"
+            android:textSize="@dimen/default_text_size" />
+
+        <SeekBar
+            android:id="@+id/seekBar2"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="20dp"
+            android:max="10"
+            android:progress="3" />
+
+
     </LinearLayout>
+
 
     <!-- BUTTONS CONTAINER -->
     <LinearLayout
