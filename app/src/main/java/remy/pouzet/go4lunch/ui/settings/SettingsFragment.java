@@ -2,6 +2,7 @@ package remy.pouzet.go4lunch.ui.settings;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import remy.pouzet.go4lunch.MainActivity;
 import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.databinding.FragmentSettingsBinding;
 
@@ -115,7 +117,10 @@ public class SettingsFragment extends Fragment {
 					@Override
 					public void onComplete(@NonNull Task<Void> task) {
 						user.delete();
+						Intent intent = new Intent(requireContext(), MainActivity.class);
+						startActivity(intent);
 					}
+					
 				});
 		
 	}
