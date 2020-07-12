@@ -35,9 +35,6 @@ import remy.pouzet.go4lunch.R;
 //------------------------------------------------------//
 
 public class MapViewFragment extends Fragment
-//		implements
-//		GoogleMap.OnMyLocationButtonClickListener,
-//		GoogleMap.OnMyLocationClickListener
 {
 	//--------------------------------------------------//
 	// ------------------   Variables   --------------- //
@@ -46,15 +43,9 @@ public class MapViewFragment extends Fragment
 	FusedLocationProviderClient mFusedLocationClient;
 	String                      restaurant = "restaurant";
 	
-	//TODO radius
 	private int    ProximityRadius = 100;
 	private double latitude, longitude;
 	private static final int       PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-	//	private static final int     DEFAULT_ZOOM    = 15;
-//	private              MapView mapView;
-	// A default location (Sydney, Australia) and default zoom to use when location permission is not granted.
-//	private final        LatLng    defaultLocation                          = new LatLng(-33.8523341, 151.2106085);
-	//	private              Location  lastKnownLocation;
 	private              GoogleMap Mmap;
 	
 	private boolean locationPermissionGranted;
@@ -94,13 +85,11 @@ public class MapViewFragment extends Fragment
 		public void onMapReady(GoogleMap map) {
 			Mmap = map;
 			// Prompt the user for permission.
-			getLocationPermission();
+//			getLocationPermission();
 			
 			// Turn on the My Location layer and the related control on the map.
 			updateLocationUI();
 			
-			// Get the current location of the device and set the position of the map.
-//			getDeviceLocation();
 		
 		}
 	};
@@ -113,7 +102,7 @@ public class MapViewFragment extends Fragment
 	
 	//------------------------------------------------------//
 	// ------------------   Callbacks   ------------------- //
-	//------------------------------------------------------//
+	//------------------------------------------------------/
 	
 	@SuppressLint("MissingPermission")
 	@Override
@@ -126,29 +115,14 @@ public class MapViewFragment extends Fragment
 		}
 		
 		mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
-		LocationRequest locationRequest = LocationRequest.create();
-		locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-		locationRequest.setSmallestDisplacement(50);
-		locationRequest.setInterval(20 * 1000);
+		LocationRequest locationRequest = LocationRequest
+				.create()
+				.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+				.setSmallestDisplacement(50)
+				.setInterval(20 * 1000);
+		getLocationPermission();
 		
-		//TODO Why I need ask permissions twice ?
-//		if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//			// TODO: Consider calling
-//			//    ActivityCompat#requestPermissions
-//			// here to request the missing permissions, and then overriding
-//			//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//			//                                          int[] grantResults)
-//			// to handle the case where the user grants the permission. See the documentation
-//			// for ActivityCompat#requestPermissions for more details.
-//			return;
-//		}
-		mFusedLocationClient.requestLocationUpdates(locationRequest
-//		                                            TODO
-//				                                            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-//				                                            .setSmallestDisplacement(50)
-//				                                            .setInterval(20 * 1000)
-				
-				, locationCallback, null);
+		mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
 	}
 	
 	private LocationCallback locationCallback = new LocationCallback() {
@@ -174,22 +148,6 @@ public class MapViewFragment extends Fragment
 	//------------------------------------------------------//
 	// ------------------   Functions   ------------------- //
 	//------------------------------------------------------//
-//	@Override
-//	public void onMyLocationClick(@NonNull Location location) {
-//		Toast
-//				.makeText(requireContext(), "Current location:\n" + location, Toast.LENGTH_LONG)
-//				.show();
-//	}
-//
-//	@Override
-//	public boolean onMyLocationButtonClick() {
-//		Toast
-//				.makeText(requireContext(), "MyLocation button clicked", Toast.LENGTH_SHORT)
-//				.show();
-//		// Return false so that we don't consume the event and the default behavior still occurs
-//		// (the camera animates to the user's current position).
-//		return false;
-//	}
 	
 	public void DisplaysNearbyRestaurant() {
 		Object[]        transferData    = new Object[2];
@@ -201,7 +159,6 @@ public class MapViewFragment extends Fragment
 		
 	}
 	
-	// use for DisplaysNearbyRestaurant
 	private String getUrl(double latitude,
 	                      double longitude,
 	                      String restaurant) {
@@ -220,28 +177,17 @@ public class MapViewFragment extends Fragment
 		return googleURL.toString();
 	}
 	
-	// [START maps_current_place_location_permission]
+
 	private void getLocationPermission() {
-		/*
-		 * Request location permission, so that we can get the location of the
-		 * device.
-		 */
+		
 		if (ContextCompat.checkSelfPermission(this.requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 			locationPermissionGranted = true;
 			
 		} else {
 			ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-//
-// TODO ask or wait for results and find by where code pass if the user deny permission after he allowed it
-
-//			if (ContextCompat.checkSelfPermission(this.requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//				locationPermissionGranted = true;
-//			}
 		}
 	}
-	// [END maps_current_place_location_permission]
 	
-	// [START maps_current_place_update_location_ui]
 	private void updateLocationUI() {
 		if (Mmap == null) {
 			return;
@@ -257,47 +203,6 @@ public class MapViewFragment extends Fragment
 			Log.e("Exception: %s", e.getMessage());
 		}
 	}
-	
-	// [END maps_current_place_show_current_place]
-	
-	/**
-	 * Gets the current location of the device, and positions the map's camera.
-	 */
-//	// [START maps_current_place_get_device_location]
-//	private void getDeviceLocation() {
-//		/*
-//		 * Get the best and most recent location of the device, which may be null in rare
-//		 * cases when a location is not available.
-//		 */
-//		try {
-//			if (locationPermissionGranted) {
-//				Task<Location> locationResult = mFusedLocationClient.getLastLocation();
-//				locationResult.addOnCompleteListener((Executor) this, new OnCompleteListener<Location>() {
-//					@Override
-//					public void onComplete(@NonNull Task<Location> task) {
-//						if (task.isSuccessful()) {
-//							// Set the map's camera position to the current location of the device.
-//							lastKnownLocation = task.getResult();
-//							if (lastKnownLocation != null) {
-//								Mmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-//							}
-//						} else {
-////							Log.d(TAG, "Current location is null. Using defaults.");
-////							Log.e(TAG, "Exception: %s", task.getException());
-//							Mmap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
-//							Mmap
-//									.getUiSettings()
-//									.setMyLocationButtonEnabled(false);
-//						}
-//					}
-//				});
-//			}
-//		}
-//		catch (SecurityException e) {
-//			Log.e("Exception: %s", e.getMessage(), e);
-//		}
-//	}
-	// [END maps_current_place_open_places_dialog]
 	
 }
 
