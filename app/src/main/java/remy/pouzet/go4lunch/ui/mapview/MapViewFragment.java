@@ -1,5 +1,6 @@
 package remy.pouzet.go4lunch.ui.mapview;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -90,7 +91,6 @@ public class MapViewFragment extends Fragment
 			// Turn on the My Location layer and the related control on the map.
 			updateLocationUI();
 			
-		
 		}
 	};
 	
@@ -103,27 +103,6 @@ public class MapViewFragment extends Fragment
 	//------------------------------------------------------//
 	// ------------------   Callbacks   ------------------- //
 	//------------------------------------------------------/
-	
-	@SuppressLint("MissingPermission")
-	@Override
-	public void onViewCreated(@NonNull View view,
-	                          @Nullable Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-		if (mapFragment != null) {
-			mapFragment.getMapAsync(callback);
-		}
-		
-		mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
-		LocationRequest locationRequest = LocationRequest
-				.create()
-				.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-				.setSmallestDisplacement(50)
-				.setInterval(20 * 1000);
-		getLocationPermission();
-		
-		mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-	}
 	
 	private LocationCallback locationCallback = new LocationCallback() {
 		@Override
@@ -140,14 +119,84 @@ public class MapViewFragment extends Fragment
 					// clear all previous markers
 					Mmap.clear();
 					DisplaysNearbyRestaurant();
+					
 				}
 			}
+			
 		}
 	};
+	
+	@Override
+	public void onRequestPermissionsResult(int requestCode,
+	                                       String[] permissions,
+	                                       int[] grantResults) {
+		switch (requestCode) {
+			case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
+				// If request is cancelled, the result arrays are empty.
+				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					
+					// permission was granted, proceed to the normal flow.
+					locationPermissionGranted = true;
+					updateLocationUI();
+					getLocationAndCheckPermission();
+				}
+		}
+	}
+	
+	@SuppressLint("MissingPermission")
+	@Override
+	public void onViewCreated(@NonNull View view,
+	                          @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+		if (mapFragment != null) {
+			mapFragment.getMapAsync(callback);
+		}
+		
+		requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+		
+		mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
+		getLocationAndCheckPermission();
+		
+	}
+
+//	@SuppressLint("MissingPermission")
+//	@Override
+//	public void onRequestPermissionsResult(int requestCode,
+//	                                       @NonNull String[] permissions,
+//	                                       @NonNull int[] grantResults) {
+//		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//
+//
+////
+////		int permissionCheck = PackageManager.PERMISSION_GRANTED;
+////		for (int permission : grantResults) {
+////			permissionCheck = permissionCheck + permission;
+////		}
+////		if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
+//			locationPermissionGranted = true;
+//			updateLocationUI();
+//			getLocationAndCheckPermission();
+////		}
+//
+//
+//	}
 	
 	//------------------------------------------------------//
 	// ------------------   Functions   ------------------- //
 	//------------------------------------------------------//
+	
+	@SuppressLint("MissingPermission")
+	public void getLocationAndCheckPermission() {
+		
+		LocationRequest locationRequest = LocationRequest
+				.create()
+				.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+				.setSmallestDisplacement(50)
+				.setInterval(20 * 1000);
+		getLocationPermission();
+		mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+	}
 	
 	public void DisplaysNearbyRestaurant() {
 		Object[]        transferData    = new Object[2];
