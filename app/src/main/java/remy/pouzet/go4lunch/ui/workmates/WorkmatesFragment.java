@@ -43,7 +43,7 @@ public class WorkmatesFragment extends Fragment {
 		
 		mFragmentWorkmatesBinding = FragmentWorkmatesBinding.inflate(getLayoutInflater());
 		
-		View           root     = inflater.inflate(R.layout.fragment_workmates, container, false);
+		View           root     = inflater.inflate(R.layout.fragment_workmates_list_view, container, false);
 		final TextView textView = mFragmentWorkmatesBinding.textWorkmates;
 		mWorkmatesViewModel
 				.getText()

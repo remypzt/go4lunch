@@ -1,13 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.restaurantDetails.RestaurantDetailsFragment">
 
-    <TextView
+    <ImageView
+        android:id="@+id/restaurant_picture"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="200dp"
+        android:contentDescription="picture_illustrating_the_restaurant"
+        android:src="@drawable/flou"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <ImageButton
+        android:id="@+id/user_interest_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintBottom_toBottomOf="@id/restaurant_picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_picture" />
+
+    <TextView
+        android:id="@+id/restaurant_name_details_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="restaurant name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_picture" />
+
+    <ImageView
+        android:id="@+id/restaurant_evaluation_details_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="picture_illustrating_evaluation_restaurant"
+        app:layout_constraintStart_toEndOf="@id/restaurant_name_details_fragment"
+        app:layout_constraintTop_toTopOf="@id/restaurant_name_details_fragment" />
+
+    <TextView
+        android:id="@+id/restaurant_type_details_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="restaurant type"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_name_details_fragment" />
+
+    <TextView
+        android:id="@+id/restaurant_adress_details_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="restaurant adress"
+        app:layout_constraintStart_toEndOf="@+id/restaurant_type_details_fragment"
+        app:layout_constraintTop_toTopOf="@id/restaurant_type_details_fragment" />
+
+    <!--    <View-->
+    <!--        android:id="@+id/background_color_details_fragment"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:background="#F44336"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/restaurant_picture" />-->
+
+    <ImageButton
+        android:id="@+id/imageButtonCall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_phone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_type_details_fragment" />
+
+    <TextView
+        android:id="@+id/imageButtonCall_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="CALL"
+        app:layout_constraintEnd_toEndOf="@id/imageButtonCall"
+        app:layout_constraintStart_toStartOf="@id/imageButtonCall"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonCall" />
+
+
+    <ImageButton
+        android:id="@+id/imageButtonLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_star"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageButtonCall" />
+
+    <TextView
+        android:id="@+id/imageButtonLike_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="LIKE"
+        app:layout_constraintEnd_toEndOf="@id/imageButtonLike"
+        app:layout_constraintStart_toStartOf="@id/imageButtonLike"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonLike" />
+
+    <ImageButton
+        android:id="@+id/imageButtonWebsite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_earth"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageButtonCall" />
+
+    <TextView
+        android:id="@+id/imageButtonWebsite_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="WEBSITE"
+        app:layout_constraintEnd_toEndOf="@id/imageButtonWebsite"
+        app:layout_constraintStart_toStartOf="@id/imageButtonWebsite"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonWebsite" />
+
+
+    <View
+        android:id="@+id/separation_restaurant_details"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonCall_title" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toBottomOf="@id/separation_restaurant_details"
+        tools:ignore="UselessParent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_workmates_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

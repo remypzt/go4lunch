@@ -63,6 +63,7 @@
     <string name="popup_message_choice_no">Non</string>
     <string name="rayon_de_recherche">\"Rayon de recherche = \"</string>
     <string name="metres">\" metres\"</string>
+    <string name="textview">textview</string>
 
 
 </resources>

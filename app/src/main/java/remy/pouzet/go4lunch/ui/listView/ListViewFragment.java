@@ -39,7 +39,7 @@ public class ListViewFragment extends Fragment {
 		mListViewViewModel = ViewModelProviders
 				.of(this)
 				.get(ListViewViewModel.class);
-		View root = inflater.inflate(R.layout.fragment_list_view, container, false);
+		View root = inflater.inflate(R.layout.fragment_restaurants_list_view, container, false);
 		
 		final TextView textView = root.findViewById(R.id.text_list_view);
 //				mFragmentListViewBinding.textListView;
