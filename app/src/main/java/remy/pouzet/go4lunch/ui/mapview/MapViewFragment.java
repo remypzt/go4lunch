@@ -85,6 +85,7 @@ public class MapViewFragment extends Fragment
 		@Override
 		public void onMapReady(GoogleMap map) {
 			Mmap = map;
+			
 			// Prompt the user for permission.
 //			getLocationPermission();
 			
@@ -204,6 +205,7 @@ public class MapViewFragment extends Fragment
 		GetNearbyPlaces getNearbyPlaces = new GetNearbyPlaces();
 		transferData[0] = Mmap;
 		transferData[1] = url;
+		
 		getNearbyPlaces.execute(transferData);
 		
 	}

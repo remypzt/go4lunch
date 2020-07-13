@@ -40,4 +40,11 @@
         android:name="remy.pouzet.go4lunch.ui.workmates.WorkmatesFragment"
         android:label="@string/title_workmates"
         tools:layout="@layout/fragment_workmates" />
+
+    <fragment
+        android:id="@+id/nav_restaurants_details"
+        android:name="remy.pouzet.go4lunch.ui.restaurantDetails.RestaurantDetailsFragment"
+        android:label="restaurants details"
+        tools:layout="@layout/restaurant_details_fragment" />
+
 </navigation>

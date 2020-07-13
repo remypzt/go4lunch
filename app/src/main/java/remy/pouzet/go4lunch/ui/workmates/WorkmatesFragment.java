@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import remy.pouzet.go4lunch.R;
+import remy.pouzet.go4lunch.databinding.FragmentWorkmatesBinding;
 
 // ------------------   Functions   ------------------- //
 // ------------------   Callbacks   ------------------- //
@@ -27,7 +28,8 @@ public class WorkmatesFragment extends Fragment {
 	// ------------------   Variables   ------------------- //
 	//------------------------------------------------------//
 	
-	private WorkmatesViewModel mWorkmatesViewModel;
+	private WorkmatesViewModel       mWorkmatesViewModel;
+	private FragmentWorkmatesBinding mFragmentWorkmatesBinding;
 	//------------------------------------------------------//
 	// ------------------   LifeCycle   ------------------- //
 	//------------------------------------------------------//
@@ -38,8 +40,11 @@ public class WorkmatesFragment extends Fragment {
 		mWorkmatesViewModel = ViewModelProviders
 				.of(this)
 				.get(WorkmatesViewModel.class);
+		
+		mFragmentWorkmatesBinding = FragmentWorkmatesBinding.inflate(getLayoutInflater());
+		
 		View           root     = inflater.inflate(R.layout.fragment_workmates, container, false);
-		final TextView textView = root.findViewById(R.id.text_workmates);
+		final TextView textView = mFragmentWorkmatesBinding.textWorkmates;
 		mWorkmatesViewModel
 				.getText()
 				.observe(getViewLifecycleOwner(), new Observer<String>() {

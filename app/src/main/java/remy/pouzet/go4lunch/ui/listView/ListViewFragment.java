@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import remy.pouzet.go4lunch.R;
+import remy.pouzet.go4lunch.databinding.FragmentListViewBinding;
 
 // ------------------   Functions   ------------------- //
 // ------------------   Callbacks   ------------------- //
@@ -26,20 +27,25 @@ public class ListViewFragment extends Fragment {
 
 // ------------------   Variables   ------------------- //
 	
-	private ListViewViewModel mListViewViewModel;
+	private ListViewViewModel       mListViewViewModel;
+	private FragmentListViewBinding mFragmentListViewBinding;
 	
 	// ------------------   LifeCycle   ------------------- //
 	public View onCreateView(@NonNull LayoutInflater inflater,
 	                         ViewGroup container,
 	                         Bundle savedInstanceState) {
+		mFragmentListViewBinding = FragmentListViewBinding.inflate(getLayoutInflater());
+		
 		mListViewViewModel = ViewModelProviders
 				.of(this)
 				.get(ListViewViewModel.class);
-		View           root     = inflater.inflate(R.layout.fragment_list_view, container, false);
+		View root = inflater.inflate(R.layout.fragment_list_view, container, false);
+		
 		final TextView textView = root.findViewById(R.id.text_list_view);
+//				mFragmentListViewBinding.textListView;
 		mListViewViewModel
 				.getText()
-				.observe(this, new Observer<String>() {
+				.observe(requireActivity(), new Observer<String>() {
 					@Override
 					public void onChanged(@Nullable String s) {
 						textView.setText(s);

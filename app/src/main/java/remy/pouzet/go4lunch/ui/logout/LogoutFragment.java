@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import remy.pouzet.go4lunch.R;
+import remy.pouzet.go4lunch.databinding.FragmentLogoutBinding;
 
 // ------------------   Functions   ------------------- //
 // ------------------   Callbacks   ------------------- //
@@ -25,7 +26,9 @@ public class LogoutFragment extends Fragment {
 	// ------------------   Variables   ------------------- //
 	//------------------------------------------------------//
 	
-	private LogoutViewModel mLogoutViewModel;
+	private LogoutViewModel       mLogoutViewModel;
+	private FragmentLogoutBinding mFragmentLogoutBinding;
+	
 	//------------------------------------------------------//
 	// ------------------   LifeCycle   ------------------- //
 	//------------------------------------------------------//
@@ -33,14 +36,16 @@ public class LogoutFragment extends Fragment {
 	public View onCreateView(@NonNull LayoutInflater inflater,
 	                         ViewGroup container,
 	                         Bundle savedInstanceState) {
+		mFragmentLogoutBinding = FragmentLogoutBinding.inflate(getLayoutInflater());
+		
 		mLogoutViewModel = ViewModelProviders
 				.of(this)
 				.get(LogoutViewModel.class);
 		View           root     = inflater.inflate(R.layout.fragment_logout, container, false);
-		final TextView textView = root.findViewById(R.id.text_logout);
+		final TextView textView = mFragmentLogoutBinding.textLogout;
 		mLogoutViewModel
 				.getText()
-				.observe(this, new Observer<String>() {
+				.observe(requireActivity(), new Observer<String>() {
 					@Override
 					public void onChanged(@Nullable String s) {
 						textView.setText(s);

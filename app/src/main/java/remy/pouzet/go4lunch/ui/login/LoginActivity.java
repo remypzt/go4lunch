@@ -37,7 +37,7 @@ public class LoginActivity extends BaseActivity {
 	//FOR DATA
 	private static final int RC_SIGN_IN = 123;
 	
-	private ActivityLoginBinding binding;
+	private ActivityLoginBinding mActivityLoginBinding;
 
 //------------------------------------------------------//
 // ------------------   LifeCycle   ------------------- //
@@ -46,11 +46,11 @@ public class LoginActivity extends BaseActivity {
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		binding = ActivityLoginBinding.inflate(getLayoutInflater());
-		View view = binding.getRoot();
+		mActivityLoginBinding = ActivityLoginBinding.inflate(getLayoutInflater());
+		View view = mActivityLoginBinding.getRoot();
 		setContentView(view);
 		
-		CoordinatorLayout coordinatorlayout = findViewById(R.id.main_activity_coordinator_layout);
+		CoordinatorLayout coordinatorlayout = mActivityLoginBinding.coordinatorLayout;
 		
 		loginByEmail();
 		loginByGoogle();
@@ -76,7 +76,8 @@ public class LoginActivity extends BaseActivity {
 	//------------------------------------------------------//
 	
 	public void loginByEmail() {
-		Button mButton = findViewById(R.id.main_activity_login_by_email_button);
+		Button mButton = mActivityLoginBinding.mainActivityLoginByEmailButton;
+		
 		mButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -86,7 +87,7 @@ public class LoginActivity extends BaseActivity {
 	}
 	
 	public void loginByGoogle() {
-		Button mButton = findViewById(R.id.main_activity_login_by_google_button);
+		Button mButton = mActivityLoginBinding.mainActivityLoginByGoogleButton;
 		mButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -96,7 +97,7 @@ public class LoginActivity extends BaseActivity {
 	}
 	
 	public void loginByFacebook() {
-		Button mButton = findViewById(R.id.main_activity_login_by_fb_button);
+		Button mButton = mActivityLoginBinding.mainActivityLoginByFbButton;
 		mButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -164,7 +165,7 @@ public class LoginActivity extends BaseActivity {
 	private void handleResponseAfterSignIn(int requestCode,
 	                                       int resultCode,
 	                                       Intent data) {
-		CoordinatorLayout coordinatorlayout = findViewById(R.id.main_activity_coordinator_layout);
+		CoordinatorLayout coordinatorlayout = mActivityLoginBinding.coordinatorLayout;
 		IdpResponse       response          = IdpResponse.fromResultIntent(data);
 		
 		if (requestCode == RC_SIGN_IN) {

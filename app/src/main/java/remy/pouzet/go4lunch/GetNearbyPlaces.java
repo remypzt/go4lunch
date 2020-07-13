@@ -69,15 +69,17 @@ public class GetNearbyPlaces extends AsyncTask<Object, String, String> {
 //			.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_your_lunch))
 					.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 			
-			mMap.addMarker(markerOptions);
+//		mMap.addMarker(markerOptions);
 			mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 			mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
 			mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
 				@Override
 				public void onInfoWindowClick(Marker parameterMarker) {
 					//TODO make an intent to launch listview activity focus on this restaurant
-					markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-					mMap.addMarker(markerOptions);
+
+//
+//					markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+//					mMap.addMarker(markerOptions);
 				}
 			});
 		}

@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import remy.pouzet.go4lunch.R;
+import remy.pouzet.go4lunch.databinding.FragmentYourLunchBinding;
 
 // ------------------   Functions   ------------------- //
 // ------------------   Callbacks   ------------------- //
@@ -26,7 +27,8 @@ public class YourLunchFragment extends Fragment {
 	//------------------------------------------------------//
 	// ------------------   Variables   ------------------- //
 	//------------------------------------------------------//
-	private YourLunchViewModel mYourLunchViewModel;
+	private YourLunchViewModel       mYourLunchViewModel;
+	private FragmentYourLunchBinding mFragmentYourLunchBinding;
 	//------------------------------------------------------//
 	// ------------------   LifeCycle   ------------------- //
 	//------------------------------------------------------//
@@ -37,8 +39,11 @@ public class YourLunchFragment extends Fragment {
 		mYourLunchViewModel = ViewModelProviders
 				.of(this)
 				.get(YourLunchViewModel.class);
+		
+		mFragmentYourLunchBinding = FragmentYourLunchBinding.inflate(getLayoutInflater());
+		
 		View           root     = inflater.inflate(R.layout.fragment_your_lunch, container, false);
-		final TextView textView = root.findViewById(R.id.text_your_lunch);
+		final TextView textView = mFragmentYourLunchBinding.textYourLunch;
 		mYourLunchViewModel
 				.getText()
 				.observe(requireActivity(), new Observer<String>() {

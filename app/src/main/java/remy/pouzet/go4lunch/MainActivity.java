@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import remy.pouzet.go4lunch.databinding.ActivityMainBinding;
+import remy.pouzet.go4lunch.databinding.AppBarMainBinding;
 import remy.pouzet.go4lunch.databinding.NavHeaderMainBinding;
 import remy.pouzet.go4lunch.ui.login.LoginActivity;
 
@@ -42,8 +43,10 @@ public class MainActivity extends AppCompatActivity {
 	
 	private static final int                 SIGN_OUT_TASK    = 10;
 	private static final int                 DELETE_USER_TASK = 20;
-	private              ActivityMainBinding binding;
-	private              AppBarConfiguration mAppBarConfiguration;
+	private              ActivityMainBinding mActivityMainBinding;
+	private              AppBarMainBinding   mAppBarMainBinding;
+	
+	private AppBarConfiguration mAppBarConfiguration;
 	
 	//------------------------------------------------------//
 	// ------------------   LifeCycle   ------------------- //
@@ -51,8 +54,11 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		binding = ActivityMainBinding.inflate(getLayoutInflater());
-		setContentView(binding.getRoot());
+		mActivityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
+		setContentView(mActivityMainBinding.getRoot());
+
+//		setSupportActionBar(mAppBarMainBinding.toolbar);
+		
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		
@@ -90,25 +96,25 @@ public class MainActivity extends AppCompatActivity {
 		
 		//Navigation drawer menu
 		mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_your_lunch, R.id.nav_settings, R.id.nav_logout)
-				.setDrawerLayout(binding.drawerLayout)
+				.setDrawerLayout(mActivityMainBinding.drawerLayout)
 				.build();
 		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 		NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-		NavigationUI.setupWithNavController(binding.navView, navController);
+		NavigationUI.setupWithNavController(mActivityMainBinding.navView, navController);
 	}
 	
 	public void bottomNavigationInitialize() {
 		//Bottom navigation menu
 		mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_map_view, R.id.navigation_list_view, R.id.navigation_workmates)
-				.setDrawerLayout(binding.drawerLayout)
+				.setDrawerLayout(mActivityMainBinding.drawerLayout)
 				.build();
 		NavController navControllerBottom = Navigation.findNavController(this, R.id.nav_host_fragment);
 		NavigationUI.setupActionBarWithNavController(this, navControllerBottom, mAppBarConfiguration);
-		NavigationUI.setupWithNavController(binding.navViewBottom, navControllerBottom);
+		NavigationUI.setupWithNavController(mActivityMainBinding.navViewBottom, navControllerBottom);
 	}
 	
 	public void signOutButton() {
-		binding.navView
+		mActivityMainBinding.navView
 				.getMenu()
 				.findItem(R.id.nav_logout)
 				.setOnMenuItemClickListener(menuItem -> {
@@ -120,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 	
 	//TODO this method could be share with SettingsFragment
 	public void updateUIWhenCreating() {
-		NavHeaderMainBinding header = NavHeaderMainBinding.bind(binding.navView.getHeaderView(0));
+		NavHeaderMainBinding header = NavHeaderMainBinding.bind(mActivityMainBinding.navView.getHeaderView(0));
 		//Get picture URL from Firebase
 		if (this
 				    .getCurrentUser()
