@@ -161,27 +161,6 @@ public class MapViewFragment extends Fragment
 		
 	}
 
-//	@SuppressLint("MissingPermission")
-//	@Override
-//	public void onRequestPermissionsResult(int requestCode,
-//	                                       @NonNull String[] permissions,
-//	                                       @NonNull int[] grantResults) {
-//		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//
-//
-////
-////		int permissionCheck = PackageManager.PERMISSION_GRANTED;
-////		for (int permission : grantResults) {
-////			permissionCheck = permissionCheck + permission;
-////		}
-////		if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
-//			locationPermissionGranted = true;
-//			updateLocationUI();
-//			getLocationAndCheckPermission();
-////		}
-//
-//
-//	}
 	
 	//------------------------------------------------------//
 	// ------------------   Functions   ------------------- //
@@ -202,7 +181,7 @@ public class MapViewFragment extends Fragment
 	public void DisplaysNearbyRestaurant() {
 		Object[]        transferData    = new Object[2];
 		String          url             = getUrl(latitude, longitude, restaurant);
-		GetNearbyPlaces getNearbyPlaces = new GetNearbyPlaces();
+		GetNearbyPlaces getNearbyPlaces = new GetNearbyPlaces(getActivity());
 		transferData[0] = Mmap;
 		transferData[1] = url;
 		
