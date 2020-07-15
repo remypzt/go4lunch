@@ -58,7 +58,9 @@ public class RestaurantsListViewFragment extends Fragment {
 	                          @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		RestaurantsListViewViewModel localViewModelMyNews = new RestaurantsListViewViewModel();
-		
+
+//		localViewModelMyNews.getRestaurants()
+//				.observe(this, this::updateList);
 	}
 	
 	private void configureRecyclerView() {

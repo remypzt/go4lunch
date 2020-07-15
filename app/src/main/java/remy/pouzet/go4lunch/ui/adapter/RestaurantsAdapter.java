@@ -38,17 +38,20 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsViewHold
 		return new RestaurantsViewHolder(root);
 	}
 	
-	// UPDATE VIEW HOLDER WITH A ARTICLES
+	// UPDATE VIEW HOLDER WITH Restaurants
 	@Override
 	public void onBindViewHolder(RestaurantsViewHolder viewHolder,
 	                             int position) {
-		viewHolder.updateWithRestaurants(this.mRestaurants.get(position));
+		viewHolder.updateWithRestaurants(this.mRestaurants.get(0)
+//						                 get(position)
+		                                );
 		
 	}
 	
 	// RETURN THE TOTAL COUNT OF ITEMS IN THE LIST
 	@Override
 	public int getItemCount() {
-		return this.mRestaurants.size();
+		return 1;
+//				this.mRestaurants.size();
 	}
 }

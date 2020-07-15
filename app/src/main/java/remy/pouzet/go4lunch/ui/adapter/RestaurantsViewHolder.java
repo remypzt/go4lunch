@@ -45,11 +45,11 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 		
 	}
 //		Glide
-//				.with(mPicture.getContext())
-//				.load(restaurants.getUrlImage())
-//				.into(mPicture);
-//		}
-//
+////				.with(mPicture.getContext())
+////				.load(restaurants.getUrlImage())
+////				.into(mPicture);
+////		}
+////
 //		this.mName.setText(restaurants.getName());
 //		this.mHorair.setText(restaurants.getDate());
 //		this.mAdress.setText(restaurants.getTitle());
