@@ -24,6 +24,7 @@
             <!--            I just need to put this to have a search view tools inside my toolbar !-->
 
             <SearchView
+                android:id="@+id/places_autocomplete_search_bar_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
