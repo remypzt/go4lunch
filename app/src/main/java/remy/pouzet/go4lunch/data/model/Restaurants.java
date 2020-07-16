@@ -15,24 +15,26 @@ public class Restaurants {
 	private int    mWorkmatesInterrested;
 	private int    mEvaluation;
 	
-	public Restaurants(int drawableImage,
-	                   String urlImage,
-	                   String name,
-	                   String type,
-	                   String adress,
-	                   String horair,
-	                   String distance,
-	                   int workmates,
-	                   int evaluation) {
-		mDrawableImage        = drawableImage;
-		mUrlImage             = urlImage;
-		mName                 = name;
-		mType                 = type;
-		mAdress               = adress;
-		mHorair               = horair;
-		mDistance             = distance;
-		mWorkmatesInterrested = workmates;
-		mEvaluation           = evaluation;
+	public Restaurants(
+//			int drawableImage,
+//	                   String urlImage,
+			String name
+//	                   String type,
+//	                   String adress,
+//	                   String horair,
+//	                   String distance,
+//	                   int workmates,
+//	                   int evaluation
+	                  ) {
+//		mDrawableImage        = drawableImage;
+//		mUrlImage             = urlImage;
+		mName = name;
+//		mType                 = type;
+//		mAdress               = adress;
+//		mHorair               = horair;
+//		mDistance             = distance;
+//		mWorkmatesInterrested = workmates;
+//		mEvaluation           = evaluation;
 		
 	}
 	

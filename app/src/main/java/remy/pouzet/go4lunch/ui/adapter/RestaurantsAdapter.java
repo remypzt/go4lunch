@@ -42,16 +42,14 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsViewHold
 	@Override
 	public void onBindViewHolder(RestaurantsViewHolder viewHolder,
 	                             int position) {
-		viewHolder.updateWithRestaurants(this.mRestaurants.get(0)
-//						                 get(position)
-		                                );
+		viewHolder.updateWithRestaurants(this.mRestaurants.
+				                                                  get(position));
 		
 	}
 	
 	// RETURN THE TOTAL COUNT OF ITEMS IN THE LIST
 	@Override
 	public int getItemCount() {
-		return 1;
-//				this.mRestaurants.size();
+		return this.mRestaurants.size();
 	}
 }

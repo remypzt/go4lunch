@@ -198,7 +198,7 @@ public class MapViewFragment extends Fragment
 		googleURL.append("&radius=" + ProximityRadius);
 		googleURL.append("&type=" + restaurant);
 		googleURL.append("&sensor=true");
-		googleURL.append("&key=" + "AIzaSyCwOvrDss4VieCkqr-66cV3FOVNLa20yNs");
+		googleURL.append("&key=" + "AIzaSyAyT25ijQ8hyslxHA7HZumtLD4emIudaLI");
 		//TODO why do I have 3 API_KEY ?
 		// AIzaSyDL-idL-XMKynowoKVqMhtvy--51D_sz_U
 		//		AIzaSyCwOvrDss4VieCkqr-66cV3FOVNLa20yNs

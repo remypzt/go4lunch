@@ -19,20 +19,31 @@ import remy.pouzet.go4lunch.databinding.ContentItemsOfRestaurantsListViewBinding
 class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 	
 	private ContentItemsOfRestaurantsListViewBinding mContentItemsOfRestaurantsListViewBinding;
-	public  ImageView                                mPicture          = mContentItemsOfRestaurantsListViewBinding.restaurantPicture;
-	public  TextView                                 mName             = mContentItemsOfRestaurantsListViewBinding.restaurantName;
-	public  TextView                                 mType             = mContentItemsOfRestaurantsListViewBinding.restaurantType;
-	public  TextView                                 mAdress           = mContentItemsOfRestaurantsListViewBinding.restaurantAdress;
-	public  TextView                                 mHorair           = mContentItemsOfRestaurantsListViewBinding.restaurantHorairInformations;
-	public  ConstraintLayout                         mConstraintLayout = mContentItemsOfRestaurantsListViewBinding.ArticlesLayout;
-	public  TextView                                 mDistance         = mContentItemsOfRestaurantsListViewBinding.restaurantDistanceFromTheUser;
-	private Activity                                 activity;
+	
+	public  ImageView        mPicture;
+	public  TextView         mName;
+	public  TextView         mType;
+	public  TextView         mAdress;
+	public  TextView         mHorair;
+	public  ConstraintLayout mConstraintLayout;
+	public  TextView         mDistance;
+	private Activity         activity;
 // TODO worksmate and evaluation
 	
 	RestaurantsViewHolder(View itemView) {
 		super(itemView);
-		ContentItemsOfRestaurantsListViewBinding.bind(itemView);
+		
+		mContentItemsOfRestaurantsListViewBinding = ContentItemsOfRestaurantsListViewBinding.bind(itemView);
 		Context localContext = itemView.getContext();
+		
+		mName = mContentItemsOfRestaurantsListViewBinding.restaurantName;
+//		 = mContentItemsOfRestaurantsListViewBinding.restaurantPicture;
+
+// = mContentItemsOfRestaurantsListViewBinding.restaurantType;
+// = mContentItemsOfRestaurantsListViewBinding.restaurantAdress;
+// = mContentItemsOfRestaurantsListViewBinding.restaurantHorairInformations;
+// = mContentItemsOfRestaurantsListViewBinding.ArticlesLayout;
+// = mContentItemsOfRestaurantsListViewBinding.restaurantDistanceFromTheUser;
 	}
 	
 	@SuppressLint("SetTextI18n")

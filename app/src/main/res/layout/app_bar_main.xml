@@ -32,7 +32,8 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <!--    <include layout="@layout/content_main"-->
+    <!--        />-->
 
     <!-- THERE is no need too create this button because it will automaticly create in mapview activity >
 

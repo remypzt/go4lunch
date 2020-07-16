@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.data.model.Restaurants;
 import remy.pouzet.go4lunch.databinding.FragmentRestaurantsListViewBinding;
 import remy.pouzet.go4lunch.ui.adapter.RestaurantsAdapter;
@@ -48,8 +47,8 @@ public class RestaurantsListViewFragment extends Fragment {
 		mRestaurantsListViewViewModel = ViewModelProviders
 				.of(this)
 				.get(RestaurantsListViewViewModel.class);
-		View rootView = inflater.inflate(R.layout.fragment_restaurants_list_view, container, false);
-		this.configureRecyclerView();
+		configureRecyclerView();
+		View rootView = mFragmentRestaurantsListViewBinding.getRoot();
 		return rootView;
 	}
 	
@@ -64,8 +63,12 @@ public class RestaurantsListViewFragment extends Fragment {
 	}
 	
 	private void configureRecyclerView() {
+		
+		Restaurants test = new Restaurants("test");
 		// 3.1 - Reset list
 		this.mRestaurants = new ArrayList<>();
+		
+		mRestaurants.add(test);
 		
 		// 3.2 - Create adapter passing the list of articles
 		this.mRestaurantsAdapter = new RestaurantsAdapter(this.mRestaurants);

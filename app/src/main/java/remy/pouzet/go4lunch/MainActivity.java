@@ -58,7 +58,9 @@ public class MainActivity extends AppCompatActivity {
 
 //		setSupportActionBar(mAppBarMainBinding.toolbar);
 		
-		Toolbar toolbar = findViewById(R.id.toolbar);
+		Toolbar toolbar = mActivityMainBinding.mainToolbar.toolbar;
+//				findViewById(R.id.toolbar)
+		
 		setSupportActionBar(toolbar);
 		
 		navigationDrawerNavigationInitialize();
@@ -178,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.bottom_nav_menu, menu);
+//		getMenuInflater().inflate(R.menu.bottom_nav_menu, menu);
 		return true;
 	}
 	
