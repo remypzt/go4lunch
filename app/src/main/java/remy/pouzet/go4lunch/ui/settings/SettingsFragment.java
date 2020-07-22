@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import remy.pouzet.go4lunch.MainActivity;
 import remy.pouzet.go4lunch.R;
+import remy.pouzet.go4lunch.databinding.ActivityMainBinding;
 import remy.pouzet.go4lunch.databinding.FragmentSettingsBinding;
 
 // ------------------   Functions   ------------------- //
@@ -41,6 +42,7 @@ public class SettingsFragment extends Fragment {
 //------------------------------------------------------//
 	private SettingsViewModel       mSettingsViewModel;
 	private FragmentSettingsBinding binding;
+	private ActivityMainBinding     mMainBinding;
 
 //------------------------------------------------------//
 // ------------------   LifeCycle   ------------------- //
@@ -52,6 +54,7 @@ public class SettingsFragment extends Fragment {
 		
 		binding = FragmentSettingsBinding.inflate(inflater, container, false);
 		View view = binding.getRoot();
+		
 		updateUIWhenCreating();
 		seekBarManagement();
 		return view;
@@ -76,6 +79,7 @@ public class SettingsFragment extends Fragment {
 	@Override
 	public void onViewCreated(@NonNull View view,
 	                          @Nullable Bundle savedInstanceState) {
+		
 		onClickDeleteButton();
 		
 	}

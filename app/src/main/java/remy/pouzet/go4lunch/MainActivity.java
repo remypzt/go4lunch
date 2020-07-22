@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
+import android.view.View;
+import android.widget.SearchView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,22 +59,69 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(mActivityMainBinding.getRoot());
 
 //		setSupportActionBar(mAppBarMainBinding.toolbar);
-		
 		Toolbar toolbar = mActivityMainBinding.mainToolbar.toolbar;
-//				findViewById(R.id.toolbar)
 		
 		setSupportActionBar(toolbar);
-		
 		navigationDrawerNavigationInitialize();
 		bottomNavigationInitialize();
 		updateWithUserStatus();
 		signOutButton();
+		setSearchViewVisibilityFragmentDepends();
 		
 	}
 	
 	//------------------------------------------------------//
 	// ------------------   Functions   ------------------- //
 	//------------------------------------------------------//
+	
+	private void setSearchViewVisibilityFragmentDepends() {
+		SearchView localSearchView = mActivityMainBinding.mainToolbar.placesAutocompleteSearchBarContainer;
+		localSearchView.setVisibility(View.INVISIBLE);
+
+//		if (getFragmentManager().getBackStackEntryCount() > 1) {
+//			Fragment f = getFragmentManager().findFragmentById(R);
+//			if (f instanceof MapViewFragment) {
+//				// Do something
+//			}
+//		}
+
+//		Fragment navHostFragment = getSupportFragmentManager().getPrimaryNavigationFragment();
+//		Fragment fragment = navHostFragment
+//				.getChildFragmentManager()
+//				.getFragments().get(0);
+
+//		NavHostFragment navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment);
+//		navHostFragment.getChildFragmentManager().getFragments().get(0);
+
+//		if (getVisibleFragment() instanceof MapViewFragment)
+//		{
+//			localSearchView.setVisibility(View.INVISIBLE);
+//		}
+
+//	Fragment visibleFragment=getCurrentFragment();
+//	if (visibleFragment instanceof MapViewFragment){
+//		localSearchView.setVisibility(View.INVISIBLE);
+//	}
+//
+	
+	}
+//
+//	private Fragment getVisibleFragment() {
+//		FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+//		List<Fragment> fragments = fragmentManager.getFragments();
+//		for (Fragment fragment : fragments) {
+//			if (fragment != null && fragment.isVisible())
+//				return fragment;
+//		}
+//		return null;
+//	}
+
+//	Fragment getCurrentFragment()
+//	{
+//		Fragment currentFragment = getSupportFragmentManager()
+//				.findFragmentById(R.id.nav_host_fragment);
+//		return currentFragment;
+//	}
 	
 	private void updateWithUserStatus() {
 		// Binding header xml element with viewbinding
