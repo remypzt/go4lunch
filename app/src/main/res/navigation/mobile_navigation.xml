@@ -7,37 +7,37 @@
 
     <fragment
         android:id="@+id/nav_your_lunch"
-        android:name="remy.pouzet.go4lunch.ui.yourlunch.YourLunchFragment"
+        android:name="remy.pouzet.go4lunch.view.fragments.YourLunchFragment"
         android:label="@string/menu_your_lunch"
         tools:layout="@layout/fragment_your_lunch" />
 
     <fragment
         android:id="@+id/nav_settings"
-        android:name="remy.pouzet.go4lunch.ui.settings.SettingsFragment"
+        android:name="remy.pouzet.go4lunch.view.fragments.SettingsFragment"
         android:label="@string/menu_settings"
         tools:layout="@layout/fragment_settings" />
 
     <fragment
         android:id="@+id/nav_logout"
-        android:name="remy.pouzet.go4lunch.ui.logout.LogoutFragment"
+        android:name="remy.pouzet.go4lunch.view.fragments.LogoutFragment"
         android:label="@string/menu_logout"
         tools:layout="@layout/fragment_logout" />
 
     <fragment
         android:id="@+id/navigation_map_view"
-        android:name="remy.pouzet.go4lunch.ui.mapview.MapViewFragment"
+        android:name="remy.pouzet.go4lunch.view.fragments.MapViewFragment"
         android:label="@string/title_map_view"
         tools:layout="@layout/fragment_map_view" />
 
     <fragment
         android:id="@+id/navigation_list_view"
-        android:name="remy.pouzet.go4lunch.ui.listView.RestaurantsListViewFragment"
+        android:name="remy.pouzet.go4lunch.view.fragments.RestaurantsListViewFragment"
         android:label="@string/title_list_view"
         tools:layout="@layout/fragment_restaurants_list_view" />
 
     <fragment
         android:id="@+id/navigation_workmates"
-        android:name="remy.pouzet.go4lunch.ui.workmates.WorkmatesFragment"
+        android:name="remy.pouzet.go4lunch.view.fragments.WorkmatesFragment"
         android:label="@string/title_workmates"
         tools:layout="@layout/fragment_workmates_list_view" />
 
