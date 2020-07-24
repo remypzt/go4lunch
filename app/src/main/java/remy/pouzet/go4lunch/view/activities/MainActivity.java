@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 //				.getChildFragmentManager()
 //				.getFragments().get(0);
 
-//		NavHostFragment navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment);
+//		NavHostFragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
 //		navHostFragment.getChildFragmentManager().getFragments().get(0);
 
 //		if (getVisibleFragment() instanceof MapViewFragment)
@@ -102,7 +102,12 @@ public class MainActivity extends AppCompatActivity {
 //		localSearchView.setVisibility(View.INVISIBLE);
 //	}
 //
-	
+//
+//		NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+//		Fragment fragment = navHostFragment.getChildFragmentManager().getFragments().get(0);
+//
+//
+		
 	}
 //
 //	private Fragment getVisibleFragment() {

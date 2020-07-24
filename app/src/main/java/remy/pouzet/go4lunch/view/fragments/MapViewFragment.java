@@ -25,6 +25,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import remy.pouzet.go4lunch.BuildConfig;
 import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.others.ATRIER.GetNearbyPlaces;
 //------------------------------------------------------//
@@ -198,8 +199,9 @@ public class MapViewFragment extends Fragment
 		googleURL.append("&radius=" + ProximityRadius);
 		googleURL.append("&type=" + restaurant);
 		googleURL.append("&sensor=true");
-		googleURL.append("&key=" + "AIzaSyAyT25ijQ8hyslxHA7HZumtLD4emIudaLI");
+		googleURL.append("&key=" + BuildConfig.apiKey);
 		//An another key which could be usefull AIzaSyDL-idL-XMKynowoKVqMhtvy--51D_sz_U
+//		"AIzaSyAyT25ijQ8hyslxHA7HZumtLD4emIudaLI"
 		
 		return googleURL.toString();
 	}

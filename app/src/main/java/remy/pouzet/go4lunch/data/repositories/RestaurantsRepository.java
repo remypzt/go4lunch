@@ -3,7 +3,7 @@ package remy.pouzet.go4lunch.data.repositories;
 /**
  * Created by Remy Pouzet on 23/07/2020.
  */
-class RestaurantsRepository {
+public class RestaurantsRepository {
 	
 	private static RestaurantsRepository restaurantsApiRepository;
 //	private final  RestaurantsApiInterfaceService mRestaurantsApiInterfaceService;

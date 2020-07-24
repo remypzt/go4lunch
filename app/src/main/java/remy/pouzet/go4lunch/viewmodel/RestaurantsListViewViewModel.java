@@ -8,11 +8,10 @@ import java.util.List;
 
 import remy.pouzet.go4lunch.data.repositories.model.Restaurants;
 
+
 public class RestaurantsListViewViewModel extends ViewModel {
 	
 	private MutableLiveData<List<Restaurants>> mRestaurants;
-	
-
 	
 	public RestaurantsListViewViewModel() {
 
