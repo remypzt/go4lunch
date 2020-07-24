@@ -1,6 +1,6 @@
 package remy.pouzet.go4lunch.data.repositories.model;
 
-/**
+ /**
  * Created by Remy Pouzet on 14/07/2020.
  */
 public class Restaurants {

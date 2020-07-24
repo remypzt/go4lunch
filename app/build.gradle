@@ -1,8 +1,22 @@
 apply plugin: 'com.android.application'
 
+
+// Creates a variable called gradlePropertiesFile, and initializes it to the
+// gradle.properties file.
+def gradlePropertiesFile = rootProject.file("gradle.properties")
+
+// Initializes a new Properties() object called gradleProperties.
+def gradleProperties = new Properties()
+
+// Loads the gradle.properties file into the gradleProperties object.
+gradleProperties.load(new FileInputStream(gradlePropertiesFile))
+
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
+
+
 
     defaultConfig {
         applicationId "remy.pouzet.go4lunch"
@@ -16,10 +30,23 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        // Creates a signing configuration called "release".
+//        release {
+//            // Specifies the password for your key.
+//            apiKey "apiKey"
+//        }
+        config {
+            apiKey gradleProperties['apiKey']
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // Adds the "release" signing configuration to the release build type.
+//            signingConfig signingConfigs.release
         }
     }
     viewBinding {
