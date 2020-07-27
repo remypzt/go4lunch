@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
+import android.view.View;
 import android.widget.SearchView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -76,56 +79,8 @@ public class MainActivity extends AppCompatActivity {
 	private void setSearchViewVisibilityFragmentDepends() {
 		SearchView localSearchView = mActivityMainBinding.mainToolbar.placesAutocompleteSearchBarContainer;
 //		localSearchView.setVisibility(View.INVISIBLE);
-
-//		if (getFragmentManager().getBackStackEntryCount() > 1) {
-//			Fragment f = getFragmentManager().findFragmentById(R);
-//			if (f instanceof MapViewFragment) {
-//				// Do something
-//			}
-//		}
-
-//		Fragment navHostFragment = getSupportFragmentManager().getPrimaryNavigationFragment();
-//		Fragment fragment = navHostFragment
-//				.getChildFragmentManager()
-//				.getFragments().get(0);
-
-//		NavHostFragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-//		navHostFragment.getChildFragmentManager().getFragments().get(0);
-
-//		if (getVisibleFragment() instanceof MapViewFragment)
-//		{
-//			localSearchView.setVisibility(View.INVISIBLE);
-//		}
-
-//	Fragment visibleFragment=getCurrentFragment();
-//	if (visibleFragment instanceof MapViewFragment){
-//		localSearchView.setVisibility(View.INVISIBLE);
-//	}
-//
-//
-//		NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-//		Fragment fragment = navHostFragment.getChildFragmentManager().getFragments().get(0);
-//
-//
-		
+	
 	}
-//
-//	private Fragment getVisibleFragment() {
-//		FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
-//		List<Fragment> fragments = fragmentManager.getFragments();
-//		for (Fragment fragment : fragments) {
-//			if (fragment != null && fragment.isVisible())
-//				return fragment;
-//		}
-//		return null;
-//	}
-
-//	Fragment getCurrentFragment()
-//	{
-//		Fragment currentFragment = getSupportFragmentManager()
-//				.findFragmentById(R.id.nav_host_fragment);
-//		return currentFragment;
-//	}
 	
 	private void updateWithUserStatus() {
 		// Binding header xml element with viewbinding
@@ -165,6 +120,28 @@ public class MainActivity extends AppCompatActivity {
 		NavController navControllerBottom = Navigation.findNavController(this, R.id.nav_host_fragment);
 		NavigationUI.setupActionBarWithNavController(this, navControllerBottom, mAppBarConfiguration);
 		NavigationUI.setupWithNavController(mActivityMainBinding.navViewBottom, navControllerBottom);
+		
+		navControllerBottom.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+			@Override
+			public void onDestinationChanged(@NonNull NavController controller,
+			                                 @NonNull NavDestination destination,
+			                                 @Nullable Bundle arguments) {
+				SearchView localSearchView = mActivityMainBinding.mainToolbar.placesAutocompleteSearchBarContainer;
+				if (destination
+						    .getLabel()
+						    .toString()
+						    .equals("Map View") || (destination
+								                            .getLabel()
+								                            .toString()
+								                            .equals("List View"))) {
+					
+					localSearchView.setVisibility(View.VISIBLE);
+				} else {
+					localSearchView.setVisibility(View.INVISIBLE);
+					
+				}
+			}
+		});
 	}
 	
 	public void signOutButton() {
