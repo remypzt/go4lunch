@@ -1,4 +1,4 @@
-package remy.pouzet.go4lunch.others.ATRIER.login;
+package remy.pouzet.go4lunch.viewmodel;
 
 import android.util.Patterns;
 
@@ -7,7 +7,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import remy.pouzet.go4lunch.R;
+import remy.pouzet.go4lunch.data.loginData.Result;
+import remy.pouzet.go4lunch.data.repositories.LoginRepository;
 import remy.pouzet.go4lunch.data.repositories.model.LoggedInUser;
+import remy.pouzet.go4lunch.others.ATRIER.login.LoggedInUserView;
+import remy.pouzet.go4lunch.others.ATRIER.login.LoginFormState;
+import remy.pouzet.go4lunch.others.ATRIER.login.LoginResult;
 
 public class LoginViewModel extends ViewModel {
 	

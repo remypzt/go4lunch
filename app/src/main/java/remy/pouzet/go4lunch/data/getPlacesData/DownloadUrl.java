@@ -1,4 +1,4 @@
-package remy.pouzet.go4lunch.others.ATRIER;
+package remy.pouzet.go4lunch.data.getPlacesData;
 
 import java.io.BufferedReader;
 import java.io.IOException;

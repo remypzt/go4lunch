@@ -1,4 +1,4 @@
-package remy.pouzet.go4lunch.others.ATRIER.login;
+package remy.pouzet.go4lunch.data.loginData;
 
 /**
  * A generic class that holds a result success w/ data or an error exception.

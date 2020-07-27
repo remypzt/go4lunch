@@ -1,8 +1,11 @@
-package remy.pouzet.go4lunch.others.ATRIER.login;
+package remy.pouzet.go4lunch.viewmodel;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
+import remy.pouzet.go4lunch.data.loginData.LoginDataSource;
+import remy.pouzet.go4lunch.data.repositories.LoginRepository;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

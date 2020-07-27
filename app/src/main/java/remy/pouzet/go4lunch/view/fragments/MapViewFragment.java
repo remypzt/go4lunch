@@ -27,7 +27,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 import remy.pouzet.go4lunch.BuildConfig;
 import remy.pouzet.go4lunch.R;
-import remy.pouzet.go4lunch.others.ATRIER.GetNearbyPlaces;
+import remy.pouzet.go4lunch.data.getPlacesData.GetNearbyPlaces;
 //------------------------------------------------------//
 // ------------------    Adapter    ------------------- //
 // ------------------      Menu     ------------------- //

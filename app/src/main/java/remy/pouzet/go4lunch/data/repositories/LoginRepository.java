@@ -1,5 +1,7 @@
-package remy.pouzet.go4lunch.others.ATRIER.login;
+package remy.pouzet.go4lunch.data.repositories;
 
+import remy.pouzet.go4lunch.data.loginData.LoginDataSource;
+import remy.pouzet.go4lunch.data.loginData.Result;
 import remy.pouzet.go4lunch.data.repositories.model.LoggedInUser;
 
 /**

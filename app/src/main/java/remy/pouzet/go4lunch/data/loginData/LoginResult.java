@@ -1,4 +1,4 @@
-package remy.pouzet.go4lunch.others.ATRIER.login;
+package remy.pouzet.go4lunch.data.loginData;
 
 import androidx.annotation.Nullable;
 
