@@ -10,8 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
         android:background="@drawable/flou"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
         <!-- IMAGE VIEW FIREBASE OC -->
@@ -70,8 +70,8 @@
                 style="@style/FirebaseUI.Button.AccountChooser.GoogleButton"
                 android:layout_width="@dimen/default_width_button"
 
-                android:layout_gravity="center_horizontal"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_margin="@dimen/default_large_margin"
                 android:background="@color/colorAccent"
                 android:padding="@dimen/default_large_margin"
@@ -85,8 +85,8 @@
                 style="@style/FirebaseUI.Button.AccountChooser.FacebookButton"
                 android:layout_width="@dimen/default_width_button"
 
-                android:layout_gravity="center_horizontal"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_margin="@dimen/default_large_margin"
                 android:background="#507CC0"
                 android:padding="@dimen/default_large_margin"

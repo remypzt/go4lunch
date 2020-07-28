@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +33,7 @@ public class RestaurantsListViewFragment extends Fragment {
 
 // ------------------   Variables   ------------------- //
 	
-	public  RecyclerView                       mRestaurantsReyclerView;
+	public RecyclerView mRestaurantsReyclerView;
 	
 	private List<Restaurants>                  mRestaurants;
 	private RestaurantsAdapter                 mRestaurantsAdapter;
@@ -43,14 +44,15 @@ public class RestaurantsListViewFragment extends Fragment {
 	public View onCreateView(@NonNull LayoutInflater inflater,
 	                         ViewGroup container,
 	                         Bundle savedInstanceState) {
-		mFragmentRestaurantsListViewBinding = FragmentRestaurantsListViewBinding.inflate(getLayoutInflater());
-		mRestaurantsReyclerView             = mFragmentRestaurantsListViewBinding.fragmentRestaurantsRecyclerView;
 		
 		mRestaurantsListViewViewModel = ViewModelProviders
 				.of(this)
 				.get(RestaurantsListViewViewModel.class);
-		configureRecyclerView();
+		
+		mFragmentRestaurantsListViewBinding = FragmentRestaurantsListViewBinding.inflate(getLayoutInflater());
+		mRestaurantsReyclerView             = mFragmentRestaurantsListViewBinding.fragmentRestaurantsRecyclerView;
 		View rootView = mFragmentRestaurantsListViewBinding.getRoot();
+		this.configureRecyclerView();
 		return rootView;
 	}
 	
@@ -62,21 +64,7 @@ public class RestaurantsListViewFragment extends Fragment {
 		
 		localViewModelMyNews
 				.getRestaurants()
-				.observe(requireActivity(), this::updateList);
-	}
-	
-	private void configureRecyclerView() {
-		
-		// 3.1 - Reset list
-		this.mRestaurants = new ArrayList<>();
-		
-		
-		// 3.2 - Create adapter passing the list of articles
-		this.mRestaurantsAdapter = new RestaurantsAdapter(this.mRestaurants);
-		// 3.3 - Attach the adapter to the recyclerview to populate items
-		this.mRestaurantsReyclerView.setAdapter(this.mRestaurantsAdapter);
-		// 3.4 - Set layout manager to position the items
-		this.mRestaurantsReyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+				.observe((LifecycleOwner) requireContext(), this::updateList);
 	}
 	
 	public void updateList(List<Restaurants> restaurantsList) {
@@ -85,5 +73,18 @@ public class RestaurantsListViewFragment extends Fragment {
 			mRestaurants.addAll(restaurantsList);
 			mRestaurantsAdapter.notifyDataSetChanged();
 		}
+	}
+	
+	private void configureRecyclerView() {
+		
+		// 3.1 - Reset list
+		this.mRestaurants = new ArrayList<>();
+		
+		// 3.2 - Create adapter passing the list of articles
+		this.mRestaurantsAdapter = new RestaurantsAdapter(this.mRestaurants);
+		// 3.3 - Attach the adapter to the recyclerview to populate items
+		this.mRestaurantsReyclerView.setAdapter(this.mRestaurantsAdapter);
+		// 3.4 - Set layout manager to position the items
+		this.mRestaurantsReyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 	}
 }

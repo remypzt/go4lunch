@@ -170,17 +170,6 @@ public class SettingsFragment extends Fragment {
 	// ------------------Navigation & UI------------------- //
 	//------------------------------------------------------//
 	
-	@Nullable
-	protected FirebaseUser getCurrentUser() {
-		return FirebaseAuth
-				.getInstance()
-				.getCurrentUser();
-	}
-	
-	//------------------------------------------------------//
-	// 9-----------------      Data     ------------------- //
-	//------------------------------------------------------//
-	
 	public void seekBarManagement() {
 		binding.seekBar2.setMax(5000);
 		binding.seekBar2.setProgress(100);
@@ -209,6 +198,17 @@ public class SettingsFragment extends Fragment {
 				
 			}
 		});
+	}
+	
+	//------------------------------------------------------//
+	// 9-----------------      Data     ------------------- //
+	//------------------------------------------------------//
+	
+	@Nullable
+	protected FirebaseUser getCurrentUser() {
+		return FirebaseAuth
+				.getInstance()
+				.getCurrentUser();
 	}
 }
 

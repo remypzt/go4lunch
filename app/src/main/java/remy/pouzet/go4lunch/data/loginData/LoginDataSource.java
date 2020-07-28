@@ -2,8 +2,6 @@ package remy.pouzet.go4lunch.data.loginData;
 
 import java.io.IOException;
 
-import remy.pouzet.go4lunch.data.repositories.model.LoggedInUser;
-
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */

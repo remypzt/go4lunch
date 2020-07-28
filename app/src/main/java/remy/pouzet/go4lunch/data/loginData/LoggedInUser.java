@@ -1,4 +1,4 @@
-package remy.pouzet.go4lunch.data.repositories.model;
+package remy.pouzet.go4lunch.data.loginData;
 
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository

@@ -6,18 +6,18 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
+import remy.pouzet.go4lunch.data.repositories.RestaurantsRepository;
 import remy.pouzet.go4lunch.data.repositories.model.Restaurants;
-
 
 public class RestaurantsListViewViewModel extends ViewModel {
 	
 	private MutableLiveData<List<Restaurants>> mRestaurants;
 	
 	public RestaurantsListViewViewModel() {
-
-//		RestaurantsRepository localRestaurantsRepository = RestaurantsRepository.getInstance();
-//		mRestaurants = localRestaurantsRepository ;
-	
+		
+		RestaurantsRepository localRestaurantsRepository = RestaurantsRepository.getInstance();
+		mRestaurants = localRestaurantsRepository.getRestaurants();
+		
 	}
 	
 	public LiveData<List<Restaurants>> getRestaurants() {

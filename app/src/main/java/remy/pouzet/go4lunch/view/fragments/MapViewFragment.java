@@ -36,52 +36,20 @@ import remy.pouzet.go4lunch.data.getPlacesData.GetNearbyPlaces;
 // ------------------Navigation & UI------------------- //
 //------------------------------------------------------//
 
-public class MapViewFragment extends Fragment
-{
+public class MapViewFragment extends Fragment {
+	private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 	//--------------------------------------------------//
 	// ------------------   Variables   --------------- //
 	//--------------------------------------------------//
 //	private MapViewViewModel mMapViewViewModel;
 	FusedLocationProviderClient mFusedLocationClient;
 	String                      restaurant = "restaurant";
-	
 	private int    ProximityRadius = 100;
 	private double latitude, longitude;
-	private static final int       PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-	private              GoogleMap Mmap;
+	private GoogleMap Mmap;
 	
-	private boolean locationPermissionGranted;
-	
-	//--------------------------------------------------//
-	// ------------------ LifeCycle ------------------- //
-	//--------------------------------------------------//
-	@Nullable
-	@Override
-	public View onCreateView(@NonNull LayoutInflater inflater,
-	                         @Nullable ViewGroup container,
-	                         @Nullable Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_map_view, container, false);
-		
-		//TODO understand if I still need this part of code
-	/*	mMapViewViewModel = ViewModelProviders
-				.of(this)
-				.get(MapViewViewModel.class);
-		View           root     = inflater.inflate(R.layout.fragment_map_view, container, false);
-		final TextView textView = root.findViewById(R.id.text_map_view);
-
-		mMapViewViewModel
-				.getText()
-				.observe(getViewLifecycleOwner(), new Observer<String>() {
-					@Override
-					public void onChanged(@Nullable String s) {
-						textView.setText(s);
-					}
-				});
-		return root;*/
-		
-	}
+	private boolean            locationPermissionGranted;
 	private OnMapReadyCallback callback         = new OnMapReadyCallback() {
-		
 		
 		@Override
 		public void onMapReady(GoogleMap map) {
@@ -95,18 +63,7 @@ public class MapViewFragment extends Fragment
 			
 		}
 	};
-	
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		mFusedLocationClient.removeLocationUpdates(locationCallback);
-	}
-	
-	//------------------------------------------------------//
-	// ------------------   Callbacks   ------------------- //
-	//------------------------------------------------------/
-	
-	private LocationCallback locationCallback = new LocationCallback() {
+	private LocationCallback   locationCallback = new LocationCallback() {
 		@Override
 		public void onLocationResult(LocationResult locationResult) {
 			if (locationResult == null) {
@@ -145,6 +102,39 @@ public class MapViewFragment extends Fragment
 		}
 	}
 	
+	//------------------------------------------------------//
+	// ------------------   Callbacks   ------------------- //
+	//------------------------------------------------------/
+	
+	//--------------------------------------------------//
+	// ------------------ LifeCycle ------------------- //
+	//--------------------------------------------------//
+	@Nullable
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater,
+	                         @Nullable ViewGroup container,
+	                         @Nullable Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_map_view, container, false);
+		
+		//TODO understand if I still need this part of code
+	/*	mMapViewViewModel = ViewModelProviders
+				.of(this)
+				.get(MapViewViewModel.class);
+		View           root     = inflater.inflate(R.layout.fragment_map_view, container, false);
+		final TextView textView = root.findViewById(R.id.text_map_view);
+
+		mMapViewViewModel
+				.getText()
+				.observe(getViewLifecycleOwner(), new Observer<String>() {
+					@Override
+					public void onChanged(@Nullable String s) {
+						textView.setText(s);
+					}
+				});
+		return root;*/
+		
+	}
+	
 	@SuppressLint("MissingPermission")
 	@Override
 	public void onViewCreated(@NonNull View view,
@@ -161,11 +151,32 @@ public class MapViewFragment extends Fragment
 		getLocationAndCheckPermission();
 		
 	}
-
+	
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mFusedLocationClient.removeLocationUpdates(locationCallback);
+	}
 	
 	//------------------------------------------------------//
 	// ------------------   Functions   ------------------- //
 	//------------------------------------------------------//
+	
+	private void updateLocationUI() {
+		if (Mmap == null) {
+			return;
+		}
+		try {
+			if (locationPermissionGranted) {
+				Mmap.setMyLocationEnabled(true);
+			} else {
+				Mmap.setMyLocationEnabled(false);
+			}
+		}
+		catch (SecurityException e) {
+			Log.e("Exception: %s", e.getMessage());
+		}
+	}
 	
 	@SuppressLint("MissingPermission")
 	public void getLocationAndCheckPermission() {
@@ -177,6 +188,16 @@ public class MapViewFragment extends Fragment
 				.setInterval(20 * 1000);
 		getLocationPermission();
 		mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+	}
+	
+	private void getLocationPermission() {
+		
+		if (ContextCompat.checkSelfPermission(this.requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+			locationPermissionGranted = true;
+			
+		} else {
+			ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+		}
 	}
 	
 	public void DisplaysNearbyRestaurant() {
@@ -204,33 +225,6 @@ public class MapViewFragment extends Fragment
 //		"AIzaSyAyT25ijQ8hyslxHA7HZumtLD4emIudaLI"
 		
 		return googleURL.toString();
-	}
-	
-
-	private void getLocationPermission() {
-		
-		if (ContextCompat.checkSelfPermission(this.requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-			locationPermissionGranted = true;
-			
-		} else {
-			ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-		}
-	}
-	
-	private void updateLocationUI() {
-		if (Mmap == null) {
-			return;
-		}
-		try {
-			if (locationPermissionGranted) {
-				Mmap.setMyLocationEnabled(true);
-			} else {
-				Mmap.setMyLocationEnabled(false);
-			}
-		}
-		catch (SecurityException e) {
-			Log.e("Exception: %s", e.getMessage());
-		}
 	}
 	
 }

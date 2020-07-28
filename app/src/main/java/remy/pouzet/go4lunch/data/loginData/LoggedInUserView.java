@@ -3,11 +3,11 @@ package remy.pouzet.go4lunch.data.loginData;
 /**
  * Class exposing authenticated user details to the UI.
  */
-class LoggedInUserView {
-	private String displayName;
+public class LoggedInUserView {
+	public String displayName;
 	//... other data fields that may be accessible to the UI
 	
-	LoggedInUserView(String displayName) {
+	public LoggedInUserView(String displayName) {
 		this.displayName = displayName;
 	}
 	

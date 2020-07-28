@@ -76,25 +76,6 @@ public class MainActivity extends AppCompatActivity {
 	// ------------------   Functions   ------------------- //
 	//------------------------------------------------------//
 	
-	private void setSearchViewVisibilityFragmentDepends() {
-		SearchView localSearchView = mActivityMainBinding.mainToolbar.placesAutocompleteSearchBarContainer;
-//		localSearchView.setVisibility(View.INVISIBLE);
-	
-	}
-	
-	private void updateWithUserStatus() {
-		// Binding header xml element with viewbinding
-		if (this.getCurrentUser() != null) {
-			updateUIWhenCreating();
-		} else {
-			passByLoginActivity();
-		}
-	}
-	
-	//------------------------------------------------------//
-	// ------------------Navigation & UI------------------- //
-	//------------------------------------------------------//
-	
 	@Override
 	public boolean onSupportNavigateUp() {
 		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -111,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
 		NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 		NavigationUI.setupWithNavController(mActivityMainBinding.navView, navController);
 	}
+	
+	//------------------------------------------------------//
+	// ------------------Navigation & UI------------------- //
+	//------------------------------------------------------//
 	
 	public void bottomNavigationInitialize() {
 		//Bottom navigation menu
@@ -144,6 +129,15 @@ public class MainActivity extends AppCompatActivity {
 		});
 	}
 	
+	private void updateWithUserStatus() {
+		// Binding header xml element with viewbinding
+		if (this.getCurrentUser() != null) {
+			updateUIWhenCreating();
+		} else {
+			passByLoginActivity();
+		}
+	}
+	
 	public void signOutButton() {
 		mActivityMainBinding.navView
 				.getMenu()
@@ -153,6 +147,19 @@ public class MainActivity extends AppCompatActivity {
 					passByLoginActivity();
 					return true;
 				});
+	}
+	
+	@Nullable
+	protected FirebaseUser getCurrentUser() {
+		return FirebaseAuth
+				.getInstance()
+				.getCurrentUser();
+	}
+	
+	private void setSearchViewVisibilityFragmentDepends() {
+		SearchView localSearchView = mActivityMainBinding.mainToolbar.placesAutocompleteSearchBarContainer;
+//		localSearchView.setVisibility(View.INVISIBLE);
+	
 	}
 	
 	//TODO this method could be share with SettingsFragment
@@ -205,25 +212,8 @@ public class MainActivity extends AppCompatActivity {
 	}
 	
 	//------------------------------------------------------//
-	// ------------------      Menu     ------------------- //
-	//------------------------------------------------------//
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-//		getMenuInflater().inflate(R.menu.bottom_nav_menu, menu);
-		return true;
-	}
-	
-	//------------------------------------------------------//
 	// 9-----------------      Data     ------------------- //
 	//------------------------------------------------------//
-	
-	@Nullable
-	protected FirebaseUser getCurrentUser() {
-		return FirebaseAuth
-				.getInstance()
-				.getCurrentUser();
-	}
 	
 	//TODO could be share with SettingsFragment
 	// Create OnCompleteListener called after tasks ended
@@ -240,6 +230,16 @@ public class MainActivity extends AppCompatActivity {
 					break;
 			}
 		};
+	}
+	
+	//------------------------------------------------------//
+	// ------------------      Menu     ------------------- //
+	//------------------------------------------------------//
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+//		getMenuInflater().inflate(R.menu.bottom_nav_menu, menu);
+		return true;
 	}
 //
 //	public void autoCompleteSearch() {

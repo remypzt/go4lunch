@@ -1,8 +1,4 @@
-package remy.pouzet.go4lunch.data.repositories;
-
-import remy.pouzet.go4lunch.data.loginData.LoginDataSource;
-import remy.pouzet.go4lunch.data.loginData.Result;
-import remy.pouzet.go4lunch.data.repositories.model.LoggedInUser;
+package remy.pouzet.go4lunch.data.loginData;
 
 /**
  * Class that requests authentication and user information from the remote data source and

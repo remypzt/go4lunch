@@ -33,25 +33,25 @@ public abstract class BaseActivity extends AppCompatActivity {
 	private ActivityLoginBinding binding;
 	//------------------------------------------------------//
 	// ------------------   LifeCycle   ------------------- //
-    //------------------------------------------------------//
-    
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityLoginBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(this.getFragmentLayout());
+	//------------------------------------------------------//
 	
-    }
-    
-    //TODO what's this method ?
-    public abstract int getFragmentLayout();
-    //------------------------------------------------------//
-    // ------------------      Menu     ------------------- //
-    //------------------------------------------------------//
-    
-    protected void configureToolbar() {
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
-    }
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		binding = ActivityLoginBinding.inflate(getLayoutInflater());
+		View view = binding.getRoot();
+		setContentView(this.getFragmentLayout());
+		
+	}
+	
+	//TODO what's this method ?
+	public abstract int getFragmentLayout();
+	//------------------------------------------------------//
+	// ------------------      Menu     ------------------- //
+	//------------------------------------------------------//
+	
+	protected void configureToolbar() {
+		ActionBar ab = getSupportActionBar();
+		ab.setDisplayHomeAsUpEnabled(true);
+	}
 }

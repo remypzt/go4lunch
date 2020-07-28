@@ -6,13 +6,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.facebook.login.LoginResult;
+
 import remy.pouzet.go4lunch.R;
+import remy.pouzet.go4lunch.data.loginData.LoggedInUser;
+import remy.pouzet.go4lunch.data.loginData.LoginFormState;
+import remy.pouzet.go4lunch.data.loginData.LoginRepository;
 import remy.pouzet.go4lunch.data.loginData.Result;
-import remy.pouzet.go4lunch.data.repositories.LoginRepository;
-import remy.pouzet.go4lunch.data.repositories.model.LoggedInUser;
-import remy.pouzet.go4lunch.others.ATRIER.login.LoggedInUserView;
-import remy.pouzet.go4lunch.others.ATRIER.login.LoginFormState;
-import remy.pouzet.go4lunch.others.ATRIER.login.LoginResult;
 
 public class LoginViewModel extends ViewModel {
 	
@@ -36,13 +36,14 @@ public class LoginViewModel extends ViewModel {
 	                  String password) {
 		// can be launched in a separate asynchronous job
 		Result<LoggedInUser> result = loginRepository.login(username, password);
-		
-		if (result instanceof Result.Success) {
-			LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-			loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-		} else {
-			loginResult.setValue(new LoginResult(R.string.login_failed));
-		}
+
+//		TODO FIX IT
+//		if (result instanceof Result.Success) {
+//			LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
+//			loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+//		} else {
+//			loginResult.setValue(new LoginResult(R.string.login_failed));
+//		}
 	}
 	
 	public void loginDataChanged(String username,

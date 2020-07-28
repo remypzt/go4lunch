@@ -20,16 +20,15 @@ import remy.pouzet.go4lunch.databinding.ContentItemsOfRestaurantsListViewBinding
  */
 class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 	
+	public  ImageView                                mPicture;
+	public  TextView                                 mName;
+	public  TextView                                 mType;
+	public  TextView                                 mAdress;
+	public  TextView                                 mHorair;
+	public  ConstraintLayout                         mConstraintLayout;
+	public  TextView                                 mDistance;
 	private ContentItemsOfRestaurantsListViewBinding mContentItemsOfRestaurantsListViewBinding;
-	
-	public  ImageView        mPicture;
-	public  TextView         mName;
-	public  TextView         mType;
-	public  TextView         mAdress;
-	public  TextView         mHorair;
-	public  ConstraintLayout mConstraintLayout;
-	public  TextView         mDistance;
-	private Activity         activity;
+	private Activity                                 activity;
 // TODO worksmate and evaluation
 	
 	RestaurantsViewHolder(View itemView) {

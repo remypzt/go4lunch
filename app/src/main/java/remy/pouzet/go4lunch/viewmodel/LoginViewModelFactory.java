@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import remy.pouzet.go4lunch.data.loginData.LoginDataSource;
-import remy.pouzet.go4lunch.data.repositories.LoginRepository;
+import remy.pouzet.go4lunch.data.loginData.LoginRepository;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
