@@ -53,7 +53,6 @@ public class Restaurants {
 	}
 	
 	public String getName() {
-		mName = "test";
 		return mName;
 	}
 	

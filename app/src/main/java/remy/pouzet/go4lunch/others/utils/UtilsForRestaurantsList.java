@@ -28,6 +28,6 @@ public class UtilsForRestaurantsList {
 	
 	private static Restaurants addArticleFromRestaurantsList(Result resultsItemOfRestaurantsList) {
 		
-		return new Restaurants(R.drawable.ic_launcher_background, "multimediaUrl", "name", "type", "adress", "horair", "distance", 1, 2);
+		return new Restaurants(R.drawable.ic_launcher_background, "multimediaUrl", resultsItemOfRestaurantsList.getName(), "type", "adress", "horair", "distance", 1, 2);
 	}
 }
