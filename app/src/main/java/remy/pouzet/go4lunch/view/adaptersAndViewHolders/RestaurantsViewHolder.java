@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import remy.pouzet.go4lunch.data.repositories.model.Restaurants;
+import remy.pouzet.go4lunch.data.repositories.model.Restaurant;
 import remy.pouzet.go4lunch.databinding.ContentItemsOfRestaurantsListViewBinding;
 
 /**
@@ -47,7 +47,7 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 	}
 	
 	@SuppressLint("SetTextI18n")
-	void updateWithRestaurants(Restaurants restaurants) {
+	void updateWithRestaurants(Restaurant restaurants) {
 		
 		this.mName.setText(restaurants.getName());
 		this.mHorair.setText(restaurants.getHorair());

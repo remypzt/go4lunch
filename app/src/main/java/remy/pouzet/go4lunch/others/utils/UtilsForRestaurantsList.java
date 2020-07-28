@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import remy.pouzet.go4lunch.R;
-import remy.pouzet.go4lunch.data.repositories.model.Restaurants;
+import remy.pouzet.go4lunch.data.repositories.model.Restaurant;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOrestaurantsList.ResponseOfRestaurantsList;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOrestaurantsList.Result;
 
@@ -13,8 +13,8 @@ import remy.pouzet.go4lunch.data.service.realAPI.POJOrestaurantsList.Result;
  */
 public class UtilsForRestaurantsList {
 	
-	public static List<Restaurants> generateRestaurantsFromRestaurantsList(ResponseOfRestaurantsList responseOfRestaurantsList) {
-		List<Restaurants> restauraurantsListRestaurants = new ArrayList<>();
+	public static List<Restaurant> generateRestaurantsFromRestaurantsList(ResponseOfRestaurantsList responseOfRestaurantsList) {
+		List<Restaurant> restauraurantsListRestaurants = new ArrayList<>();
 		if (responseOfRestaurantsList != null) {
 			List<Result> resultsRestaurantsList = responseOfRestaurantsList.getResults();
 			for (int x = 0;
@@ -26,8 +26,14 @@ public class UtilsForRestaurantsList {
 		return restauraurantsListRestaurants;
 	}
 	
-	private static Restaurants addArticleFromRestaurantsList(Result resultsItemOfRestaurantsList) {
+	private static Restaurant addArticleFromRestaurantsList(Result resultsItemOfRestaurantsList) {
 		
-		return new Restaurants(R.drawable.ic_launcher_background, "multimediaUrl", resultsItemOfRestaurantsList.getName(), "type", "adress", "horair", "distance", 1, 2);
+		return new Restaurant(R.drawable.ic_launcher_background, "multimediaUrl", resultsItemOfRestaurantsList.getName(), "type", "adress", "horair", "distance", 1, 2, resultsItemOfRestaurantsList
+				.getGeometry()
+				.getLocation()
+				.getLat(), resultsItemOfRestaurantsList
+				                      .getGeometry()
+				                      .getLocation()
+				                      .getLng());
 	}
 }

@@ -4,7 +4,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
-import remy.pouzet.go4lunch.data.repositories.model.Restaurants;
+import remy.pouzet.go4lunch.BuildConfig;
+import remy.pouzet.go4lunch.data.repositories.model.Restaurant;
 import remy.pouzet.go4lunch.data.service.RetrofitService;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOrestaurantsList.ResponseOfRestaurantsList;
 import remy.pouzet.go4lunch.data.service.realAPI.RestaurantsApiInterfaceService;
@@ -32,10 +33,11 @@ public class RestaurantsRepository {
 		return restaurantsApiRepository;
 	}
 	
-	public MutableLiveData<List<Restaurants>> getRestaurants() {
-		MutableLiveData<List<Restaurants>> restaurants = new MutableLiveData<>();
+	public MutableLiveData<List<Restaurant>> getRestaurants(double lat,
+	                                                        double lgn) {
+		MutableLiveData<List<Restaurant>> restaurants = new MutableLiveData<>();
 		mRestaurantsApiInterfaceService
-				.getResponseOfRestaurantsList()
+				.getResponseOfRestaurantsList((lat) + "," + (lgn), 15000, BuildConfig.apiKey, "restaurant")
 				.enqueue(new Callback<ResponseOfRestaurantsList>() {
 					@Override
 					public void onResponse(Call<ResponseOfRestaurantsList> call,

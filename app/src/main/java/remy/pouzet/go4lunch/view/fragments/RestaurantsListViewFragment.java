@@ -9,14 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import remy.pouzet.go4lunch.data.repositories.model.Restaurants;
+import remy.pouzet.go4lunch.data.repositories.model.Restaurant;
 import remy.pouzet.go4lunch.databinding.FragmentRestaurantsListViewBinding;
 import remy.pouzet.go4lunch.view.adaptersAndViewHolders.RestaurantsAdapter;
 import remy.pouzet.go4lunch.viewmodel.RestaurantsListViewViewModel;
@@ -35,23 +34,22 @@ public class RestaurantsListViewFragment extends Fragment {
 	
 	public RecyclerView mRestaurantsReyclerView;
 	
-	private List<Restaurants>                  mRestaurants;
-	private RestaurantsAdapter                 mRestaurantsAdapter;
-	private RestaurantsListViewViewModel       mRestaurantsListViewViewModel;
-	private FragmentRestaurantsListViewBinding mFragmentRestaurantsListViewBinding;
+	private List<Restaurant>   mRestaurants;
+	private RestaurantsAdapter mRestaurantsAdapter;
 	
 	// ------------------   LifeCycle   ------------------- //
 	public View onCreateView(@NonNull LayoutInflater inflater,
 	                         ViewGroup container,
 	                         Bundle savedInstanceState) {
-		
-		mRestaurantsListViewViewModel = ViewModelProviders
-				.of(this)
-				.get(RestaurantsListViewViewModel.class);
-		
-		mFragmentRestaurantsListViewBinding = FragmentRestaurantsListViewBinding.inflate(getLayoutInflater());
-		mRestaurantsReyclerView             = mFragmentRestaurantsListViewBinding.fragmentRestaurantsRecyclerView;
-		View rootView = mFragmentRestaurantsListViewBinding.getRoot();
+
+//		mRestaurantsListViewViewModel = ViewModelProviders
+//				.of(this)
+//				.get(RestaurantsListViewViewModel.class);
+//
+		//	private RestaurantsListViewViewModel       mRestaurantsListViewViewModel;
+		remy.pouzet.go4lunch.databinding.FragmentRestaurantsListViewBinding localFragmentRestaurantsListViewBinding = FragmentRestaurantsListViewBinding.inflate(getLayoutInflater());
+		mRestaurantsReyclerView = localFragmentRestaurantsListViewBinding.fragmentRestaurantsRecyclerView;
+		View rootView = localFragmentRestaurantsListViewBinding.getRoot();
 		this.configureRecyclerView();
 		return rootView;
 	}
@@ -60,14 +58,15 @@ public class RestaurantsListViewFragment extends Fragment {
 	public void onViewCreated(@NonNull View view,
 	                          @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		RestaurantsListViewViewModel localViewModelMyNews = new RestaurantsListViewViewModel();
+		// TODO
+		RestaurantsListViewViewModel localViewModelMyNews = new RestaurantsListViewViewModel(-33.8670522, 151.1957362);
 		
 		localViewModelMyNews
 				.getRestaurants()
 				.observe((LifecycleOwner) requireContext(), this::updateList);
 	}
 	
-	public void updateList(List<Restaurants> restaurantsList) {
+	public void updateList(List<Restaurant> restaurantsList) {
 		mRestaurants.clear();
 		if (restaurantsList != null) {
 			mRestaurants.addAll(restaurantsList);

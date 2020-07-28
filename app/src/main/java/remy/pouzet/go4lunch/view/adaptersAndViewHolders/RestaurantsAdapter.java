@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import remy.pouzet.go4lunch.R;
-import remy.pouzet.go4lunch.data.repositories.model.Restaurants;
+import remy.pouzet.go4lunch.data.repositories.model.Restaurant;
 
 /**
  * Created by Remy Pouzet on 14/07/2020.
@@ -19,10 +19,10 @@ import remy.pouzet.go4lunch.data.repositories.model.Restaurants;
 public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsViewHolder> {
 	
 	// FOR DATA
-	private List<Restaurants> mRestaurants;
+	private List<Restaurant> mRestaurants;
 	
 	// CONSTRUCTOR
-	public RestaurantsAdapter(List<Restaurants> mRestaurants) {
+	public RestaurantsAdapter(List<Restaurant> mRestaurants) {
 		this.mRestaurants = mRestaurants;
 	}
 	

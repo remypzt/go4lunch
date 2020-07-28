@@ -3,7 +3,7 @@ package remy.pouzet.go4lunch.data.repositories.model;
 /**
  * Created by Remy Pouzet on 14/07/2020.
  */
-public class Restaurants {
+public class Restaurant {
 	
 	private int    mDrawableImage;
 	private String mUrlImage;
@@ -14,16 +14,20 @@ public class Restaurants {
 	private String mDistance;
 	private int    mWorkmatesInterrested;
 	private int    mEvaluation;
+	double mlat;
+	double mlon;
 	
-	public Restaurants(int drawableImage,
-	                   String urlImage,
-	                   String name,
-	                   String type,
-	                   String adress,
-	                   String horair,
-	                   String distance,
-	                   int workmates,
-	                   int evaluation) {
+	public Restaurant(int drawableImage,
+	                  String urlImage,
+	                  String name,
+	                  String type,
+	                  String adress,
+	                  String horair,
+	                  String distance,
+	                  int workmates,
+	                  int evaluation,
+	                  double lat,
+	                  double lon) {
 		mDrawableImage        = drawableImage;
 		mUrlImage             = urlImage;
 		mName                 = name;
@@ -33,11 +37,29 @@ public class Restaurants {
 		mDistance             = distance;
 		mWorkmatesInterrested = workmates;
 		mEvaluation           = evaluation;
+		mlon                  = lon;
+		mlat                  = lat;
 		
 	}
 	
 	public int getDrawableImage() {
 		return mDrawableImage;
+	}
+	
+	public double getMlat() {
+		return mlat;
+	}
+	
+	public void setMlat(double parameterMlat) {
+		mlat = parameterMlat;
+	}
+	
+	public double getMlon() {
+		return mlon;
+	}
+	
+	public void setMlon(double parameterMlon) {
+		mlon = parameterMlon;
 	}
 	
 	public void setDrawableImage(int parameterDrawableImage) {

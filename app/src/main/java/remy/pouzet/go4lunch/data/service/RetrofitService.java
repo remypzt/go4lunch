@@ -23,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitService {
 	private static Retrofit retrofit = new Retrofit.Builder()
-			.baseUrl("https://maps.googleapis.com/maps/api/place/textsearch/")
+			.baseUrl("https://maps.googleapis.com/maps/api/place/nearbysearch/")
 			.addConverterFactory(GsonConverterFactory.create())
 			
 			.client(getNewHttpClient())
