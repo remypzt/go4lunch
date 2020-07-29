@@ -25,4 +25,8 @@ public class RestaurantsListViewViewModel extends ViewModel {
 		return mRestaurants;
 	}
 	
+	public LiveData<List<Restaurant>> getRestaurantsDetails() {
+		return mRestaurants;
+	}
+	
 }

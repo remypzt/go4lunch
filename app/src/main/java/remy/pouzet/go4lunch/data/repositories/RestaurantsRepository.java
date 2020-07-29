@@ -43,7 +43,9 @@ public class RestaurantsRepository {
 					public void onResponse(Call<ResponseOfRestaurantsList> call,
 					                       Response<ResponseOfRestaurantsList> response) {
 						if (response.isSuccessful()) {
+							
 							restaurants.setValue(UtilsForRestaurantsList.generateRestaurantsFromRestaurantsList(response.body()));
+							
 						} else {
 							restaurants.setValue(null);
 						}

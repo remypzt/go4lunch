@@ -1,5 +1,7 @@
 package remy.pouzet.go4lunch.view.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +36,12 @@ public class RestaurantsListViewFragment extends Fragment {
 	
 	public RecyclerView mRestaurantsReyclerView;
 	
-	private List<Restaurant>   mRestaurants;
-	private RestaurantsAdapter mRestaurantsAdapter;
+	private             List<Restaurant>   mRestaurants;
+	private             RestaurantsAdapter mRestaurantsAdapter;
+	public static final String             PREF_KEY_LATITUDE  = "PREF_KEY_LATITUDE";
+	public static final String             PREF_KEY_LONGITUDE = "PREF_KEY_LONGITUDE";
+	public              SharedPreferences  mPreferences;
+	private             double             latitude, longitude;
 	
 	// ------------------   LifeCycle   ------------------- //
 	public View onCreateView(@NonNull LayoutInflater inflater,
@@ -58,12 +64,25 @@ public class RestaurantsListViewFragment extends Fragment {
 	public void onViewCreated(@NonNull View view,
 	                          @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		// TODO
-		RestaurantsListViewViewModel localViewModelMyNews = new RestaurantsListViewViewModel(-33.8670522, 151.1957362);
+		
+		getLocation();
+		RestaurantsListViewViewModel localViewModelMyNews = new RestaurantsListViewViewModel(latitude, longitude);
 		
 		localViewModelMyNews
 				.getRestaurants()
 				.observe((LifecycleOwner) requireContext(), this::updateList);
+	}
+	
+	public void getLocation() {
+		mPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+		latitude     = getDouble(mPreferences, PREF_KEY_LATITUDE, 2.0);
+		longitude    = getDouble(mPreferences, PREF_KEY_LONGITUDE, 2.0);
+	}
+	
+	public double getDouble(final SharedPreferences prefs,
+	                        final String key,
+	                        final double defaultValue) {
+		return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
 	}
 	
 	public void updateList(List<Restaurant> restaurantsList) {

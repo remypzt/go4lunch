@@ -2,7 +2,9 @@ package remy.pouzet.go4lunch.view.fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -46,35 +48,18 @@ import remy.pouzet.go4lunch.viewmodel.RestaurantsListViewViewModel;
 //------------------------------------------------------//
 
 public class MapViewFragment extends Fragment {
-	private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-	//--------------------------------------------------//
-	// ------------------   Variables   --------------- //
-	//--------------------------------------------------//
-//	private MapViewViewModel MmapViewViewModel;
-	FusedLocationProviderClient mFusedLocationClient;
-	String                      restaurant = "restaurant";
+	
+	public static final String PREFS = "PREFS";
+	String restaurant = "restaurant";
 	private int    ProximityRadius = 100;
 	private double latitude, longitude;
-	private GoogleMap Mmap;
-
-//	private RestaurantsListViewViewModel       mRestaurantsListViewViewModel;
-	
-	private boolean            locationPermissionGranted;
-	private OnMapReadyCallback callback         = new OnMapReadyCallback() {
-		
-		@Override
-		public void onMapReady(GoogleMap map) {
-			Mmap = map;
-			
-			// Prompt the user for permission.
-//			getLocationPermission();
-			
-			// Turn on the My Location layer and the related control on the map.
-			updateLocationUI();
-			
-		}
-	};
-	private LocationCallback   locationCallback = new LocationCallback() {
+	private              GoogleMap         Mmap;
+	public static final  String            PREF_KEY_LONGITUDE                       = "PREF_KEY_LONGITUDE";
+	static final         String            PREF_KEY_LATITUDE                        = "PREF_KEY_LATITUDE";
+	private static final int               PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+	public               SharedPreferences mPreferences;
+	public               LocationCallback  locationCallback                         = new LocationCallback() {
+		@SuppressLint("CommitPrefEdits")
 		@Override
 		public void onLocationResult(LocationResult locationResult) {
 			if (locationResult == null) {
@@ -86,7 +71,8 @@ public class MapViewFragment extends Fragment {
 					latitude  = location.getLatitude();
 					longitude = location.getLongitude();
 					
-					// clear all previous markers
+					saveLocation();
+					
 					Mmap.clear();
 					
 					new RestaurantsListViewViewModel(latitude, longitude)
@@ -96,74 +82,25 @@ public class MapViewFragment extends Fragment {
 			}
 		}
 	};
-	
-	public void displayRestaurants(List<Restaurant> restaurants) {
-		for (Restaurant restaurant : restaurants) {
-			MarkerOptions markerOptions = new MarkerOptions();
-			
-			String nameOfPlace = restaurant.getName();
-			double lat         = restaurant.getMlat();
-			double lng         = restaurant.getMlon();
-			
-			LatLng latLng = new LatLng(lat, lng);
-			markerOptions
-					.position(latLng)
-					.title(nameOfPlace
-//					       TODO check how fix vicinity
-//					       + " : " + vicinity
-					      )
-//			.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_your_lunch))
-					.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-//			//TODO define an id for each marker will be use to define right intent
-////			String id = marker.getId();
-//			markerMap.put(id, "action_one");
-			
-			Mmap.addMarker(markerOptions);
-			Mmap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-			Mmap.animateCamera(CameraUpdateFactory.zoomTo(10));
-			Mmap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-				@Override
-				public void onInfoWindowClick(Marker parameterMarker) {
-					getActivity().startActivity(new Intent(getActivity(), RestaurantDetails.class));
-					
-					//TODO define an id for each marker will be use to define right intent
-//					String actionId = markerMap.get(marker.getId());
-//					if (actionId.equals("action_one")) {
-//						Intent i = new Intent(MainActivity.this, ActivityOne.class);
-//					markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-//					Mmap.addMarker(markerOptions);
-//						startActivity(i);
-//					} else if (actionId.equals("action_two")) {
-//						Intent i = new Intent(MainActivity.this, ActivityTwo.class);
-//						startActivity(i);
-//
-//
-				}
-			});
-		}
-		
-	}
-	
-	@Override
-	public void onRequestPermissionsResult(int requestCode,
-	                                       String[] permissions,
-	                                       int[] grantResults) {
-		switch (requestCode) {
-			case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
-				// If request is cancelled, the result arrays are empty.
-				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					
-					// permission was granted, proceed to the normal flow.
-					locationPermissionGranted = true;
-					updateLocationUI();
-					getLocationAndCheckPermission();
-				}
-		}
-	}
-	
+	private              boolean           locationPermissionGranted;
+	//--------------------------------------------------//
+	// ------------------   Variables   --------------- //
+	//--------------------------------------------------//
+//	private MapViewViewModel MmapViewViewModel;
+	//	private RestaurantsListViewViewModel       mRestaurantsListViewViewModel;
+	FusedLocationProviderClient mFusedLocationClient;
 	//------------------------------------------------------//
 	// ------------------   Callbacks   ------------------- //
 	//------------------------------------------------------/
+	private OnMapReadyCallback callback = new OnMapReadyCallback() {
+		
+		@Override
+		public void onMapReady(GoogleMap map) {
+			Mmap = map;
+			// Turn on the My Location layer and the related control on the map.
+			updateLocationUI();
+		}
+	};
 	
 	//--------------------------------------------------//
 	// ------------------ LifeCycle ------------------- //
@@ -220,6 +157,80 @@ public class MapViewFragment extends Fragment {
 	//------------------------------------------------------//
 	// ------------------   Functions   ------------------- //
 	//------------------------------------------------------//
+	
+	public void saveLocation() {
+		mPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+		putDouble(mPreferences.edit(), PREF_KEY_LATITUDE, latitude).apply();
+		putDouble(mPreferences.edit(), PREF_KEY_LONGITUDE, longitude).apply();
+	}
+	
+	public SharedPreferences.Editor putDouble(final SharedPreferences.Editor edit,
+	                                          final String key,
+	                                          final double value) {
+		return edit.putLong(key, Double.doubleToRawLongBits(value));
+	}
+	
+	public void displayRestaurants(List<Restaurant> restaurants) {
+		for (Restaurant restaurant : restaurants) {
+			MarkerOptions markerOptions = new MarkerOptions();
+			
+			String nameOfPlace = restaurant.getName();
+			double lat         = restaurant.getMlat();
+			double lng         = restaurant.getMlon();
+			
+			LatLng latLng = new LatLng(lat, lng);
+			markerOptions
+					.position(latLng)
+					.title(nameOfPlace
+//					       TODO check how fix vicinity
+//					       + " : " + vicinity
+					      )
+//			.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_your_lunch))
+					.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+//			//TODO define an id for each marker will be use to define right intent
+////			String id = marker.getId();
+//			markerMap.put(id, "action_one");
+			
+			Mmap.addMarker(markerOptions);
+			Mmap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+			Mmap.animateCamera(CameraUpdateFactory.zoomTo(10));
+			Mmap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+				@Override
+				public void onInfoWindowClick(Marker parameterMarker) {
+					getActivity().startActivity(new Intent(getActivity(), RestaurantDetails.class));
+					
+					//TODO define an id for each marker will be use to define right intent
+//					String actionId = markerMap.get(marker.getId());
+//					if (actionId.equals("action_one")) {
+//						Intent i = new Intent(MainActivity.this, ActivityOne.class);
+//					markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+//					Mmap.addMarker(markerOptions);
+//						startActivity(i);
+//					} else if (actionId.equals("action_two")) {
+//						Intent i = new Intent(MainActivity.this, ActivityTwo.class);
+//						startActivity(i);
+				}
+			});
+		}
+		
+	}
+	
+	@Override
+	public void onRequestPermissionsResult(int requestCode,
+	                                       String[] permissions,
+	                                       int[] grantResults) {
+		switch (requestCode) {
+			case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
+				// If request is cancelled, the result arrays are empty.
+				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					
+					// permission was granted, proceed to the normal flow.
+					locationPermissionGranted = true;
+					updateLocationUI();
+					getLocationAndCheckPermission();
+				}
+		}
+	}
 	
 	private void updateLocationUI() {
 		if (Mmap == null) {

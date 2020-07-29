@@ -55,16 +55,8 @@ public class LoginActivity extends BaseActivity {
 		loginByGoogle();
 		loginByFacebook();
 		
-		// This part of code are commented in waiting to resolve how to use propely view binding for replace fid and butterknife
-		//binding.main_activity_login_by_email.setText(viewModel.main_activity_login_by_email);
-		/*binding.main_activity_login_by_email.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View parameterView) {}
-			viewModel.userClicked()
-		});*/
 	}
 	
-	//TODO is that a lifecycle part ?
 	@Override
 	public int getFragmentLayout() {
 		return R.layout.activity_login;
