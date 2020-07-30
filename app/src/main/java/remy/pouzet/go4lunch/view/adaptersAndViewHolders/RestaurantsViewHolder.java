@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import remy.pouzet.go4lunch.data.repositories.model.Restaurant;
+import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 import remy.pouzet.go4lunch.databinding.ContentItemsOfRestaurantsListViewBinding;
 
 /**

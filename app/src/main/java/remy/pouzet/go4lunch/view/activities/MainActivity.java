@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,11 +21,15 @@ import androidx.navigation.ui.NavigationUI;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import remy.pouzet.go4lunch.R;
+import remy.pouzet.go4lunch.data.repositories.models.User;
+import remy.pouzet.go4lunch.data.service.realAPI.UserHelper;
 import remy.pouzet.go4lunch.databinding.ActivityMainBinding;
 import remy.pouzet.go4lunch.databinding.AppBarMainBinding;
 import remy.pouzet.go4lunch.databinding.NavHeaderMainBinding;
@@ -50,6 +55,13 @@ public class MainActivity extends AppCompatActivity {
 	private              AppBarMainBinding   mAppBarMainBinding;
 	
 	private AppBarConfiguration mAppBarConfiguration;
+	
+	// Creating identifier to identify REST REQUEST (Update username)
+	private static final int UPDATE_USERNAME = 30;
+	
+	//TODO MAJ username
+//	@OnClick(R.id.profile_activity_button_update)
+//	public void onClickUpdateButton() { this.updateUsernameInFirebase();
 	
 	//------------------------------------------------------//
 	// ------------------   LifeCycle   ------------------- //
@@ -197,6 +209,22 @@ public class MainActivity extends AppCompatActivity {
 		//Update views with data's user
 		header.profileActivityEditTextUsername.setText(username);
 		header.profileActivityTextViewEmail.setText(email);
+		
+		// 7 - Get additional data from Firestore (isMentor & Username)
+		UserHelper
+				.getUser(this
+						         .getCurrentUser()
+						         .getUid())
+				.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+					@Override
+					public void onSuccess(DocumentSnapshot documentSnapshot) {
+						User   currentUser = documentSnapshot.toObject(User.class);
+						String username    = TextUtils.isEmpty(currentUser.getUsername())
+						                     ? getString(R.string.info_no_username_found)
+						                     : currentUser.getUsername();
+//				textInputEditTextUsername.setText(username);
+					}
+				});
 	}
 	
 	public void passByLoginActivity() {
@@ -226,8 +254,27 @@ public class MainActivity extends AppCompatActivity {
 				case DELETE_USER_TASK:
 					finish();
 					break;
+				// 8 - Hiding Progress bar after request completed
+				case UPDATE_USERNAME:
+//					progressBar.setVisibility(View.INVISIBLE);
+					break;
 				default:
 					break;
+			}
+		};
+	}
+	
+	// --------------------
+	// ERROR HANDLER
+	// --------------------
+	
+	protected OnFailureListener onFailureListener() {
+		return new OnFailureListener() {
+			@Override
+			public void onFailure(@NonNull Exception e) {
+				Toast
+						.makeText(getApplicationContext(), getString(R.string.error_unknown_error), Toast.LENGTH_LONG)
+						.show();
 			}
 		};
 	}

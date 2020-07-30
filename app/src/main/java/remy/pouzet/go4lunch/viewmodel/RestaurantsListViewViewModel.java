@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 import java.util.List;
 
 import remy.pouzet.go4lunch.data.repositories.RestaurantsRepository;
-import remy.pouzet.go4lunch.data.repositories.model.Restaurant;
+import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 
 public class RestaurantsListViewViewModel extends ViewModel {
 	

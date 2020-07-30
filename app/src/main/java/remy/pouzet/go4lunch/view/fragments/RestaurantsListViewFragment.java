@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import remy.pouzet.go4lunch.data.repositories.model.Restaurant;
+import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 import remy.pouzet.go4lunch.databinding.FragmentRestaurantsListViewBinding;
 import remy.pouzet.go4lunch.view.adaptersAndViewHolders.RestaurantsAdapter;
 import remy.pouzet.go4lunch.viewmodel.RestaurantsListViewViewModel;

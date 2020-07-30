@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,13 +18,18 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import remy.pouzet.go4lunch.R;
+import remy.pouzet.go4lunch.data.repositories.models.User;
+import remy.pouzet.go4lunch.data.service.realAPI.UserHelper;
 import remy.pouzet.go4lunch.databinding.ActivityMainBinding;
 import remy.pouzet.go4lunch.databinding.FragmentSettingsBinding;
 import remy.pouzet.go4lunch.view.activities.MainActivity;
@@ -121,6 +127,10 @@ public class SettingsFragment extends Fragment {
 				.addOnCompleteListener(new OnCompleteListener<Void>() {
 					@Override
 					public void onComplete(@NonNull Task<Void> task) {
+						//4 - We also delete user from firestore storage
+						UserHelper
+								.deleteUser(getCurrentUser().getUid())
+								.addOnFailureListener(onFailureListener());
 						user.delete();
 						Intent intent = new Intent(requireContext(), MainActivity.class);
 						startActivity(intent);
@@ -130,41 +140,30 @@ public class SettingsFragment extends Fragment {
 		
 	}
 	
-	public void updateUIWhenCreating() {
-		//Get picture URL from Firebase
-		if (this
-				    .getCurrentUser()
-				    .getPhotoUrl() != null) {
-			Glide
-					.with(requireContext())
-					.load(this
-							      .getCurrentUser()
-							      .getPhotoUrl())
-					.apply(RequestOptions.circleCropTransform())
-					.into(binding.settingsFragmentImageviewProfile);
-			
-		}
-		
-		//Get email & username from Firebase
-		String email = TextUtils.isEmpty(this
-				                                 .getCurrentUser()
-				                                 .getEmail())
-		               ? getString(R.string.info_no_email_found)
-		               : this
-				               .getCurrentUser()
-				               .getEmail();
-		String username = TextUtils.isEmpty(this
-				                                    .getCurrentUser()
-				                                    .getDisplayName())
-		                  ? getString(R.string.info_no_username_found)
-		                  : this
-				                  .getCurrentUser()
-				                  .getDisplayName();
-		
-		//Update views with data's user
-		binding.settingsFragmentTextViewEmail.setText(email);
-		binding.settingsFragmentEditTextUsername.setText(username);
+	protected OnFailureListener onFailureListener() {
+		return new OnFailureListener() {
+			@Override
+			public void onFailure(@NonNull Exception e) {
+				Toast
+						.makeText(requireContext(), getString(R.string.error_unknown_error), Toast.LENGTH_LONG)
+						.show();
+			}
+		};
 	}
+	
+	//TODO MAJ username
+	// 3 - Update User Username
+//	private void updateUsernameInFirebase(){
+//
+//		this.progressBar.setVisibility(View.VISIBLE);
+//		String username = this.textInputEditTextUsername.getText().toString();
+//
+//		if (this.getCurrentUser() != null){
+//			if (!username.isEmpty() &&  !username.equals(getString(R.string.info_no_username_found))){
+//				UserHelper.updateUsername(username, this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener()).addOnSuccessListener(this.updateUIAfterRESTRequestsCompleted(UPDATE_USERNAME));
+//			}
+//		}
+//	}
 	
 	//------------------------------------------------------//
 	// ------------------Navigation & UI------------------- //
@@ -209,6 +208,58 @@ public class SettingsFragment extends Fragment {
 		return FirebaseAuth
 				.getInstance()
 				.getCurrentUser();
+	}
+	
+	public void updateUIWhenCreating() {
+		//Get picture URL from Firebase
+		if (this
+				    .getCurrentUser()
+				    .getPhotoUrl() != null) {
+			Glide
+					.with(requireContext())
+					.load(this
+							      .getCurrentUser()
+							      .getPhotoUrl())
+					.apply(RequestOptions.circleCropTransform())
+					.into(binding.settingsFragmentImageviewProfile);
+			
+		}
+		
+		//Get email & username from Firebase
+		String email = TextUtils.isEmpty(this
+				                                 .getCurrentUser()
+				                                 .getEmail())
+		               ? getString(R.string.info_no_email_found)
+		               : this
+				               .getCurrentUser()
+				               .getEmail();
+		String username = TextUtils.isEmpty(this
+				                                    .getCurrentUser()
+				                                    .getDisplayName())
+		                  ? getString(R.string.info_no_username_found)
+		                  : this
+				                  .getCurrentUser()
+				                  .getDisplayName();
+		
+		//Update views with data's user
+		binding.settingsFragmentTextViewEmail.setText(email);
+		binding.settingsFragmentEditTextUsername.setText(username);
+		
+		// 7 - Get additional data from Firestore (isMentor & Username)
+		UserHelper
+				.getUser(this
+						         .getCurrentUser()
+						         .getUid())
+				.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+					@Override
+					public void onSuccess(DocumentSnapshot documentSnapshot) {
+						User   currentUser = documentSnapshot.toObject(User.class);
+						String username    = TextUtils.isEmpty(currentUser.getUsername())
+						                     ? getString(R.string.info_no_username_found)
+						                     : currentUser.getUsername();
+//				textInputEditTextUsername.setText(username);
+					}
+				});
 	}
 }
 

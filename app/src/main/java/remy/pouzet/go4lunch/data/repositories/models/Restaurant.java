@@ -1,4 +1,4 @@
-package remy.pouzet.go4lunch.data.repositories.model;
+package remy.pouzet.go4lunch.data.repositories.models;
 
 /**
  * Created by Remy Pouzet on 14/07/2020.

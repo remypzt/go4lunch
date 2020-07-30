@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import remy.pouzet.go4lunch.R;
-import remy.pouzet.go4lunch.data.repositories.model.Restaurant;
+import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOrestaurantsList.ResponseOfRestaurantsList;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOrestaurantsList.Result;
 

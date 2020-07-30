@@ -37,7 +37,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 
 import remy.pouzet.go4lunch.R;
-import remy.pouzet.go4lunch.data.repositories.model.Restaurant;
+import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 import remy.pouzet.go4lunch.viewmodel.RestaurantsListViewViewModel;
 //------------------------------------------------------//
 // ------------------    Adapter    ------------------- //

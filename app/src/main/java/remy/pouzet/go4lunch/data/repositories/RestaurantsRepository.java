@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 
 import remy.pouzet.go4lunch.BuildConfig;
-import remy.pouzet.go4lunch.data.repositories.model.Restaurant;
+import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 import remy.pouzet.go4lunch.data.service.RetrofitService;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOrestaurantsList.ResponseOfRestaurantsList;
 import remy.pouzet.go4lunch.data.service.realAPI.RestaurantsApiInterfaceService;

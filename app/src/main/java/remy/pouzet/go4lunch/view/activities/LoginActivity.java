@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -12,11 +14,15 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 
 import remy.pouzet.go4lunch.R;
+import remy.pouzet.go4lunch.data.service.realAPI.UserHelper;
 import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 
 //------------------------------------------------------//
@@ -137,18 +143,6 @@ public class LoginActivity extends AppCompatActivity
 	private void startMainActivity() {
 		finish();
 	}
-//------------------------------------------------------//
-// ------------------Navigation & UI------------------- //
-//------------------------------------------------------//
-	
-	@Override
-	protected void onActivityResult(int requestCode,
-	                                int resultCode,
-	                                Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		//  Handle SignIn Activity response on activity result
-		this.handleResponseAfterSignIn(requestCode, resultCode, data);
-	}
 	
 	//  Method that handles response after SignIn Activity close
 	private void handleResponseAfterSignIn(int requestCode,
@@ -159,6 +153,8 @@ public class LoginActivity extends AppCompatActivity
 		
 		if (requestCode == RC_SIGN_IN) {
 			if (resultCode == RESULT_OK) { // SUCCESS
+				// 2 - CREATE USER IN FIRESTORE
+				this.createUserInFirestore();
 				showSnackBar(coordinatorlayout, getString(R.string.connection_succeed));
 				// if authentification is success finish this activity because it's not usefull anymore and if I need by an intent it'll make a "millefeuille"
 				finish();
@@ -179,9 +175,66 @@ public class LoginActivity extends AppCompatActivity
 		}
 	}
 	
+	// 1 - Http request that create user in firestore
+	private void createUserInFirestore() {
+		
+		if (this.getCurrentUser() != null) {
+			
+			String urlPicture = (this
+					                     .getCurrentUser()
+					                     .getPhotoUrl() != null)
+			                    ? this
+					                    .getCurrentUser()
+					                    .getPhotoUrl()
+					                    .toString()
+			                    : null;
+			String username   = this
+					.getCurrentUser()
+					.getDisplayName();
+			String uid        = this
+					.getCurrentUser()
+					.getUid();
+			
+			UserHelper
+					.createUser(uid, username, urlPicture)
+					.addOnFailureListener(this.onFailureListener());
+		}
+	}
+
+//------------------------------------------------------//
+// ------------------Navigation & UI------------------- //
+//------------------------------------------------------//
+	
+	@Override
+	protected void onActivityResult(int requestCode,
+	                                int resultCode,
+	                                Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		//  Handle SignIn Activity response on activity result
+		this.handleResponseAfterSignIn(requestCode, resultCode, data);
+	}
+	
+	@Nullable
+	protected FirebaseUser getCurrentUser() {
+		return FirebaseAuth
+				.getInstance()
+				.getCurrentUser();
+	}
+	
 	//------------------------------------------------------//
 	// ------------------ Miscellaneous ------------------- //
 	//------------------------------------------------------//
+	
+	protected OnFailureListener onFailureListener() {
+		return new OnFailureListener() {
+			@Override
+			public void onFailure(@NonNull Exception e) {
+				Toast
+						.makeText(getApplicationContext(), getString(R.string.error_unknown_error), Toast.LENGTH_LONG)
+						.show();
+			}
+		};
+	}
 	
 	// --------------------
 	// UTILS
