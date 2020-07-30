@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.firebase.ui.auth.AuthUI;
@@ -27,7 +28,9 @@ import remy.pouzet.go4lunch.databinding.ActivityLoginBinding;
 // ------------------     Intent    ------------------- //
 // ------------------Navigation & UI------------------- //
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends AppCompatActivity
+//		extends BaseActivity
+{
 
 //------------------------------------------------------//
 // ------------------   Variables   ------------------- //
@@ -55,11 +58,6 @@ public class LoginActivity extends BaseActivity {
 		loginByGoogle();
 		loginByFacebook();
 		
-	}
-	
-	@Override
-	public int getFragmentLayout() {
-		return R.layout.activity_login;
 	}
 	
 	//------------------------------------------------------//
