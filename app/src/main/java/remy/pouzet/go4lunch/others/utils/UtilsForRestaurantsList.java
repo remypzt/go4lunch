@@ -31,7 +31,7 @@ public class UtilsForRestaurantsList {
 		
 		//TODO getrestaurantsdetails
 		
-		return new Restaurant(R.drawable.ic_launcher_background, "multimediaUrl", resultsItemOfRestaurantsList.getName(), "type", "adress", "horair", "distance", 1, 2, resultsItemOfRestaurantsList
+		return new Restaurant(resultsItemOfRestaurantsList.getPlaceId(), R.drawable.ic_launcher_background, "multimediaUrl", resultsItemOfRestaurantsList.getName(), "type", "adress", "horair", "distance", 1, 2, resultsItemOfRestaurantsList
 				.getGeometry()
 				.getLocation()
 				.getLat(), resultsItemOfRestaurantsList

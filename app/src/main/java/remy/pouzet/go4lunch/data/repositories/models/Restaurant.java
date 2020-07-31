@@ -4,7 +4,7 @@ package remy.pouzet.go4lunch.data.repositories.models;
  * Created by Remy Pouzet on 14/07/2020.
  */
 public class Restaurant {
-	
+	private String mplaceID;
 	private int    mDrawableImage;
 	private String mUrlImage;
 	private String mName;
@@ -17,7 +17,8 @@ public class Restaurant {
 	double mlat;
 	double mlon;
 	
-	public Restaurant(int drawableImage,
+	public Restaurant(String placeID,
+	                  int drawableImage,
 	                  String urlImage,
 	                  String name,
 	                  String type,
@@ -28,6 +29,7 @@ public class Restaurant {
 	                  int evaluation,
 	                  double lat,
 	                  double lon) {
+		mplaceID              = placeID;
 		mDrawableImage        = drawableImage;
 		mUrlImage             = urlImage;
 		mName                 = name;
@@ -40,6 +42,14 @@ public class Restaurant {
 		mlon                  = lon;
 		mlat                  = lat;
 		
+	}
+	
+	public String getMplaceID() {
+		return mplaceID;
+	}
+	
+	public void setMplaceID(String parameterMplaceID) {
+		mplaceID = parameterMplaceID;
 	}
 	
 	public int getDrawableImage() {

@@ -52,11 +52,12 @@
             <!-- </intent-filter> -->
         </activity>
 
-        <!-- MENTOR CHAT ACTIVITY -->
+        <!-- CHAT ACTIVITY -->
         <activity
             android:name=".view.activities.ChatActivity"
-            android:label="@string/toolbar_title_chat_activity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".view.activities.MainActivity" />
+
+        <!--        android:label="@string/toolbar_title_chat_activity"-->
 
     </application>
 

@@ -7,6 +7,7 @@ import java.util.List;
 import remy.pouzet.go4lunch.BuildConfig;
 import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 import remy.pouzet.go4lunch.data.service.RetrofitService;
+import remy.pouzet.go4lunch.data.service.realAPI.POJOdetailsRestaurants.ResponseOfPlaceDetailsRestaurants;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOrestaurantsList.ResponseOfRestaurantsList;
 import remy.pouzet.go4lunch.data.service.realAPI.RestaurantsApiInterfaceService;
 import remy.pouzet.go4lunch.others.utils.UtilsForRestaurantsList;
@@ -19,11 +20,13 @@ import retrofit2.Response;
  */
 public class RestaurantsRepository {
 	
-	private static RestaurantsRepository          restaurantsApiRepository;
-	private final  RestaurantsApiInterfaceService mRestaurantsApiInterfaceService;
+	private static RestaurantsRepository             restaurantsApiRepository;
+	private final  RestaurantsApiInterfaceService    mRestaurantsApiInterfaceService;
+	private        MutableLiveData<List<Restaurant>> restaurants;
 	
 	private RestaurantsRepository() {
 		mRestaurantsApiInterfaceService = RetrofitService.cteateService(RestaurantsApiInterfaceService.class);
+		restaurants                     = new MutableLiveData<>();
 	}
 	
 	public static RestaurantsRepository getInstance() {
@@ -35,7 +38,6 @@ public class RestaurantsRepository {
 	
 	public MutableLiveData<List<Restaurant>> getRestaurants(double lat,
 	                                                        double lgn) {
-		MutableLiveData<List<Restaurant>> restaurants = new MutableLiveData<>();
 		mRestaurantsApiInterfaceService
 				.getResponseOfRestaurantsList((lat) + "," + (lgn), 15000, BuildConfig.apiKey, "restaurant")
 				.enqueue(new Callback<ResponseOfRestaurantsList>() {
@@ -44,7 +46,7 @@ public class RestaurantsRepository {
 					                       Response<ResponseOfRestaurantsList> response) {
 						if (response.isSuccessful()) {
 							
-							restaurants.setValue(UtilsForRestaurantsList.generateRestaurantsFromRestaurantsList(response.body()));
+							getRestaurantsDetails(UtilsForRestaurantsList.generateRestaurantsFromRestaurantsList(response.body()));
 							
 						} else {
 							restaurants.setValue(null);
@@ -58,6 +60,37 @@ public class RestaurantsRepository {
 					}
 				});
 		return restaurants;
+	}
+	
+	private void getRestaurantsDetails(List<Restaurant> restaurantdetails) {
+		for (Restaurant restaurant : restaurantdetails) {
+			mRestaurantsApiInterfaceService
+					.getResponseOfPlaceDetailsRestaurants(restaurant.getMplaceID())
+					.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
+						@Override
+						public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
+						                       Response<ResponseOfPlaceDetailsRestaurants> response) {
+							if (response.isSuccessful()) {
+								restaurant.setName("test");
+								restaurant.setAdress(response
+										                     .body()
+										                     .getResult()
+										                     .getAdrAddress());
+								restaurants.setValue(restaurantdetails);
+								
+							}
+						}
+						
+						@Override
+						public void onFailure(Call<ResponseOfPlaceDetailsRestaurants> call,
+						                      Throwable t) {
+							//TODO toast
+						}
+					});
+			
+		}
+
+//		return restaurants;
 	}
 	
 }

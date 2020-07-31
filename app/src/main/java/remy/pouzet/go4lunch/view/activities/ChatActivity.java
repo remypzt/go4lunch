@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
@@ -72,7 +73,8 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 		//Track current chat name
 		this.currentChatName = chatName;
 		//Configure Adapter & RecyclerView
-		this.mentorChatAdapter = new ChatAdapter(generateOptionsForAdapter(MessageHelper.getAllMessageForChat(this.currentChatName)), Glide.with(this), this, this
+		this.mentorChatAdapter = new ChatAdapter(generateOptionsForAdapter(MessageHelper.getAllMessageForChat(this.currentChatName)), Glide.with(this), this, FirebaseAuth
+				.getInstance()
 				.getCurrentUser()
 				.getUid());
 		mentorChatAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -96,7 +98,10 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 	// 4 - Get Current User from Firestore
 	private void getCurrentUserFromFirestore() {
 		UserHelper
-				.getUser(getCurrentUser().getUid())
+				.getUser(FirebaseAuth
+						         .getInstance()
+						         .getCurrentUser()
+						         .getUid())
 				.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 					@Override
 					public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -112,11 +117,11 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 				.setLifecycleOwner(this)
 				.build();
 	}
-	
-	@Override
-	public int getFragmentLayout() {
-		return R.layout.activity_chat;
-	}
+
+//	@Override
+//	public int getFragmentLayout() {
+//		return R.layout.activity_chat;
+//	}
 	
 	@OnClick(R.id.activity_chat_send_button)
 	public void onClickSendMessage() {
