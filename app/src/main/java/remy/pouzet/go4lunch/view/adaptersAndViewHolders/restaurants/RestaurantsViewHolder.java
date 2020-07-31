@@ -1,4 +1,4 @@
-package remy.pouzet.go4lunch.view.adaptersAndViewHolders;
+package remy.pouzet.go4lunch.view.adaptersAndViewHolders.restaurants;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

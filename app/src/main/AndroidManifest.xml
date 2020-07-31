@@ -51,6 +51,13 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
+
+        <!-- MENTOR CHAT ACTIVITY -->
+        <activity
+            android:name=".view.activities.ChatActivity"
+            android:label="@string/toolbar_title_chat_activity"
+            android:parentActivityName=".MainActivity" />
+
     </application>
 
 </manifest>

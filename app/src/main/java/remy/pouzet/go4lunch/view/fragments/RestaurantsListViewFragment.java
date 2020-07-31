@@ -19,7 +19,7 @@ import java.util.List;
 
 import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 import remy.pouzet.go4lunch.databinding.FragmentRestaurantsListViewBinding;
-import remy.pouzet.go4lunch.view.adaptersAndViewHolders.RestaurantsAdapter;
+import remy.pouzet.go4lunch.view.adaptersAndViewHolders.restaurants.RestaurantsAdapter;
 import remy.pouzet.go4lunch.viewmodel.RestaurantsListViewViewModel;
 
 // ------------------   Functions   ------------------- //

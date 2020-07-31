@@ -1,4 +1,4 @@
-package remy.pouzet.go4lunch.view.adaptersAndViewHolders;
+package remy.pouzet.go4lunch.view.adaptersAndViewHolders.restaurants;
 
 import android.content.Context;
 import android.view.LayoutInflater;
