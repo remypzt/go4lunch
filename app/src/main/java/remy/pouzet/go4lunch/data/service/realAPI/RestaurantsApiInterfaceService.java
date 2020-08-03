@@ -11,12 +11,13 @@ import retrofit2.http.Query;
  */
 public interface RestaurantsApiInterfaceService {
 	
-	@GET("json")
+	@GET("nearbysearch/json")
 	Call<ResponseOfRestaurantsList> getResponseOfRestaurantsList(@Query("location") String location,
 	                                                             @Query("radius") int radius,
 	                                                             @Query("key") String key,
 	                                                             @Query("type") String type);
 	
-	@GET("json")
-	Call<ResponseOfPlaceDetailsRestaurants> getResponseOfPlaceDetailsRestaurants(@Query("placeID") String placeID);
+	@GET("details/json?")
+	Call<ResponseOfPlaceDetailsRestaurants> getResponseOfPlaceDetailsRestaurants(@Query("place_id") String placeID,
+	                                                                             @Query("key") String key);
 }

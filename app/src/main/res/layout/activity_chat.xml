@@ -20,7 +20,7 @@
             android:layout_height="50dip"
             android:layout_weight="1"
             android:background="@color/colorGreen"
-            android:src="@drawable/ic_phone"
+            android:src="@drawable/ic_android_white_24"
             android:tag="10" />
 
         <!-- BUTTON CHAT FIREBASE -->
@@ -31,7 +31,7 @@
             android:layout_height="50dip"
             android:layout_weight="1"
             android:background="@color/colorSandLight"
-            android:src="@drawable/ic_phone"
+            android:src="@drawable/ic_cloud_white_24dp"
             android:tag="20" />
 
         <!-- BUTTON CHAT BUG -->
@@ -42,7 +42,7 @@
             android:layout_height="50dip"
             android:layout_weight="1"
             android:background="@color/colorSand"
-            android:src="@drawable/ic_phone"
+            android:src="@drawable/ic_bug_report_white_24dp"
             android:tag="30" />
 
     </LinearLayout>
@@ -63,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_large_margin"
-            android:text="rsrr"
+            android:text="@string/text_view_mentor_chat_error"
             android:textAlignment="center" />
 
         <!-- RECYCLER VIEW -->
@@ -97,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:src="@drawable/ic_phone" />
+            android:src="@drawable/ic_add_circle_black_24px" />
 
         <!-- TEXT MESSAGE EDIT TEXT -->
         <com.google.android.material.textfield.TextInputEditText
@@ -105,7 +105,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="srts"
+            android:hint="@string/text_input_title_mentor_chat_activity"
             android:imeOptions="actionDone"
             android:inputType="textMultiLine"
             android:textSize="@dimen/default_text_size" />
@@ -116,7 +116,7 @@
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="tsr" />
+            android:text="@string/button_title_mentor_chat_activity" />
 
     </LinearLayout>
 

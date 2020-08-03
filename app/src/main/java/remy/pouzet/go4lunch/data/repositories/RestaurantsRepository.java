@@ -65,7 +65,7 @@ public class RestaurantsRepository {
 	private void getRestaurantsDetails(List<Restaurant> restaurantdetails) {
 		for (Restaurant restaurant : restaurantdetails) {
 			mRestaurantsApiInterfaceService
-					.getResponseOfPlaceDetailsRestaurants(restaurant.getMplaceID())
+					.getResponseOfPlaceDetailsRestaurants(restaurant.getMplaceID(), BuildConfig.apiKey)
 					.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
 						@Override
 						public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
