@@ -5,7 +5,7 @@ package remy.pouzet.go4lunch.data.repositories.models;
  */
 public class Restaurant {
 	private String mplaceID;
-	private int    mDrawableImage;
+//	private int    mDrawableImage;
 	private String mUrlImage;
 	private String mName;
 	private String mType;
@@ -18,7 +18,7 @@ public class Restaurant {
 	double mlon;
 	
 	public Restaurant(String placeID,
-	                  int drawableImage,
+//	                  int drawableImage,
 	                  String urlImage,
 	                  String name,
 	                  String type,
@@ -30,7 +30,7 @@ public class Restaurant {
 	                  double lat,
 	                  double lon) {
 		mplaceID              = placeID;
-		mDrawableImage        = drawableImage;
+//		mDrawableImage        = drawableImage;
 		mUrlImage             = urlImage;
 		mName                 = name;
 		mType                 = type;
@@ -51,10 +51,10 @@ public class Restaurant {
 	public void setMplaceID(String parameterMplaceID) {
 		mplaceID = parameterMplaceID;
 	}
-	
-	public int getDrawableImage() {
-		return mDrawableImage;
-	}
+
+//	public int getDrawableImage() {
+//		return mDrawableImage;
+//	}
 	
 	public double getMlat() {
 		return mlat;
@@ -71,10 +71,10 @@ public class Restaurant {
 	public void setMlon(double parameterMlon) {
 		mlon = parameterMlon;
 	}
-	
-	public void setDrawableImage(int parameterDrawableImage) {
-		mDrawableImage = parameterDrawableImage;
-	}
+
+//	public void setDrawableImage(int parameterDrawableImage) {
+//		mDrawableImage = parameterDrawableImage;
+//	}
 	
 	public String getUrlImage() {
 		return mUrlImage;

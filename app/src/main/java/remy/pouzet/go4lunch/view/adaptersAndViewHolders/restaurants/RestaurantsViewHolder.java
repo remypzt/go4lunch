@@ -27,6 +27,8 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 	public  TextView                                 mHorair;
 	public  ConstraintLayout                         mConstraintLayout;
 	public  TextView                                 mDistance;
+	public  ImageView                                mEvaluation;
+	public  ImageView                                mWorkmatesInterrested;
 	private ContentItemsOfRestaurantsListViewBinding mContentItemsOfRestaurantsListViewBinding;
 	private Activity                                 activity;
 // TODO worksmate and evaluation
@@ -37,11 +39,13 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 		mContentItemsOfRestaurantsListViewBinding = ContentItemsOfRestaurantsListViewBinding.bind(itemView);
 		Context localContext = itemView.getContext();
 		
-		mName    = mContentItemsOfRestaurantsListViewBinding.restaurantName;
-		mPicture = mContentItemsOfRestaurantsListViewBinding.restaurantPicture;
-//		mType = mContentItemsOfRestaurantsListViewBinding.restaurantType;
-		mAdress = mContentItemsOfRestaurantsListViewBinding.restaurantAdress;
-		mHorair = mContentItemsOfRestaurantsListViewBinding.restaurantHorairInformations;
+		mEvaluation           = mContentItemsOfRestaurantsListViewBinding.evaluation;
+		mWorkmatesInterrested = mContentItemsOfRestaurantsListViewBinding.interrestingWorkmatesNumber;
+		mName                 = mContentItemsOfRestaurantsListViewBinding.restaurantName;
+		mPicture              = mContentItemsOfRestaurantsListViewBinding.restaurantPicture;
+		mType                 = mContentItemsOfRestaurantsListViewBinding.restaurantType;
+		mAdress               = mContentItemsOfRestaurantsListViewBinding.restaurantAdress;
+		mHorair               = mContentItemsOfRestaurantsListViewBinding.restaurantHorairInformations;
 		//mConstraintLayout = mContentItemsOfRestaurantsListViewBinding.ArticlesLayout;
 		mDistance = mContentItemsOfRestaurantsListViewBinding.restaurantDistanceFromTheUser;
 	}
@@ -50,16 +54,36 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 	void updateWithRestaurants(Restaurant restaurants) {
 		
 		this.mName.setText(restaurants.getName());
-		this.mHorair.setText(restaurants.getHorair());
-//		this.mType.setText(restaurants.getType());
 		this.mAdress.setText(restaurants.getAdress());
-		this.mDistance.setText(restaurants.getDistance());
 		
 		Glide
 				.with(mPicture.getContext())
 				.load(restaurants.getUrlImage())
 //				.placeholder(R.drawable.ic_launcher_background)
 				.into(mPicture);
+
+//		Glide
+//				.with(mEvaluation.getContext())
+//				.load(
+//						//TODO make appropriate method
+//						restaurants.getUrlImage()
+//				     )
+////				.placeholder(R.drawable.ic_launcher_background)
+//				.into(mEvaluation);
+		
+		this.mDistance.setText(restaurants.getDistance());
+		
+		this.mHorair.setText(restaurants.getHorair());
+		this.mType.setText(restaurants.getType());
+
+//		Glide
+//				.with(mWorkmatesInterrested.getContext())
+//				.load(
+//						//TODO make appropriate method
+//						restaurants.getWorkmatesInterrested()
+//				     )
+////				.placeholder(R.drawable.ic_launcher_background)
+//				.into(mWorkmatesInterrested);
 
 //		this.mConstraintLayout.setOnClickListener(v -> {
 //

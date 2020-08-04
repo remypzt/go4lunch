@@ -3,7 +3,6 @@ package remy.pouzet.go4lunch.others.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOrestaurantsList.ResponseOfRestaurantsList;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOrestaurantsList.Result;
@@ -31,10 +30,12 @@ public class UtilsForRestaurantsList {
 		
 		//TODO getrestaurantsdetails
 		
-		return new Restaurant(resultsItemOfRestaurantsList.getPlaceId(), R.drawable.ic_launcher_background, "multimediaUrl", resultsItemOfRestaurantsList.getName(), "type", "adress", "horair", "distance", 1, 2, resultsItemOfRestaurantsList
-				.getGeometry()
-				.getLocation()
-				.getLat(), resultsItemOfRestaurantsList
+		return new Restaurant(resultsItemOfRestaurantsList.getPlaceId(),
+//				R.drawable.ic_launcher_background,
+                              "multimediaUrl", "Name", "Type", "Adress", "Horair", "Distance", 1, 2, resultsItemOfRestaurantsList
+				                      .getGeometry()
+				                      .getLocation()
+				                      .getLat(), resultsItemOfRestaurantsList
 				                      .getGeometry()
 				                      .getLocation()
 				                      .getLng());

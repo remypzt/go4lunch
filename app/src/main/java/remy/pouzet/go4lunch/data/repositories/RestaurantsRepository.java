@@ -1,5 +1,7 @@
 package remy.pouzet.go4lunch.data.repositories;
 
+import android.widget.ImageView;
+
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import remy.pouzet.go4lunch.data.service.RetrofitService;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOdetailsRestaurants.ResponseOfPlaceDetailsRestaurants;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOrestaurantsList.ResponseOfRestaurantsList;
 import remy.pouzet.go4lunch.data.service.realAPI.RestaurantsApiInterfaceService;
+import remy.pouzet.go4lunch.databinding.ContentItemsOfRestaurantsListViewBinding;
 import remy.pouzet.go4lunch.others.utils.UtilsForRestaurantsList;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,9 +23,11 @@ import retrofit2.Response;
  */
 public class RestaurantsRepository {
 	
-	private static RestaurantsRepository             restaurantsApiRepository;
-	private final  RestaurantsApiInterfaceService    mRestaurantsApiInterfaceService;
-	private        MutableLiveData<List<Restaurant>> restaurants;
+	private static RestaurantsRepository                    restaurantsApiRepository;
+	private final  RestaurantsApiInterfaceService           mRestaurantsApiInterfaceService;
+	public         ImageView                                mPicture;
+	private        MutableLiveData<List<Restaurant>>        restaurants;
+	private        ContentItemsOfRestaurantsListViewBinding binding;
 	
 	private RestaurantsRepository() {
 		mRestaurantsApiInterfaceService = RetrofitService.cteateService(RestaurantsApiInterfaceService.class);
@@ -63,22 +68,43 @@ public class RestaurantsRepository {
 	}
 	
 	private void getRestaurantsDetails(List<Restaurant> restaurantdetails) {
-		for (Restaurant restaurant : restaurantdetails) {
-			mRestaurantsApiInterfaceService
-					.getResponseOfPlaceDetailsRestaurants(restaurant.getMplaceID(), BuildConfig.apiKey)
-					.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
-						@Override
-						public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
-						                       Response<ResponseOfPlaceDetailsRestaurants> response) {
-							if (response.isSuccessful()) {
-								restaurant.setName("test");
-								restaurant.setAdress(response
-										                     .body()
-										                     .getResult()
-										                     .getAdrAddress());
-								restaurants.setValue(restaurantdetails);
-								
-							}
+//		 mPicture = binding.restaurantPicture;
+		//Todo pass by loop when project is finish ( for limitate google API free request)
+//		for (Restaurant restaurant : restaurantdetails) {
+		Restaurant restaurant = restaurantdetails.get(1);
+		mRestaurantsApiInterfaceService
+				.getResponseOfPlaceDetailsRestaurants(restaurant.getMplaceID(), BuildConfig.apiKey)
+				.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
+					@Override
+					public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
+					                       Response<ResponseOfPlaceDetailsRestaurants> response) {
+						if (response.isSuccessful()) {
+							restaurant.setName(response
+									                   .body()
+									                   .getResult()
+									                   .getName());
+							restaurant.setAdress(response
+									                     .body()
+									                     .getResult()
+									                     .getFormattedAddress());
+							restaurant.setUrlImage("https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=" + response
+									.body()
+									.getResult()
+									.getPhotos()
+									.get(0)
+									.getPhotoReference() + "&key=" + BuildConfig.apiKey);
+
+//								restaurant.setEvaluation();
+
+//								restaurant.setDistance();
+
+//								restaurant.setHorair();
+//								restaurant.setType();
+//								restaurant.setWorkmatesInterrested();
+							
+							restaurants.setValue(restaurantdetails);
+							
+						}
 						}
 						
 						@Override
@@ -92,5 +118,5 @@ public class RestaurantsRepository {
 
 //		return restaurants;
 	}
-	
-}
+
+//}
