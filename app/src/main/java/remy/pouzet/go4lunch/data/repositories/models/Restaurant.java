@@ -5,35 +5,35 @@ package remy.pouzet.go4lunch.data.repositories.models;
  */
 public class Restaurant {
 	private String mplaceID;
-//	private int    mDrawableImage;
+	//	private int    mDrawableImage;
 	private String mUrlImage;
 	private String mName;
-	private String mType;
+	//	private String mType;
 	private String mAdress;
 	private String mHorair;
 	private String mDistance;
 	private int    mWorkmatesInterrested;
-	private int    mEvaluation;
+	private double mEvaluation;
 	double mlat;
 	double mlon;
 	
 	public Restaurant(String placeID,
 //	                  int drawableImage,
-	                  String urlImage,
-	                  String name,
-	                  String type,
-	                  String adress,
-	                  String horair,
-	                  String distance,
-	                  int workmates,
-	                  int evaluation,
-	                  double lat,
-	                  double lon) {
+                      String urlImage,
+                      String name,
+//	                  String type,
+                      String adress,
+                      String horair,
+                      String distance,
+                      int workmates,
+                      double evaluation,
+                      double lat,
+                      double lon) {
 		mplaceID              = placeID;
 //		mDrawableImage        = drawableImage;
 		mUrlImage             = urlImage;
 		mName                 = name;
-		mType                 = type;
+//		mType                 = type;
 		mAdress               = adress;
 		mHorair               = horair;
 		mDistance             = distance;
@@ -92,14 +92,15 @@ public class Restaurant {
 		mName = parameterName;
 	}
 	
-	public String getType() {
-		return mType;
-	}
-	
-	public void setType(String parameterType) {
-		mType = parameterType;
-	}
-	
+	//
+//	public String getType() {
+//		return mType;
+//	}
+//
+//	public void setType(String parameterType) {
+//		mType = parameterType;
+//	}
+//
 	public String getAdress() {
 		return mAdress;
 	}
@@ -132,11 +133,11 @@ public class Restaurant {
 		mWorkmatesInterrested = parameterWorkmatesInterrested;
 	}
 	
-	public int getEvaluation() {
+	public double getEvaluation() {
 		return mEvaluation;
 	}
 	
-	public void setEvaluation(int parameterEvaluation) {
+	public void setEvaluation(Double parameterEvaluation) {
 		mEvaluation = parameterEvaluation;
 	}
 }

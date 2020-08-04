@@ -93,8 +93,11 @@ public class RestaurantsRepository {
 									.getPhotos()
 									.get(0)
 									.getPhotoReference() + "&key=" + BuildConfig.apiKey);
-
-//								restaurant.setEvaluation();
+							
+							restaurant.setEvaluation(response
+									                         .body()
+									                         .getResult()
+									                         .getRating());
 
 //								restaurant.setDistance();
 
