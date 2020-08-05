@@ -54,6 +54,7 @@ public class MapViewFragment extends Fragment {
 	private int    ProximityRadius = 100;
 	private double latitude, longitude;
 	private              GoogleMap         Mmap;
+	
 	public static final  String            PREF_KEY_LONGITUDE                       = "PREF_KEY_LONGITUDE";
 	static final         String            PREF_KEY_LATITUDE                        = "PREF_KEY_LATITUDE";
 	private static final int               PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;

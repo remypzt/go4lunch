@@ -76,7 +76,6 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 		Glide
 				.with(mEvaluation.getContext())
 				.load(
-						
 						getRatingScorePicture(restaurants))
 //				.placeholder(R.drawable.ic_launcher_background)
 				.into(mEvaluation);
