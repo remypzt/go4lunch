@@ -1,7 +1,9 @@
 package remy.pouzet.go4lunch.view.activities;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,17 +50,20 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 	private           ChatAdapter         mentorChatAdapter;
 	@Nullable private User                modelCurrentUser;
 	private           String              currentChatName;
-	private           ActivityChatBinding mActivityChatBinding;
+	public            ActivityChatBinding mActivityChatBinding;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
+		super.onCreate(savedInstanceState);
+		mActivityChatBinding = ActivityChatBinding.inflate(getLayoutInflater());
+		View view = mActivityChatBinding.getRoot();
+		setContentView(view);
 		
 		recyclerView              = mActivityChatBinding.activityChatRecyclerView;
 		textViewRecyclerViewEmpty = mActivityChatBinding.activityChatTextViewRecyclerViewEmpty;
 		editTextMessage           = mActivityChatBinding.activityChatMessageEditText;
 		imageViewPreview          = mActivityChatBinding.activityChatImageChosenPreview;
-		
-		super.onCreate(savedInstanceState);
 		
 		this.configureRecyclerView(CHAT_NAME_ANDROID);
 //		this.configureToolbar();
@@ -92,6 +97,56 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 	// ACTIONS
 	// --------------------
 	
+	// 8 - Re-Configure the RecyclerView depending chosen chat
+	public void onClickChatButtons(ImageButton imageButton) {
+		ImageButton androidChatButton  = mActivityChatBinding.activityChatAndroidChatButton;
+		ImageButton firebaseChatButton = mActivityChatBinding.activityChatFirebaseChatButton;
+		ImageButton bugChatButton      = mActivityChatBinding.activityChatBugChatButton;
+		
+		androidChatButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				this.configureRecyclerView(CHAT_NAME_ANDROID);
+			}
+		});
+		
+		firebaseChatButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				this.configureRecyclerView(CHAT_NAME_FIREBASE);
+			}
+		});
+		
+		bugChatButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				this.configureRecyclerView(CHAT_NAME_BUG);
+			}
+		});
+		
+	}
+	
+	public void onClickSendMessage() {
+		Button chatSendButton = mActivityChatBinding.activityChatSendButton;
+		chatSendButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// 1 - Check if text field is not empty and current user properly downloaded from Firestore
+				if (!TextUtils.isEmpty(editTextMessage.getText()) && modelCurrentUser != null) {
+					// 2 - Create a new Message to Firestore
+					MessageHelper
+							.createMessageForChat(editTextMessage
+									                      .getText()
+									                      .toString(), this.currentChatName, modelCurrentUser)
+							.addOnFailureListener(this.onFailureListener());
+					// 3 - Reset text field
+					this.editTextMessage.setText("");
+				}
+			}
+		});
+		
+	}
+	
 	// --------------------
 	// REST REQUESTS
 	// --------------------
@@ -123,27 +178,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 //		return R.layout.activity_chat;
 //	}
 	
-	@OnClick(R.id.activity_chat_send_button)
-	public void onClickSendMessage() {
-	}
 	
-	@OnClick({R.id.activity_chat_android_chat_button, R.id.activity_chat_firebase_chat_button, R.id.activity_chat_bug_chat_button})
-	public void onClickChatButtons(ImageButton imageButton) {
-		// 8 - Re-Configure the RecyclerView depending chosen chat
-		switch (Integer.valueOf(imageButton
-				                        .getTag()
-				                        .toString())) {
-			case 10:
-				this.configureRecyclerView(CHAT_NAME_ANDROID);
-				break;
-			case 20:
-				this.configureRecyclerView(CHAT_NAME_FIREBASE);
-				break;
-			case 30:
-				this.configureRecyclerView(CHAT_NAME_BUG);
-				break;
-		}
-	}
 	
 	@OnClick(R.id.activity_chat_add_file_button)
 	public void onClickAddFile() {

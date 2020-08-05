@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 		bottomNavigationInitialize();
 		updateWithUserStatus();
 		signOutButton();
+		chatButton();
 		setSearchViewVisibilityFragmentDepends();
 		
 	}
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 	public void navigationDrawerNavigationInitialize() {
 		
 		//Navigation drawer menu
-		mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_your_lunch, R.id.nav_settings, R.id.nav_logout)
+		mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_your_lunch, R.id.nav_settings, R.id.nav_logout, R.id.nav_chat)
 				.setDrawerLayout(mActivityMainBinding.drawerLayout)
 				.build();
 		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -157,6 +158,17 @@ public class MainActivity extends AppCompatActivity {
 				.setOnMenuItemClickListener(menuItem -> {
 					signOutUserFromFirebase();
 					passByLoginActivity();
+					return true;
+				});
+	}
+	
+	public void chatButton() {
+		mActivityMainBinding.navView
+				.getMenu()
+				.findItem(R.id.nav_chat)
+				.setOnMenuItemClickListener(menuItem -> {
+					Intent chatActivityIntent = new Intent(this, ChatActivity.class);
+					startActivity(chatActivityIntent);
 					return true;
 				});
 	}

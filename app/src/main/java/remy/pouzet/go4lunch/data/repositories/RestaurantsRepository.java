@@ -14,7 +14,6 @@ import remy.pouzet.go4lunch.data.service.realAPI.POJOdetailsRestaurants.Response
 import remy.pouzet.go4lunch.data.service.realAPI.POJOmatrix.ResponseOfMatrix;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOrestaurantsList.ResponseOfRestaurantsList;
 import remy.pouzet.go4lunch.data.service.realAPI.RestaurantsApiInterfaceService;
-import remy.pouzet.go4lunch.databinding.ContentItemsOfRestaurantsListViewBinding;
 import remy.pouzet.go4lunch.others.utils.UtilsForRestaurantsList;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,7 +35,7 @@ public class RestaurantsRepository {
 	public              String                                   horairs;
 	public              SharedPreferences                        mPreferences;
 	private             MutableLiveData<List<Restaurant>>        restaurants;
-	private             ContentItemsOfRestaurantsListViewBinding binding;
+//	private             ContentItemsOfRestaurantsListViewBinding binding;
 	private             double                                   latitude, longitude;
 	
 	private RestaurantsRepository() {
@@ -111,10 +110,10 @@ public class RestaurantsRepository {
 									                         .body()
 									                         .getResult()
 									                         .getRating());
-							
-							restaurant.setDistance(getDistanceFromMatrixAPI(destination));
-							
-							restaurant.setHorair(getHorairs(response));
+
+//							restaurant.setDistance(getDistanceFromMatrixAPI(destination));
+
+//							restaurant.setHorair(getHorairs(response));
 
 //								restaurant.setType();
 //								restaurant.setWorkmatesInterrested();
