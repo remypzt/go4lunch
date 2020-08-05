@@ -14,6 +14,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
@@ -66,11 +67,13 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 		
 		this.mName.setText(restaurants.getName());
 		this.mAdress.setText(restaurants.getAdress());
+		RequestOptions mRequestOption = new RequestOptions();
+		mRequestOption.placeholder(R.drawable.ic_launcher_background);
 		
 		Glide
 				.with(mPicture.getContext())
 				.load(restaurants.getUrlImage())
-//				.placeholder(R.drawable.ic_launcher_background)
+				.apply(mRequestOption)
 				.into(mPicture);
 		
 		Glide

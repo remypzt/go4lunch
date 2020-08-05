@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -65,6 +67,8 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 		editTextMessage           = mActivityChatBinding.activityChatMessageEditText;
 		imageViewPreview          = mActivityChatBinding.activityChatImageChosenPreview;
 		
+		onClickSendMessage();
+		onClickChatButtons();
 		this.configureRecyclerView(CHAT_NAME_ANDROID);
 //		this.configureToolbar();
 		this.getCurrentUserFromFirestore();
@@ -97,35 +101,6 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 	// ACTIONS
 	// --------------------
 	
-	// 8 - Re-Configure the RecyclerView depending chosen chat
-	public void onClickChatButtons(ImageButton imageButton) {
-		ImageButton androidChatButton  = mActivityChatBinding.activityChatAndroidChatButton;
-		ImageButton firebaseChatButton = mActivityChatBinding.activityChatFirebaseChatButton;
-		ImageButton bugChatButton      = mActivityChatBinding.activityChatBugChatButton;
-		
-		androidChatButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				this.configureRecyclerView(CHAT_NAME_ANDROID);
-			}
-		});
-		
-		firebaseChatButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				this.configureRecyclerView(CHAT_NAME_FIREBASE);
-			}
-		});
-		
-		bugChatButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				this.configureRecyclerView(CHAT_NAME_BUG);
-			}
-		});
-		
-	}
-	
 	public void onClickSendMessage() {
 		Button chatSendButton = mActivityChatBinding.activityChatSendButton;
 		chatSendButton.setOnClickListener(new View.OnClickListener() {
@@ -137,11 +112,45 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 					MessageHelper
 							.createMessageForChat(editTextMessage
 									                      .getText()
-									                      .toString(), this.currentChatName, modelCurrentUser)
-							.addOnFailureListener(this.onFailureListener());
+									                      .toString(), currentChatName, modelCurrentUser)
+							.addOnFailureListener(new OnFailureListener() {
+								@Override
+								public void onFailure(@NonNull Exception parameterE) {
+									//todo manage if usefull
+								}
+							});
 					// 3 - Reset text field
-					this.editTextMessage.setText("");
+					editTextMessage.setText("");
 				}
+			}
+		});
+		
+	}
+	
+	// 8 - Re-Configure the RecyclerView depending chosen chat
+	public void onClickChatButtons() {
+		ImageButton androidChatButton  = mActivityChatBinding.activityChatAndroidChatButton;
+		ImageButton firebaseChatButton = mActivityChatBinding.activityChatFirebaseChatButton;
+		ImageButton bugChatButton      = mActivityChatBinding.activityChatBugChatButton;
+		
+		androidChatButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				configureRecyclerView(CHAT_NAME_ANDROID);
+			}
+		});
+		
+		firebaseChatButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				configureRecyclerView(CHAT_NAME_FIREBASE);
+			}
+		});
+		
+		bugChatButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				configureRecyclerView(CHAT_NAME_BUG);
 			}
 		});
 		

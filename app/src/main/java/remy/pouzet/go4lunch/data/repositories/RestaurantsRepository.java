@@ -1,6 +1,7 @@
 package remy.pouzet.go4lunch.data.repositories;
 
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.widget.ImageView;
 
 import androidx.lifecycle.MutableLiveData;
@@ -60,7 +61,7 @@ public class RestaurantsRepository {
 					                       Response<ResponseOfRestaurantsList> response) {
 						if (response.isSuccessful()) {
 							
-							getRestaurantsDetails(UtilsForRestaurantsList.generateRestaurantsFromRestaurantsList(response.body()));
+							getRestaurantsDetails(UtilsForRestaurantsList.generateRestaurantsFromRestaurantsList(response.body()), lat, lgn);
 							
 						} else {
 							restaurants.setValue(null);
@@ -76,7 +77,9 @@ public class RestaurantsRepository {
 		return restaurants;
 	}
 	
-	private void getRestaurantsDetails(List<Restaurant> restaurantdetails) {
+	private void getRestaurantsDetails(List<Restaurant> restaurantdetails,
+	                                   double lat,
+	                                   double lgn) {
 //		 mPicture = binding.restaurantPicture;
 		//Todo pass by loop when project is finish ( it's like that for limitate google API free request)
 //		for (Restaurant restaurant : restaurantdetails) {
@@ -110,8 +113,9 @@ public class RestaurantsRepository {
 									                         .body()
 									                         .getResult()
 									                         .getRating());
-
-//							restaurant.setDistance(getDistanceFromMatrixAPI(destination));
+							
+							// pass lat and lgn destination
+							restaurant.setDistance(getDistance(destination, lat, lgn));
 
 //							restaurant.setHorair(getHorairs(response));
 
@@ -131,12 +135,30 @@ public class RestaurantsRepository {
 				});
 		
 	}
+	
+	public String getDistance(String destination,
+	                          double lat,
+	                          double lgn) {
+		Location locationOrigin = new Location("");
+		locationOrigin.setLatitude(lat);
+		locationOrigin.setLongitude(lgn);
+		
+		Location locationDestination = new Location("");
+		
+		distance = String.valueOf(locationOrigin.distanceTo(locationDestination));
+		
+		return distance;
+	}
 
 //		return restaurants;
 	
-	public String getDistanceFromMatrixAPI(String destination) {
+	public String getDistanceFromMatrixAPI(String destination,
+	                                       double lat,
+	                                       double lgn) {
+
+//		restaurant.setDistance(getDistanceFromMatrixAPI(destination, lat, lgn));
 		
-		origin = getLocation();
+		origin = lat + "|" + lgn;
 		
 		mRestaurantsApiInterfaceService
 				.getResponseOfMatrix("metric", origin, destination, BuildConfig.apiKey)
@@ -149,7 +171,7 @@ public class RestaurantsRepository {
 							distance = response
 									.body()
 									.getRows()
-									.get(0)
+									.get(1)
 									.getElements()
 									.get(0)
 									.getDistance()
