@@ -39,8 +39,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 	
 	// STATIC DATA FOR CHAT (3)
 	private static final String CHAT_NAME_ANDROID  = "android";
-	private static final String CHAT_NAME_BUG      = "bug";
-	private static final String CHAT_NAME_FIREBASE = "firebase";
+
 	// FOR DESIGN
 	// 1 - Getting all views needed
 	RecyclerView      recyclerView;
@@ -130,27 +129,11 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 	// 8 - Re-Configure the RecyclerView depending chosen chat
 	public void onClickChatButtons() {
 		ImageButton androidChatButton  = mActivityChatBinding.activityChatAndroidChatButton;
-		ImageButton firebaseChatButton = mActivityChatBinding.activityChatFirebaseChatButton;
-		ImageButton bugChatButton      = mActivityChatBinding.activityChatBugChatButton;
 		
 		androidChatButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				configureRecyclerView(CHAT_NAME_ANDROID);
-			}
-		});
-		
-		firebaseChatButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				configureRecyclerView(CHAT_NAME_FIREBASE);
-			}
-		});
-		
-		bugChatButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				configureRecyclerView(CHAT_NAME_BUG);
 			}
 		});
 		

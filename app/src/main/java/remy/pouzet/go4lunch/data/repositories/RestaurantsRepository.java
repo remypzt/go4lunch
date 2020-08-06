@@ -6,13 +6,13 @@ import android.widget.ImageView;
 
 import androidx.lifecycle.MutableLiveData;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import remy.pouzet.go4lunch.BuildConfig;
 import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 import remy.pouzet.go4lunch.data.service.RetrofitService;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOdetailsRestaurants.ResponseOfPlaceDetailsRestaurants;
-import remy.pouzet.go4lunch.data.service.realAPI.POJOmatrix.ResponseOfMatrix;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOrestaurantsList.ResponseOfRestaurantsList;
 import remy.pouzet.go4lunch.data.service.realAPI.RestaurantsApiInterfaceService;
 import remy.pouzet.go4lunch.others.utils.UtilsForRestaurantsList;
@@ -25,19 +25,20 @@ import retrofit2.Response;
  */
 public class RestaurantsRepository {
 	
-	public static final String                                   PREF_KEY_LATITUDE  = "PREF_KEY_LATITUDE";
-	public static final String                                   PREF_KEY_LONGITUDE = "PREF_KEY_LONGITUDE";
-	private static      RestaurantsRepository                    restaurantsApiRepository;
-	private final       RestaurantsApiInterfaceService           mRestaurantsApiInterfaceService;
-	public              ImageView                                mPicture;
-	public              String                                   origin;
-	public              String                                   distance;
-	public              String                                   destination;
-	public              String                                   horairs;
-	public              SharedPreferences                        mPreferences;
-	private             MutableLiveData<List<Restaurant>>        restaurants;
-//	private             ContentItemsOfRestaurantsListViewBinding binding;
-	private             double                                   latitude, longitude;
+	public static final String                         PREF_KEY_LATITUDE  = "PREF_KEY_LATITUDE";
+	public static final String                         PREF_KEY_LONGITUDE = "PREF_KEY_LONGITUDE";
+	private static      RestaurantsRepository          restaurantsApiRepository;
+	private final       RestaurantsApiInterfaceService mRestaurantsApiInterfaceService;
+	public              ImageView                      mPicture;
+	public              String                         origin;
+	public              String                         distance;
+	public              String                         destination;
+	public              String                         horairs, status;
+	public  SharedPreferences                 mPreferences;
+	private MutableLiveData<List<Restaurant>> restaurants;
+	//	private             ContentItemsOfRestaurantsListViewBinding binding;
+	private double                            latitude, longitude, destinationLat, destinationLng;
+	private float unformatedDistance;
 	
 	private RestaurantsRepository() {
 		mRestaurantsApiInterfaceService = RetrofitService.cteateService(RestaurantsApiInterfaceService.class);
@@ -51,17 +52,17 @@ public class RestaurantsRepository {
 		return restaurantsApiRepository;
 	}
 	
-	public MutableLiveData<List<Restaurant>> getRestaurants(double lat,
-	                                                        double lgn) {
+	public MutableLiveData<List<Restaurant>> getRestaurants(double userLat,
+	                                                        double userLng) {
 		mRestaurantsApiInterfaceService
-				.getResponseOfRestaurantsList((lat) + "," + (lgn), 15000, BuildConfig.apiKey, "restaurant")
+				.getResponseOfRestaurantsList((userLat) + "," + (userLng), 15000, BuildConfig.apiKey, "restaurant")
 				.enqueue(new Callback<ResponseOfRestaurantsList>() {
 					@Override
 					public void onResponse(Call<ResponseOfRestaurantsList> call,
 					                       Response<ResponseOfRestaurantsList> response) {
 						if (response.isSuccessful()) {
 							
-							getRestaurantsDetails(UtilsForRestaurantsList.generateRestaurantsFromRestaurantsList(response.body()), lat, lgn);
+							getRestaurantsDetails(UtilsForRestaurantsList.generateRestaurantsFromRestaurantsList(response.body()), userLat, userLng);
 							
 						} else {
 							restaurants.setValue(null);
@@ -78,9 +79,8 @@ public class RestaurantsRepository {
 	}
 	
 	private void getRestaurantsDetails(List<Restaurant> restaurantdetails,
-	                                   double lat,
-	                                   double lgn) {
-//		 mPicture = binding.restaurantPicture;
+	                                   double userLat,
+	                                   double userLng) {
 		//Todo pass by loop when project is finish ( it's like that for limitate google API free request)
 //		for (Restaurant restaurant : restaurantdetails) {
 		Restaurant restaurant = restaurantdetails.get(1);
@@ -114,10 +114,23 @@ public class RestaurantsRepository {
 									                         .getResult()
 									                         .getRating());
 							
-							// pass lat and lgn destination
-							restaurant.setDistance(getDistance(destination, lat, lgn));
-
-//							restaurant.setHorair(getHorairs(response));
+							//TODO set lgn
+							destinationLat = response
+									.body()
+									.getResult()
+									.getGeometry()
+									.getLocation()
+									.getLat();
+							destinationLng = response
+									.body()
+									.getResult()
+									.getGeometry()
+									.getLocation()
+									.getLng();
+							
+							restaurant.setDistance(getDistance(destinationLat, destinationLng, userLat, userLng));
+							
+							restaurant.setHorair(getStatus(response));
 
 //								restaurant.setType();
 //								restaurant.setWorkmatesInterrested();
@@ -133,127 +146,63 @@ public class RestaurantsRepository {
 						//TODO toast
 					}
 				});
+//		}
 		
 	}
 	
-	public String getDistance(String destination,
-	                          double lat,
-	                          double lgn) {
+	public String getDistance(double destinationLat,
+	                          double destinationLng,
+	                          double userLat,
+	                          double userLng) {
 		Location locationOrigin = new Location("");
-		locationOrigin.setLatitude(lat);
-		locationOrigin.setLongitude(lgn);
+		locationOrigin.setLatitude(userLat);
+		locationOrigin.setLongitude(userLng);
 		
 		Location locationDestination = new Location("");
+		locationDestination.setLatitude(destinationLat);
+		locationDestination.setLongitude(destinationLng);
 		
-		distance = String.valueOf(locationOrigin.distanceTo(locationDestination));
+		DecimalFormat df1 = new DecimalFormat("0.0");
+		DecimalFormat df2 = new DecimalFormat("00.0");
+		DecimalFormat df3 = new DecimalFormat("000");
+		DecimalFormat df4 = new DecimalFormat("0000");
 		
-		return distance;
-	}
-
-//		return restaurants;
-	
-	public String getDistanceFromMatrixAPI(String destination,
-	                                       double lat,
-	                                       double lgn) {
-
-//		restaurant.setDistance(getDistanceFromMatrixAPI(destination, lat, lgn));
+		unformatedDistance = locationOrigin.distanceTo(locationDestination) / 1000;
 		
-		origin = lat + "|" + lgn;
-		
-		mRestaurantsApiInterfaceService
-				.getResponseOfMatrix("metric", origin, destination, BuildConfig.apiKey)
-				.enqueue(new Callback<ResponseOfMatrix>() {
-					@Override
-					public void onResponse(Call<ResponseOfMatrix> call,
-					                       Response<ResponseOfMatrix> response) {
-						if (response.isSuccessful()) {
-							
-							distance = response
-									.body()
-									.getRows()
-									.get(1)
-									.getElements()
-									.get(0)
-									.getDistance()
-									.toString();
-						}
-					}
-					
-					@Override
-					public void onFailure(Call<ResponseOfMatrix> call,
-					                      Throwable t) {
-						//TODO toast
-						
-					}
-				});
+		if (unformatedDistance > 1) {
+			distance = df1.format(locationOrigin.distanceTo(locationDestination) / 1000) + " km";
+		} else if (unformatedDistance > 10) {
+			distance = df2.format(locationOrigin.distanceTo(locationDestination) / 1000) + " km";
+		} else if (unformatedDistance > 100) {
+			distance = df3.format(locationOrigin.distanceTo(locationDestination) / 1000) + " km";
+		} else if (unformatedDistance > 1000) {
+			distance = df4.format(locationOrigin.distanceTo(locationDestination) / 1000) + " km";
+		} else {
+			distance = df3.format(locationOrigin.distanceTo(locationDestination)) + " m";
+		}
 		
 		return distance;
 	}
 	
-	public String getHorairs(Response<ResponseOfPlaceDetailsRestaurants> response) {
-		//Todo getTime
-		//Todo getdate
-		//todo switch date
-		//todo inside switch date get horair from date and get time
-		// if user time-open time is - it's close so display it and openhour
-		// if user time-open time is + it's open...
-		// or pass by OpenNow
-		// if user tim-open time is close to 0 display appropriate message
-		// how manage it when there's severals open-close the same day ?
-		
-		response
+	public String getStatus(Response<ResponseOfPlaceDetailsRestaurants> response) {
+		if (response
 				.body()
 				.getResult()
 				.getOpeningHours()
-				.getOpenNow();
-		response
-				.body()
-				.getResult()
-				.getOpeningHours()
-				.getPeriods()
-				.get(0)
-				.getClose();
-		
-		return horairs;
+				.getOpenNow()) {
+			status = "ouvert";
+		} else {
+			status = "fermé";
+		}
+		return status;
 		
 	}
-
-//
-//	public void onLocationResult(LocationResult locationResult) {
-//		if (locationResult == null) {
-//			return;
-//		}
-//		for (Location location : locationResult.getLocations()) {
-//			if (location != null) {
-//				latitude  = location.getLatitude();
-//				longitude = location.getLongitude();
-//			}
-//		}
-//	}
 	
 	public String getLocation() {
-//		Location location = null;
-//		latitude  = location.getLatitude();
-//		longitude = location.getLongitude();
-		
 		//TODO get location as origin parameter
-
-//		mPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-//		latitude     = getDouble(mPreferences, PREF_KEY_LATITUDE, 2.0);
-//		longitude    = getDouble(mPreferences, PREF_KEY_LONGITUDE, 2.0);
-
-//		onLocationResult();
 		
 		origin = latitude + "|" + longitude;
 		
 		return origin;
 	}
-	
-	public double getDouble(final SharedPreferences prefs,
-	                        final String key,
-	                        final double defaultValue) {
-		return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
-	}
 }
-
-//}

@@ -20,30 +20,8 @@
             android:layout_height="50dip"
             android:layout_weight="1"
             android:background="@color/colorGreen"
-            android:src="@drawable/ic_android_white_24"
-            android:tag="10" />
-
-        <!-- BUTTON CHAT FIREBASE -->
-        <ImageButton
-            android:id="@+id/activity_chat_firebase_chat_button"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="50dip"
-            android:layout_weight="1"
-            android:background="@color/colorSandLight"
             android:src="@drawable/ic_cloud_white_24dp"
-            android:tag="20" />
-
-        <!-- BUTTON CHAT BUG -->
-        <ImageButton
-            android:id="@+id/activity_chat_bug_chat_button"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="50dip"
-            android:layout_weight="1"
-            android:background="@color/colorSand"
-            android:src="@drawable/ic_bug_report_white_24dp"
-            android:tag="30" />
+            android:tag="10" />
 
     </LinearLayout>
 
