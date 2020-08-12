@@ -3,7 +3,6 @@ package remy.pouzet.go4lunch.view.fragments;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -34,6 +33,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import remy.pouzet.go4lunch.R;
@@ -53,13 +53,16 @@ public class MapViewFragment extends Fragment {
 	String restaurant = "restaurant";
 	private int    ProximityRadius = 100;
 	private double latitude, longitude;
-	private              GoogleMap         Mmap;
+	public  ArrayList<String> clickedRestaurants = new ArrayList<>();
+	private GoogleMap         mMap;
 	
-	public static final  String            PREF_KEY_LONGITUDE                       = "PREF_KEY_LONGITUDE";
-	static final         String            PREF_KEY_LATITUDE                        = "PREF_KEY_LATITUDE";
-	private static final int               PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-	public               SharedPreferences mPreferences;
-	public               LocationCallback  locationCallback                         = new LocationCallback() {
+	public static final  String                PREF_KEY_LONGITUDE                       = "PREF_KEY_LONGITUDE";
+	static final         String                PREF_KEY_LATITUDE                        = "PREF_KEY_LATITUDE";
+	private static final int                   PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+	public               SharedPreferences     mPreferences;
+	private              ArrayList<Restaurant> mRestaurants                             = new ArrayList<>();
+	
+	public               LocationCallback  locationCallback = new LocationCallback() {
 		@SuppressLint("CommitPrefEdits")
 		@Override
 		public void onLocationResult(LocationResult locationResult) {
@@ -74,11 +77,15 @@ public class MapViewFragment extends Fragment {
 					
 					saveLocation();
 					
-					Mmap.clear();
+					mMap.clear();
 					
 					new RestaurantsListViewViewModel(latitude, longitude)
 							.getRestaurants()
-							.observe((LifecycleOwner) requireContext(), restaurants -> displayRestaurants(restaurants));
+							.observe((LifecycleOwner) requireContext(), restaurants -> {
+								mRestaurants.clear();
+								mRestaurants.addAll(restaurants);
+								displayRestaurants(restaurants);
+							});
 				}
 			}
 		}
@@ -97,7 +104,7 @@ public class MapViewFragment extends Fragment {
 		
 		@Override
 		public void onMapReady(GoogleMap map) {
-			Mmap = map;
+			mMap = map;
 			// Turn on the My Location layer and the related control on the map.
 			updateLocationUI();
 		}
@@ -150,6 +157,15 @@ public class MapViewFragment extends Fragment {
 	}
 	
 	@Override
+	public void onResume() {
+		super.onResume();
+		if (mMap != null) {
+			displayRestaurants(mRestaurants);
+		}
+		
+	}
+	
+	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
 		mFusedLocationClient.removeLocationUpdates(locationCallback);
@@ -172,6 +188,7 @@ public class MapViewFragment extends Fragment {
 	}
 	
 	public void displayRestaurants(List<Restaurant> restaurants) {
+		mMap.clear();
 		for (Restaurant restaurant : restaurants) {
 			MarkerOptions markerOptions = new MarkerOptions();
 			
@@ -179,38 +196,24 @@ public class MapViewFragment extends Fragment {
 			double lat         = restaurant.getMlat();
 			double lng         = restaurant.getMlon();
 			
-			LatLng latLng = new LatLng(lat, lng);
+			LatLng latLng      = new LatLng(lat, lng);
+			float  markerColor = (clickedRestaurants.contains(restaurant.getName()))
+			                     ? BitmapDescriptorFactory.HUE_AZURE
+			                     : BitmapDescriptorFactory.HUE_RED;
 			markerOptions
 					.position(latLng)
-					.title(nameOfPlace
-//					       TODO check how fix vicinity
-//					       + " : " + vicinity
-					      )
+					.title(nameOfPlace)
 //			.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_your_lunch))
-					.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-//			//TODO define an id for each marker will be use to define right intent
-////			String id = marker.getId();
-//			markerMap.put(id, "action_one");
+					.icon(BitmapDescriptorFactory.defaultMarker(markerColor));
 			
-			Mmap.addMarker(markerOptions);
-			Mmap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-			Mmap.animateCamera(CameraUpdateFactory.zoomTo(10));
-			Mmap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-				@Override
-				public void onInfoWindowClick(Marker parameterMarker) {
-					getActivity().startActivity(new Intent(getActivity(), RestaurantDetails.class));
-					
-					//TODO define an id for each marker will be use to define right intent
-//					String actionId = markerMap.get(marker.getId());
-//					if (actionId.equals("action_one")) {
-//						Intent i = new Intent(MainActivity.this, ActivityOne.class);
-//					markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-//					Mmap.addMarker(markerOptions);
-//						startActivity(i);
-//					} else if (actionId.equals("action_two")) {
-//						Intent i = new Intent(MainActivity.this, ActivityTwo.class);
-//						startActivity(i);
-				}
+			Marker marker = mMap.addMarker(markerOptions);
+			marker.setTag(restaurant);
+			mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+			mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+			mMap.setOnInfoWindowClickListener(parameterMarker -> {
+				Restaurant r = (Restaurant) parameterMarker.getTag();
+				RestaurantDetails.startActivity(getActivity(), r);
+				clickedRestaurants.add(r.getName());
 			});
 		}
 		
@@ -234,14 +237,14 @@ public class MapViewFragment extends Fragment {
 	}
 	
 	private void updateLocationUI() {
-		if (Mmap == null) {
+		if (mMap == null) {
 			return;
 		}
 		try {
 			if (locationPermissionGranted) {
-				Mmap.setMyLocationEnabled(true);
+				mMap.setMyLocationEnabled(true);
 			} else {
-				Mmap.setMyLocationEnabled(false);
+				mMap.setMyLocationEnabled(false);
 			}
 		}
 		catch (SecurityException e) {

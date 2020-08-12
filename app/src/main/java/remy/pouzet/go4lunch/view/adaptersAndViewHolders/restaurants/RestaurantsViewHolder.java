@@ -3,7 +3,6 @@ package remy.pouzet.go4lunch.view.adaptersAndViewHolders.restaurants;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -67,37 +66,31 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 	}
 	
 	@SuppressLint("SetTextI18n")
-	public void updateWithRestaurants(Restaurant restaurants) {
+	public void updateWithRestaurants(Restaurant restaurant) {
 		
-		this.mName.setText(restaurants.getName());
-		this.mAdress.setText(restaurants.getAdress());
+		this.mName.setText(restaurant.getName());
+		this.mAdress.setText(restaurant.getAdress());
 		RequestOptions mRequestOption = new RequestOptions();
 		mRequestOption.placeholder(R.drawable.ic_launcher_background);
 		
 		Glide
 				.with(mPicture.getContext())
-				.load(restaurants.getUrlImage())
+				.load(restaurant.getUrlImage())
 				.apply(mRequestOption)
 				.into(mPicture);
 		
 		Glide
 				.with(mEvaluation.getContext())
-				.load(getRatingScorePicture(restaurants))
+				.load(getRatingScorePicture(restaurant))
 //				.placeholder(R.drawable.ic_launcher_background)
 				.into(mEvaluation);
 		
-		this.mDistance.setText(restaurants.getDistance());
+		this.mDistance.setText(restaurant.getDistance());
 		
-		this.mHorair.setText(restaurants.getHorair());
+		this.mHorair.setText(restaurant.getHorair());
 		
 		this.mConstraintLayout.setOnClickListener(v -> {
-			
-			Intent restaurantDetailsIntent = new Intent(mConstraintLayout.getContext(), RestaurantDetails.class);
-			restaurantDetailsIntent.putExtra("test", );
-			
-			mConstraintLayout
-					.getContext()
-					.startActivity(restaurantDetailsIntent);
+			RestaurantDetails.startActivity(mConstraintLayout.getContext(), restaurant);
 			
 		});
 

@@ -1,9 +1,11 @@
 package remy.pouzet.go4lunch.data.repositories.models;
 
+import java.io.Serializable;
+
 /**
  * Created by Remy Pouzet on 14/07/2020.
  */
-public class Restaurant {
+public class Restaurant implements Serializable {
 	private String mplaceID;
 	//	private int    mDrawableImage;
 	private String mUrlImage;
