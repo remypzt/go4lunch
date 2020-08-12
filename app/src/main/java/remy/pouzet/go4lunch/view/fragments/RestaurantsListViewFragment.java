@@ -105,4 +105,5 @@ public class RestaurantsListViewFragment extends Fragment {
 		// 3.4 - Set layout manager to position the items
 		this.mRestaurantsReyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 	}
+	
 }

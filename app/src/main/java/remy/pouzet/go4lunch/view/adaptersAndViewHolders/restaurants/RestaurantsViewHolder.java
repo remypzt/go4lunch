@@ -3,6 +3,7 @@ package remy.pouzet.go4lunch.view.adaptersAndViewHolders.restaurants;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 import remy.pouzet.go4lunch.databinding.ContentItemsOfRestaurantsListViewBinding;
+import remy.pouzet.go4lunch.view.fragments.RestaurantDetails;
 
 /**
  * Created by Remy Pouzet on 14/07/2020.
@@ -42,6 +44,8 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 	public  ImageView                                mWorkmatesInterrestedScore;
 	private ContentItemsOfRestaurantsListViewBinding mContentItemsOfRestaurantsListViewBinding;
 	public  Activity                                 activity;
+	public  Restaurant                               mRestaurant;
+
 // TODO worksmate and evaluation
 	
 	public RestaurantsViewHolder(View itemView) {
@@ -55,10 +59,10 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 		mName                 = mContentItemsOfRestaurantsListViewBinding.restaurantName;
 		mPicture              = mContentItemsOfRestaurantsListViewBinding.restaurantPicture;
 //		mType                 = mContentItemsOfRestaurantsListViewBinding.restaurantType;
-		mAdress               = mContentItemsOfRestaurantsListViewBinding.restaurantAdress;
-		mHorair               = mContentItemsOfRestaurantsListViewBinding.restaurantHorairInformations;
-		//mConstraintLayout = mContentItemsOfRestaurantsListViewBinding.ArticlesLayout;
-		mDistance = mContentItemsOfRestaurantsListViewBinding.restaurantDistanceFromTheUser;
+		mAdress           = mContentItemsOfRestaurantsListViewBinding.restaurantAdress;
+		mHorair           = mContentItemsOfRestaurantsListViewBinding.restaurantHorairInformations;
+		mConstraintLayout = mContentItemsOfRestaurantsListViewBinding.ArticlesLayout;
+		mDistance         = mContentItemsOfRestaurantsListViewBinding.restaurantDistanceFromTheUser;
 		
 	}
 	
@@ -78,14 +82,24 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 		
 		Glide
 				.with(mEvaluation.getContext())
-				.load(
-						getRatingScorePicture(restaurants))
+				.load(getRatingScorePicture(restaurants))
 //				.placeholder(R.drawable.ic_launcher_background)
 				.into(mEvaluation);
 		
 		this.mDistance.setText(restaurants.getDistance());
 		
 		this.mHorair.setText(restaurants.getHorair());
+		
+		this.mConstraintLayout.setOnClickListener(v -> {
+			
+			Intent restaurantDetailsIntent = new Intent(mConstraintLayout.getContext(), RestaurantDetails.class);
+			restaurantDetailsIntent.putExtra("test", );
+			
+			mConstraintLayout
+					.getContext()
+					.startActivity(restaurantDetailsIntent);
+			
+		});
 
 //		Glide
 //				.with(mWorkmatesInterrested.getContext())

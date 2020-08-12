@@ -14,6 +14,9 @@ public class Restaurant {
 	private String mDistance;
 	private int    mWorkmatesInterrested;
 	private double mEvaluation;
+	int    mphoneNumber;
+	String mWebsite;
+	
 	double mlat;
 	double mlon;
 	
@@ -27,21 +30,45 @@ public class Restaurant {
                       String distance,
                       int workmates,
                       double evaluation,
+                      int phoneNumber,
+                      String webSite,
                       double lat,
                       double lon) {
-		mplaceID              = placeID;
+		mplaceID = placeID;
 //		mDrawableImage        = drawableImage;
-		mUrlImage             = urlImage;
-		mName                 = name;
+		mUrlImage = urlImage;
+		mName     = name;
 //		mType                 = type;
 		mAdress               = adress;
 		mHorair               = horair;
 		mDistance             = distance;
 		mWorkmatesInterrested = workmates;
 		mEvaluation           = evaluation;
+		mphoneNumber          = phoneNumber;
+		mWebsite              = webSite;
 		mlon                  = lon;
 		mlat                  = lat;
 		
+	}
+	
+	public void setEvaluation(double parameterEvaluation) {
+		mEvaluation = parameterEvaluation;
+	}
+	
+	public int getMphoneNumber() {
+		return mphoneNumber;
+	}
+	
+	public void setMphoneNumber(int parameterMphoneNumber) {
+		mphoneNumber = parameterMphoneNumber;
+	}
+	
+	public String getWebsite() {
+		return mWebsite;
+	}
+	
+	public void setWebsite(String parameterWebsite) {
+		mWebsite = parameterWebsite;
 	}
 	
 	public String getMplaceID() {
