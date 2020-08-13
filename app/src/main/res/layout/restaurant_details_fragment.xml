@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".view.fragments.RestaurantDetails">
 
     <ImageView
@@ -15,11 +16,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <View
+        android:id="@+id/background_color_details_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#FF5722"
+        app:layout_constraintBottom_toTopOf="@id/imageButtonCall"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_picture" />
+
     <ImageButton
         android:id="@+id/user_interest_image_button"
+        style="@android:style/Widget.Holo.Light.ImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:layout_marginEnd="15dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_baseline_check_circle_24"
         app:layout_constraintBottom_toBottomOf="@id/restaurant_picture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/restaurant_picture" />
@@ -28,17 +41,21 @@
         android:id="@+id/restaurant_name_details_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
         android:text="restaurant name"
+        android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/restaurant_picture" />
 
     <ImageView
         android:id="@+id/restaurant_evaluation_details_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="10dp"
         android:contentDescription="picture_illustrating_evaluation_restaurant"
         app:layout_constraintStart_toEndOf="@id/restaurant_name_details_fragment"
+        app:layout_constraintBottom_toBottomOf="@id/restaurant_name_details_fragment"
         app:layout_constraintTop_toTopOf="@id/restaurant_name_details_fragment" />
 
 
@@ -47,23 +64,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="restaurant adress"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="@id/restaurant_name_details_fragment"
         app:layout_constraintTop_toBottomOf="@id/restaurant_name_details_fragment" />
 
-    <!--    <View-->
-    <!--        android:id="@+id/background_color_details_fragment"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:background="#F44336"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@id/restaurant_picture" />-->
 
     <ImageButton
         android:id="@+id/imageButtonCall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_phone"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/restaurant_adress_details_fragment" />
 
@@ -102,6 +114,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_earth"
+        android:layout_marginEnd="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageButtonCall" />
 

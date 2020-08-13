@@ -16,7 +16,7 @@ public class Restaurant implements Serializable {
 	private String mDistance;
 	private int    mWorkmatesInterrested;
 	private double mEvaluation;
-	int    mphoneNumber;
+	String mphoneNumber;
 	String mWebsite;
 	
 	double mlat;
@@ -32,7 +32,7 @@ public class Restaurant implements Serializable {
                       String distance,
                       int workmates,
                       double evaluation,
-                      int phoneNumber,
+                      String phoneNumber,
                       String webSite,
                       double lat,
                       double lon) {
@@ -57,13 +57,7 @@ public class Restaurant implements Serializable {
 		mEvaluation = parameterEvaluation;
 	}
 	
-	public int getMphoneNumber() {
-		return mphoneNumber;
-	}
-	
-	public void setMphoneNumber(int parameterMphoneNumber) {
-		mphoneNumber = parameterMphoneNumber;
-	}
+
 	
 	public String getWebsite() {
 		return mWebsite;
@@ -84,6 +78,14 @@ public class Restaurant implements Serializable {
 //	public int getDrawableImage() {
 //		return mDrawableImage;
 //	}
+	
+	public String getMphoneNumber() {
+		return mphoneNumber;
+	}
+	
+	public void setMphoneNumber(String parameterMphoneNumber) {
+		mphoneNumber = parameterMphoneNumber;
+	}
 	
 	public double getMlat() {
 		return mlat;

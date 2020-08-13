@@ -32,7 +32,7 @@ public class UtilsForRestaurantsList {
 		
 		return new Restaurant(resultsItemOfRestaurantsList.getPlaceId(),
 //				R.drawable.ic_launcher_background,
-                              "multimediaUrl", "Name", "Adress", "Horair", "Distance", 1, 2, 0, "website", resultsItemOfRestaurantsList
+                              "multimediaUrl", "Name", "Adress", "Horair", "Distance", 1, 2, "phone number", "website", resultsItemOfRestaurantsList
 				                      .getGeometry()
 				                      .getLocation()
 				                      .getLat(), resultsItemOfRestaurantsList
