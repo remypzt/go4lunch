@@ -57,12 +57,12 @@ public class MapViewFragment extends Fragment {
 	private GoogleMap         mMap;
 	
 	public static final  String                PREF_KEY_LONGITUDE                       = "PREF_KEY_LONGITUDE";
-	static final         String                PREF_KEY_LATITUDE                        = "PREF_KEY_LATITUDE";
+	public static final  String                PREF_KEY_LATITUDE                        = "PREF_KEY_LATITUDE";
 	private static final int                   PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 	public               SharedPreferences     mPreferences;
 	private              ArrayList<Restaurant> mRestaurants                             = new ArrayList<>();
 	
-	public               LocationCallback  locationCallback = new LocationCallback() {
+	public LocationCallback locationCallback = new LocationCallback() {
 		@SuppressLint("CommitPrefEdits")
 		@Override
 		public void onLocationResult(LocationResult locationResult) {

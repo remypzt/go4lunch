@@ -1,11 +1,14 @@
 package remy.pouzet.go4lunch.view.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
-import android.view.View;
-import android.widget.SearchView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,12 +24,22 @@ import androidx.navigation.ui.NavigationUI;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompletePrediction;
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
+import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import remy.pouzet.go4lunch.BuildConfig;
 import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.data.repositories.models.User;
 import remy.pouzet.go4lunch.data.service.realAPI.UserHelper;
@@ -54,10 +67,20 @@ public class MainActivity extends AppCompatActivity {
 	private              ActivityMainBinding mActivityMainBinding;
 	private              AppBarMainBinding   mAppBarMainBinding;
 	
+	public static final  String PREF_KEY_LATITUDE  = "PREF_KEY_LATITUDE";
+	public static final  String PREF_KEY_LONGITUDE = "PREF_KEY_LONGITUDE";
+	private static final String TAG                = MainActivity.class.getSimpleName();
+	
 	private AppBarConfiguration mAppBarConfiguration;
+	public  SharedPreferences   mPreferences;
+	private EditText            queryText;
+	private Button              mSearchButton;
+	private TextView            mSearchResult;
+	private StringBuilder       mResult;
 	
 	// Creating identifier to identify REST REQUEST (Update username)
-	private static final int UPDATE_USERNAME = 30;
+	private static final int    UPDATE_USERNAME = 30;
+	private              double latitude, longitude;
 	
 	//TODO MAJ username
 //	@OnClick(R.id.profile_activity_button_update)
@@ -74,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
 
 //		setSupportActionBar(mAppBarMainBinding.toolbar);
 		Toolbar toolbar = mActivityMainBinding.mainToolbar.toolbar;
+		queryText     = mActivityMainBinding.mainToolbar.inputEditText;
+		mSearchButton = mActivityMainBinding.mainToolbar.searchButton;
 		
 		setSupportActionBar(toolbar);
 		navigationDrawerNavigationInitialize();
@@ -119,12 +144,17 @@ public class MainActivity extends AppCompatActivity {
 		NavigationUI.setupActionBarWithNavController(this, navControllerBottom, mAppBarConfiguration);
 		NavigationUI.setupWithNavController(mActivityMainBinding.navViewBottom, navControllerBottom);
 		
+		autoCompleteSearchAPI();
+		
 		navControllerBottom.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
 			@Override
 			public void onDestinationChanged(@NonNull NavController controller,
 			                                 @NonNull NavDestination destination,
 			                                 @Nullable Bundle arguments) {
-				SearchView localSearchView = mActivityMainBinding.mainToolbar.placesAutocompleteSearchBarContainer;
+
+//				android.widget.fragment localSearchView = mActivityMainBinding.mainToolbar.autocompleteFragment;
+//				SearchView localSearchView = mActivityMainBinding.mainToolbar.placesAutocompleteSearchBarContainer;
+				
 				if (destination
 						    .getLabel()
 						    .toString()
@@ -132,14 +162,125 @@ public class MainActivity extends AppCompatActivity {
 								                            .getLabel()
 								                            .toString()
 								                            .equals("List View"))) {
-					
-					localSearchView.setVisibility(View.VISIBLE);
+
+//					localSearchView.setVisibility(View.VISIBLE);
 				} else {
-					localSearchView.setVisibility(View.INVISIBLE);
-					
+//					localSearchView.setVisibility(View.INVISIBLE);
+				
 				}
 			}
 		});
+	}
+	
+	private void setSearchViewVisibilityFragmentDepends() {
+//		SearchView localSearchView = mActivityMainBinding.mainToolbar.placesAutocompleteSearchBarContainer;
+//		localSearchView.setVisibility(View.INVISIBLE);
+	
+	}
+	
+	public void autoCompleteSearchAPI() {
+		getLocation();
+		String apiKey = BuildConfig.apiKey;
+		
+		if (!Places.isInitialized()) {
+			Places.initialize(getApplicationContext(), apiKey);
+		}
+
+// Create a new Places client instance.
+		PlacesClient placesClient = Places.createClient(this);
+		
+		RectangularBounds bounds = RectangularBounds.newInstance(getCoordinate(latitude, longitude, -10000, -10000), getCoordinate(latitude, longitude, +10000, +10000));
+		
+		//WIDGET
+//		// Initialize the AutocompleteSupportFragment.
+//		AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+//				getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+//
+//		// Specify the types of place data to return.
+//		assert autocompleteFragment != null;
+//		autocompleteFragment
+//				.setLocationRestriction(bounds)
+////				.setTypeFilter(TypeFilter.ESTABLISHMENT)
+//
+//
+//				.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+//
+//		// Set up a PlaceSelectionListener to handle the response.
+//		autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+//			@Override
+//			public void onPlaceSelected(@NonNull Place place) {
+//				// TODO: Get info about the selected place.
+//
+//				Log.i("TAG", "Place: " + place.getName() + ", " + place.getId());
+//			}
+//
+//
+//			@Override
+//			public void onError(@NonNull Status status) {
+//				// TODO: Handle the error.
+//				Log.i("TAG", "An error occurred: " + status);
+//			}
+//		});
+		
+		//PROGRAMMATICALY
+		mSearchButton.setOnClickListener(v -> {
+			Toast
+					.makeText(MainActivity.this, queryText
+							.getText()
+							.toString(), Toast.LENGTH_SHORT)
+					.show();
+			// Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest,
+			// and once again when the user makes a selection (for example when calling fetchPlace()).
+			AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
+			
+			// Use the builder to create a FindAutocompletePredictionsRequest.
+			FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
+//			                                                                               .setLocationBias(bounds)
+                                                                                           .setLocationRestriction(bounds)
+//			                                                                               .setOrigin(new LatLng(latitude, longitude)
+                                                                                           .setTypeFilter(TypeFilter.ESTABLISHMENT)
+                                                                                           .setSessionToken(token)
+                                                                                           .setQuery(queryText
+		                                                                                                     .getText()
+		                                                                                                     .toString())
+                                                                                           .build();
+			
+			placesClient
+					.findAutocompletePredictions(request)
+					.addOnSuccessListener(response -> {
+//				mResult = new StringBuilder();
+						for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
+							mResult
+									.append(" ")
+									.append(prediction.getFullText(null) + "\n");
+//
+							Toast
+									.makeText(MainActivity.this, prediction.getPrimaryText(null) + "-" + prediction.getSecondaryText(null), Toast.LENGTH_LONG)
+									.show();
+						}
+						//TODO maj view
+						Toast
+								.makeText(this, String.valueOf(mResult), Toast.LENGTH_LONG)
+								.show();
+						
+					})
+					.addOnFailureListener((exception) -> {
+						if (exception instanceof ApiException) {
+							ApiException apiException = (ApiException) exception;
+//					Log.e(TAG, "Place not found: " + apiException.getStatusCode());
+							Toast
+									.makeText(this, "error", Toast.LENGTH_LONG)
+									.show();
+						}
+					});
+		});
+		
+	}
+	
+	public void getLocation() {
+		mPreferences = getPreferences(Context.MODE_PRIVATE);
+		latitude     = getDouble(mPreferences, PREF_KEY_LATITUDE, 2.0);
+		longitude    = getDouble(mPreferences, PREF_KEY_LONGITUDE, 2.0);
 	}
 	
 	private void updateWithUserStatus() {
@@ -180,10 +321,13 @@ public class MainActivity extends AppCompatActivity {
 				.getCurrentUser();
 	}
 	
-	private void setSearchViewVisibilityFragmentDepends() {
-		SearchView localSearchView = mActivityMainBinding.mainToolbar.placesAutocompleteSearchBarContainer;
-//		localSearchView.setVisibility(View.INVISIBLE);
-	
+	public static LatLng getCoordinate(double lat0,
+	                                   double lng0,
+	                                   long dy,
+	                                   long dx) {
+		double lat = lat0 + (180 / Math.PI) * (dy / 6378137);
+		double lng = lng0 + (180 / Math.PI) * (dx / 6378137) / Math.cos(lat0);
+		return new LatLng(lat, lng);
 	}
 	
 	//TODO this method could be share with SettingsFragment
@@ -230,13 +374,19 @@ public class MainActivity extends AppCompatActivity {
 				.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 					@Override
 					public void onSuccess(DocumentSnapshot documentSnapshot) {
-						User   currentUser = documentSnapshot.toObject(User.class);
-						String username    = TextUtils.isEmpty(currentUser.getUsername())
-						                     ? getString(R.string.info_no_username_found)
-						                     : currentUser.getUsername();
+						User currentUser = documentSnapshot.toObject(User.class);
+						String username = TextUtils.isEmpty(currentUser.getUsername())
+						                  ? getString(R.string.info_no_username_found)
+						                  : currentUser.getUsername();
 //				textInputEditTextUsername.setText(username);
 					}
 				});
+	}
+	
+	public double getDouble(final SharedPreferences prefs,
+	                        final String key,
+	                        final double defaultValue) {
+		return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
 	}
 	
 	public void passByLoginActivity() {
@@ -300,42 +450,5 @@ public class MainActivity extends AppCompatActivity {
 //		getMenuInflater().inflate(R.menu.bottom_nav_menu, menu);
 		return true;
 	}
-//
-//	public void autoCompleteSearch() {
-//		// Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest,
-//		// and once again when the user makes a selection (for example when calling fetchPlace()).
-//		AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
-//
-//		// Create a RectangularBounds object.
-//		RectangularBounds bounds = RectangularBounds.newInstance(new LatLng(-33.880490, 151.184363), new LatLng(-33.858754, 151.229596));
-//		// Use the builder to create a FindAutocompletePredictionsRequest.
-//		FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
-//		                                                                               // Call either setLocationBias() OR setLocationRestriction().
-////		                                                                               .setLocationBias(bounds)
-////		                                                                               //.setLocationRestriction(bounds)
-////		                                                                               .setOrigin(new LatLng(-33.8749937, 151.2041382))
-////		                                                                               .setCountries("AU", "NZ")
-////		                                                                               .setTypeFilter(TypeFilter.ADDRESS)
-////		                                                                               .setSessionToken(token)
-//		                                                                               .setQuery(query)
-//		                                                                               .build();
-//
-//		placesClient
-//				.findAutocompletePredictions(request)
-//				.addOnSuccessListener((response) -> {
-//					for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
-//						Log.i(TAG, prediction.getPlaceId());
-//						Log.i(TAG, prediction
-//								.getPrimaryText(null)
-//								.toString());
-//					}
-//				})
-//				.addOnFailureListener((exception) -> {
-//					if (exception instanceof ApiException) {
-//						ApiException apiException = (ApiException) exception;
-//						Log.e(TAG, "Place not found: " + apiException.getStatusCode());
-//					}
-//				});
-//	}
-//
+	
 }
