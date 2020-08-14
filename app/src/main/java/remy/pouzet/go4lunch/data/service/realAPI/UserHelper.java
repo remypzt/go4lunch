@@ -46,12 +46,10 @@ public class UserHelper {
 	}
 	
 	public static Query getAllUsers(String user) {
-		return UserHelper
-				.getUsersCollection()
-				.document(user)
-				.collection(COLLECTION_NAME)
-				.orderBy("dateCreated")
-				.limit(50);
+		return UserHelper.getUsersCollection()
+				//TODO
+//				.orderBy("placeid")
+				;
 	}
 	
 	// --- UPDATE ---

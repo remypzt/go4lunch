@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
 // Create a new Places client instance.
 		PlacesClient placesClient = Places.createClient(this);
 		
-		RectangularBounds bounds = RectangularBounds.newInstance(getCoordinate(latitude, longitude, -10000, -10000), getCoordinate(latitude, longitude, +10000, +10000));
+		RectangularBounds bounds = RectangularBounds.newInstance(getCoordinate(latitude, longitude, +100000, +100000), getCoordinate(latitude, longitude, -100000, -100000));
 		
 		//WIDGET
 //		// Initialize the AutocompleteSupportFragment.

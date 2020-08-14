@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
-import remy.pouzet.go4lunch.data.repositories.models.Message;
 import remy.pouzet.go4lunch.data.repositories.models.User;
 import remy.pouzet.go4lunch.data.service.realAPI.UserHelper;
 import remy.pouzet.go4lunch.databinding.FragmentWorkmatesListViewBinding;
@@ -106,9 +105,9 @@ public class WorkmatesFragment extends Fragment implements WorkmatesAdapter.List
 	}
 	
 	// 6 - Create options for RecyclerView from a Query
-	private FirestoreRecyclerOptions<Message> generateOptionsForAdapter(Query query) {
-		return new FirestoreRecyclerOptions.Builder<Message>()
-				.setQuery(query, Message.class)
+	private FirestoreRecyclerOptions<User> generateOptionsForAdapter(Query query) {
+		return new FirestoreRecyclerOptions.Builder<User>()
+				.setQuery(query, User.class)
 				.setLifecycleOwner(this)
 				.build();
 	}

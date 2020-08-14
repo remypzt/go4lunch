@@ -11,6 +11,7 @@ public class User {
 	private           String uid;
 	private           String username;
 	@Nullable private String urlPicture;
+	//TODO placeid and restaurant name
 	
 	public User() {
 	}
