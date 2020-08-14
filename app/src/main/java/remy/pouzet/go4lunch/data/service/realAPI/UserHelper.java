@@ -4,6 +4,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import remy.pouzet.go4lunch.data.repositories.models.User;
 
@@ -44,6 +45,15 @@ public class UserHelper {
 				.get();
 	}
 	
+	public static Query getAllUsers(String user) {
+		return UserHelper
+				.getUsersCollection()
+				.document(user)
+				.collection(COLLECTION_NAME)
+				.orderBy("dateCreated")
+				.limit(50);
+	}
+	
 	// --- UPDATE ---
 	
 	public static Task<Void> updateUsername(String username,
@@ -52,14 +62,6 @@ public class UserHelper {
 				.getUsersCollection()
 				.document(uid)
 				.update("username", username);
-	}
-	
-	public static Task<Void> updateIsMentor(String uid,
-	                                        Boolean isMentor) {
-		return UserHelper
-				.getUsersCollection()
-				.document(uid)
-				.update("isMentor", isMentor);
 	}
 	
 	// --- DELETE ---
