@@ -20,8 +20,12 @@ public class UserHelper {
 	
 	public static Task<Void> createUser(String uid,
 	                                    String username,
-	                                    String urlPicture) {
-		User userToCreate = new User(uid, username, urlPicture);
+	                                    String urlPicture
+//	                                    ,String placeID, String resaurantName
+	                                   ) {
+		User userToCreate = new User(uid, username, urlPicture
+//				, placeID, resaurantName
+		);
 		return UserHelper
 				.getUsersCollection()
 				.document(uid)
@@ -47,7 +51,7 @@ public class UserHelper {
 	
 	public static Query getAllUsers(String user) {
 		return UserHelper.getUsersCollection()
-				//TODO
+				//TODO configure field place id in firebase
 //				.orderBy("placeid")
 				;
 	}

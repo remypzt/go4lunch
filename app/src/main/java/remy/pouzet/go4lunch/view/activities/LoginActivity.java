@@ -188,15 +188,19 @@ public class LoginActivity extends AppCompatActivity
 					                    .getPhotoUrl()
 					                    .toString()
 			                    : null;
-			String username   = this
+			String username = this
 					.getCurrentUser()
 					.getDisplayName();
-			String uid        = this
+			String uid = this
 					.getCurrentUser()
 					.getUid();
+//			String placeID = "TODO";
+//			String restaurantName = "TODDO";
 			
 			UserHelper
-					.createUser(uid, username, urlPicture)
+					.createUser(uid, username, urlPicture
+//							,placeID, restaurantName
+					           )
 					.addOnFailureListener(this.onFailureListener());
 		}
 	}

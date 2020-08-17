@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
 // Create a new Places client instance.
 		PlacesClient placesClient = Places.createClient(this);
 		
-		RectangularBounds bounds = RectangularBounds.newInstance(getCoordinate(latitude, longitude, +100000, +100000), getCoordinate(latitude, longitude, -100000, -100000));
+		RectangularBounds bounds = RectangularBounds.newInstance(getCoordinate(latitude, longitude, -10000, -10000), getCoordinate(latitude, longitude, 10000, 10000));
 		
 		//WIDGET
 //		// Initialize the AutocompleteSupportFragment.
@@ -248,11 +248,12 @@ public class MainActivity extends AppCompatActivity {
 			placesClient
 					.findAutocompletePredictions(request)
 					.addOnSuccessListener(response -> {
-//				mResult = new StringBuilder();
+						mResult = new StringBuilder();
 						for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
 							mResult
 									.append(" ")
-									.append(prediction.getFullText(null) + "\n");
+									.append(prediction.getFullText(null))
+									.append("\n");
 //
 							Toast
 									.makeText(MainActivity.this, prediction.getPrimaryText(null) + "-" + prediction.getSecondaryText(null), Toast.LENGTH_LONG)
@@ -325,8 +326,9 @@ public class MainActivity extends AppCompatActivity {
 	                                   double lng0,
 	                                   long dy,
 	                                   long dx) {
-		double lat = lat0 + (180 / Math.PI) * (dy / 6378137);
-		double lng = lng0 + (180 / Math.PI) * (dx / 6378137) / Math.cos(lat0);
+		double earthCircumference = 6378137;
+		double lat                = lat0 + (180 / Math.PI) * (dy / earthCircumference);
+		double lng                = lng0 + (180 / Math.PI) * (dx / earthCircumference) / Math.cos(lat0);
 		return new LatLng(lat, lng);
 	}
 	
@@ -366,7 +368,7 @@ public class MainActivity extends AppCompatActivity {
 		header.profileActivityEditTextUsername.setText(username);
 		header.profileActivityTextViewEmail.setText(email);
 		
-		// 7 - Get additional data from Firestore (isMentor & Username)
+		// 7 - Get additional data from Firestore (Username)
 		UserHelper
 				.getUser(this
 						         .getCurrentUser()
