@@ -245,7 +245,7 @@ public class SettingsFragment extends Fragment {
 		binding.settingsFragmentTextViewEmail.setText(email);
 		binding.settingsFragmentEditTextUsername.setText(username);
 		
-		// 7 - Get additional data from Firestore (isMentor & Username)
+		// 7 - Get additional data from Firestore (Username)
 		UserHelper
 				.getUser(this
 						         .getCurrentUser()
@@ -253,9 +253,9 @@ public class SettingsFragment extends Fragment {
 				.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 					@Override
 					public void onSuccess(DocumentSnapshot documentSnapshot) {
-						User   currentUser = documentSnapshot.toObject(User.class);
-						String username    = TextUtils.isEmpty(currentUser.getUsername())
-						                     ? getString(R.string.info_no_username_found)
+						User currentUser = documentSnapshot.toObject(User.class);
+						String username = TextUtils.isEmpty(currentUser.getUsername())
+						                  ? getString(R.string.info_no_username_found)
 						                     : currentUser.getUsername();
 //				textInputEditTextUsername.setText(username);
 					}

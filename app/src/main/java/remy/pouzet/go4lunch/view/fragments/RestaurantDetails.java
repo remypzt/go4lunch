@@ -6,36 +6,53 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.List;
 
 import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
+import remy.pouzet.go4lunch.data.repositories.models.User;
+import remy.pouzet.go4lunch.data.service.realAPI.UserHelper;
 import remy.pouzet.go4lunch.databinding.RestaurantDetailsFragmentBinding;
 
 public class RestaurantDetails extends AppCompatActivity {
 	
-	private final static String                           EXTRA_RESTAURANT = "EXTRA_RESTAURANT";
-	public               ImageView                        restaurantPicture;
-	public               ImageButton                      userInterestImageButon;
-	public               TextView                         restaurantName;
-	public               ImageView                        restaurantEvaluationImageView;
-	public               TextView                         restaurantAdress;
-	public               ImageButton                      callImageButon;
-	public               ImageButton                      likeImageButon;
-	public               ImageButton                      websiteImageButon;
-	public               int                              mRatingScore;
-	public               double                           mRatingScoreDouble;
-	public               Drawable                         mEvaluationScore;
-	private              RestaurantDetailsFragmentBinding mRestaurantDetailsFragmentBinding;
+	private final static String      EXTRA_RESTAURANT = "EXTRA_RESTAURANT";
+	public               ImageView   restaurantPicture;
+	public               ImageButton userInterestImageButon;
+	public               TextView    restaurantName;
+	public               ImageView   restaurantEvaluationImageView;
+	public               TextView    restaurantAdress;
+	public               ImageButton callImageButon;
+	public               ImageButton likeImageButon;
+	public               ImageButton websiteImageButon;
+	public               String      firestorePlaceID;
+	public               String      firestorerestaurantName;
+	
+	public  int                              mRatingScore;
+	public  double                           mRatingScoreDouble;
+	public  User                             currentUser;
+	public  Drawable                         mEvaluationScore;
+	private RestaurantDetailsFragmentBinding mRestaurantDetailsFragmentBinding;
+	public  String                           uid = this
+			.getCurrentUser()
+			.getUid();
 	
 	public static void startActivity(Context context,
 	                                 Restaurant restaurant) {
@@ -49,7 +66,6 @@ public class RestaurantDetails extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		mRestaurantDetailsFragmentBinding = RestaurantDetailsFragmentBinding.inflate(getLayoutInflater());
 		setContentView(mRestaurantDetailsFragmentBinding.getRoot());
-		
 		displayingManagement();
 		
 	}
@@ -149,25 +165,69 @@ public class RestaurantDetails extends AppCompatActivity {
 	}
 	
 	public void userInterestImageButonManagement(Restaurant restaurant) {
-		displayingRightUserInterestImageButon();
-		
-		likeImageButon.setOnClickListener(new View.OnClickListener() {
+		getCurrentUserFromFirestore();
+		displayingRightUserInterestImageButon(firestorePlaceID, restaurant);
+		userInterestImageButon.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-			
+				if (firestorePlaceID == null || !firestorePlaceID.equals(restaurant.getMplaceID())) {
+					firestorePlaceID        = restaurant.getMplaceID();
+					firestorerestaurantName = restaurant.getName();
+				} else {
+					firestorePlaceID        = null;
+					firestorerestaurantName = null;
+				}
+				updateChosenRestaurantInFirestore();
+				displayingRightUserInterestImageButon(firestorePlaceID, restaurant);
 			}
 		});
+	}
+	
+	private void getCurrentUserFromFirestore() {
+		UserHelper
+				.getUser(this
+						         .getCurrentUser()
+						         .getUid())
+				.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+					@Override
+					public void onSuccess(DocumentSnapshot documentSnapshot) {
+						currentUser      = documentSnapshot.toObject(User.class);
+						firestorePlaceID = TextUtils.isEmpty(currentUser.getPlaceID())
+						                   ? getString(R.string.info_no_username_found)
+						                   : currentUser.getPlaceID();
+						
+					}
+				});
+	}
+	
+	public void displayingRightUserInterestImageButon(String placeID,
+	                                                  Restaurant restaurant) {
+		if (placeID != null && firestorePlaceID.equals(restaurant.getMplaceID())) {
+			userInterestImageButon.setImageResource(R.drawable.ic_baseline_check_circle_green_24);
+		} else {
+			userInterestImageButon.setImageResource(R.drawable.ic_baseline_check_circle_24);
+		}
+	}
+	
+	private void updateChosenRestaurantInFirestore() {
+		UserHelper.updateChosenRestaurant(firestorePlaceID, firestorerestaurantName, uid);
+	}
+	
+	@Nullable
+	protected FirebaseUser getCurrentUser() {
+		return FirebaseAuth
+				.getInstance()
+				.getCurrentUser();
+	}
+	
+	private void updateLikedRestaurantsInFirestore() {
+		List<String> likedRestaurants = null;
+		UserHelper.updateLikedRestaurants(likedRestaurants, uid);
 	}
 	
 	public void displayingRightLikeImageButon() {
 //		likeImageButon.setImageResource(R.drawable.ic_star);
 		likeImageButon.setImageResource(R.drawable.ic_star_border_24);
 	}
-	
-	public void displayingRightUserInterestImageButon() {
-
-//		userInterestImageButon.setImageResource(R.drawable.ic_baseline_check_circle_24);
-		userInterestImageButon.setImageResource(R.drawable.ic_baseline_check_circle_green_24);
-		
-	}
 }
+	

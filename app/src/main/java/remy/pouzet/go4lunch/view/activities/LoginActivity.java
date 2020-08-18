@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
+import java.util.List;
 
 import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.data.service.realAPI.UserHelper;
@@ -194,13 +195,12 @@ public class LoginActivity extends AppCompatActivity
 			String uid = this
 					.getCurrentUser()
 					.getUid();
-//			String placeID = "TODO";
-//			String restaurantName = "TODDO";
+			String       placeID          = "test";
+			String       restaurantName   = null;
+			List<String> likedRestaurants = null;
 			
 			UserHelper
-					.createUser(uid, username, urlPicture
-//							,placeID, restaurantName
-					           )
+					.createUser(uid, username, urlPicture, placeID, restaurantName, likedRestaurants)
 					.addOnFailureListener(this.onFailureListener());
 		}
 	}

@@ -6,6 +6,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.util.List;
+
 import remy.pouzet.go4lunch.data.repositories.models.User;
 
 /**
@@ -20,12 +22,11 @@ public class UserHelper {
 	
 	public static Task<Void> createUser(String uid,
 	                                    String username,
-	                                    String urlPicture
-//	                                    ,String placeID, String resaurantName
-	                                   ) {
-		User userToCreate = new User(uid, username, urlPicture
-//				, placeID, resaurantName
-		);
+	                                    String urlPicture,
+	                                    String placeID,
+	                                    String resaurantName,
+	                                    List<String> likedRestaurants) {
+		User userToCreate = new User(uid, username, urlPicture, placeID, resaurantName, likedRestaurants);
 		return UserHelper
 				.getUsersCollection()
 				.document(uid)
@@ -64,6 +65,23 @@ public class UserHelper {
 				.getUsersCollection()
 				.document(uid)
 				.update("username", username);
+	}
+	
+	public static Task<Void> updateChosenRestaurant(String placeID,
+	                                                String nameRestaurant,
+	                                                String uid) {
+		return UserHelper
+				.getUsersCollection()
+				.document(uid)
+				.update("nameRestaurant", nameRestaurant, "placeID", placeID);
+	}
+	
+	public static Task<Void> updateLikedRestaurants(List<String> likedRestaurants,
+	                                                String uid) {
+		return UserHelper
+				.getUsersCollection()
+				.document(uid)
+				.update("likedRestaurants", likedRestaurants);
 	}
 	
 	// --- DELETE ---

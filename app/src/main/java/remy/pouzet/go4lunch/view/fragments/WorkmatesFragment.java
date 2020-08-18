@@ -14,9 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
 import remy.pouzet.go4lunch.data.repositories.models.User;
@@ -64,7 +62,7 @@ public class WorkmatesFragment extends Fragment implements WorkmatesAdapter.List
 		recyclerView                      = mFragmentWorkmatesListViewBinding.fragmentWorkmatesRecyclerView;
 		View root = mFragmentWorkmatesListViewBinding.getRoot();
 		this.configureRecyclerView();
-		this.getCurrentUserFromFirestore();
+//		this.getCurrentUserFromFirestore();
 		return root;
 		
 	}
@@ -87,22 +85,22 @@ public class WorkmatesFragment extends Fragment implements WorkmatesAdapter.List
 	}
 	
 	// --------------------
-	// REST REQUESTS
-	// --------------------
-	// 4 - Get Current User from Firestore
-	private void getCurrentUserFromFirestore() {
-		UserHelper
-				.getUser(FirebaseAuth
-						         .getInstance()
-						         .getCurrentUser()
-						         .getUid())
-				.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-					@Override
-					public void onSuccess(DocumentSnapshot documentSnapshot) {
-						modelCurrentUser = documentSnapshot.toObject(User.class);
-					}
-				});
-	}
+//	// REST REQUESTS
+//	// --------------------
+//	// 4 - Get Current User from Firestore
+//	private void getCurrentUserFromFirestore() {
+//		UserHelper
+//				.getUser(FirebaseAuth
+//						         .getInstance()
+//						         .getCurrentUser()
+//						         .getUid())
+//				.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//					@Override
+//					public void onSuccess(DocumentSnapshot documentSnapshot) {
+//						modelCurrentUser = documentSnapshot.toObject(User.class);
+//					}
+//				});
+//	}
 	
 	// 6 - Create options for RecyclerView from a Query
 	private FirestoreRecyclerOptions<User> generateOptionsForAdapter(Query query) {
