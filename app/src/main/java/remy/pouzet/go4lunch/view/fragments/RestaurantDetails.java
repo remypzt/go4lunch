@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import remy.pouzet.go4lunch.R;
@@ -33,21 +34,22 @@ import remy.pouzet.go4lunch.databinding.RestaurantDetailsFragmentBinding;
 
 public class RestaurantDetails extends AppCompatActivity {
 	
-	private final static String      EXTRA_RESTAURANT = "EXTRA_RESTAURANT";
-	public               ImageView   restaurantPicture;
-	public               ImageButton userInterestImageButon;
-	public               TextView    restaurantName;
-	public               ImageView   restaurantEvaluationImageView;
-	public               TextView    restaurantAdress;
-	public               ImageButton callImageButon;
-	public               ImageButton likeImageButon;
-	public               ImageButton websiteImageButon;
-	public               String      firestorePlaceID;
-	public               String      firestorerestaurantName;
+	private final static String       EXTRA_RESTAURANT = "EXTRA_RESTAURANT";
+	public               ImageView    restaurantPicture;
+	public               ImageButton  userInterestImageButon;
+	public               TextView     restaurantName;
+	public               ImageView    restaurantEvaluationImageView;
+	public               TextView     restaurantAdress;
+	public               ImageButton  callImageButon;
+	public               ImageButton  likeImageButon;
+	public               ImageButton  websiteImageButon;
+	public               User         currentUser;
+	public               String       firestorePlaceID;
+	public               String       firestorerestaurantName;
+	public               List<String> firestoreLikedRestaurants;
+	public               int          mRatingScore;
+	public               double       mRatingScoreDouble;
 	
-	public  int                              mRatingScore;
-	public  double                           mRatingScoreDouble;
-	public  User                             currentUser;
 	public  Drawable                         mEvaluationScore;
 	private RestaurantDetailsFragmentBinding mRestaurantDetailsFragmentBinding;
 	public  String                           uid = this
@@ -154,33 +156,39 @@ public class RestaurantDetails extends AppCompatActivity {
 	}
 	
 	public void likeImageButonManagement(Restaurant restaurant) {
-		displayingRightLikeImageButon();
-		
+		if (restaurant.getMplaceID() != null) {
+			firestorePlaceID = restaurant.getMplaceID();
+		}
+		getCurrentUserFromFirestore();
+		displayingRightLikeImageButon(firestorePlaceID, restaurant);
 		likeImageButon.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-			
+				if (firestoreLikedRestaurants == null) {
+					firestoreLikedRestaurants = new ArrayList<>();
+					firestoreLikedRestaurants.add(restaurant.getMplaceID());
+				} else {
+					if (!firestoreLikedRestaurants.contains(restaurant.getMplaceID())) {
+						firestoreLikedRestaurants.add(restaurant.getMplaceID());
+					} else {
+						firestoreLikedRestaurants.remove(restaurant.getMplaceID());
+					}
+				}
+				updateLikedRestaurantsInFirestore();
+				displayingRightLikeImageButon(firestorePlaceID, restaurant);
 			}
 		});
 	}
 	
-	public void userInterestImageButonManagement(Restaurant restaurant) {
-		getCurrentUserFromFirestore();
-		displayingRightUserInterestImageButon(firestorePlaceID, restaurant);
-		userInterestImageButon.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (firestorePlaceID == null || !firestorePlaceID.equals(restaurant.getMplaceID())) {
-					firestorePlaceID        = restaurant.getMplaceID();
-					firestorerestaurantName = restaurant.getName();
-				} else {
-					firestorePlaceID        = null;
-					firestorerestaurantName = null;
-				}
-				updateChosenRestaurantInFirestore();
-				displayingRightUserInterestImageButon(firestorePlaceID, restaurant);
-			}
-		});
+	public void displayingRightLikeImageButon(String firestorePlaceID,
+	                                          Restaurant restaurant) {
+		if (firestoreLikedRestaurants != null && firestoreLikedRestaurants.size() > 0 && firestoreLikedRestaurants.contains(restaurant.getMplaceID())) {
+			likeImageButon.setImageResource(R.drawable.ic_star);
+		} else {
+			likeImageButon.setImageResource(R.drawable.ic_star_border_24);
+			
+		}
+		
 	}
 	
 	private void getCurrentUserFromFirestore() {
@@ -200,13 +208,8 @@ public class RestaurantDetails extends AppCompatActivity {
 				});
 	}
 	
-	public void displayingRightUserInterestImageButon(String placeID,
-	                                                  Restaurant restaurant) {
-		if (placeID != null && firestorePlaceID.equals(restaurant.getMplaceID())) {
-			userInterestImageButon.setImageResource(R.drawable.ic_baseline_check_circle_green_24);
-		} else {
-			userInterestImageButon.setImageResource(R.drawable.ic_baseline_check_circle_24);
-		}
+	private void updateLikedRestaurantsInFirestore() {
+		UserHelper.updateLikedRestaurants(firestoreLikedRestaurants, uid);
 	}
 	
 	private void updateChosenRestaurantInFirestore() {
@@ -220,14 +223,35 @@ public class RestaurantDetails extends AppCompatActivity {
 				.getCurrentUser();
 	}
 	
-	private void updateLikedRestaurantsInFirestore() {
-		List<String> likedRestaurants = null;
-		UserHelper.updateLikedRestaurants(likedRestaurants, uid);
+	public void userInterestImageButonManagement(Restaurant restaurant) {
+		if (restaurant.getMplaceID() != null) {
+			firestorePlaceID = restaurant.getMplaceID();
+		}
+		getCurrentUserFromFirestore();
+		displayingRightUserInterestImageButon(firestorePlaceID, restaurant);
+		userInterestImageButon.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (firestorePlaceID == null || !firestorePlaceID.equals(restaurant.getMplaceID())) {
+					firestorePlaceID        = restaurant.getMplaceID();
+					firestorerestaurantName = restaurant.getName();
+				} else {
+					firestorePlaceID        = null;
+					firestorerestaurantName = null;
+				}
+				updateChosenRestaurantInFirestore();
+				displayingRightUserInterestImageButon(firestorePlaceID, restaurant);
+			}
+		});
 	}
 	
-	public void displayingRightLikeImageButon() {
-//		likeImageButon.setImageResource(R.drawable.ic_star);
-		likeImageButon.setImageResource(R.drawable.ic_star_border_24);
+	public void displayingRightUserInterestImageButon(String firestorePlaceID,
+	                                                  Restaurant restaurant) {
+		if (firestorePlaceID != null && firestorePlaceID.equals(restaurant.getMplaceID())) {
+			userInterestImageButon.setImageResource(R.drawable.ic_baseline_check_circle_green_24);
+		} else {
+			userInterestImageButon.setImageResource(R.drawable.ic_baseline_check_circle_24);
+		}
 	}
 }
 	

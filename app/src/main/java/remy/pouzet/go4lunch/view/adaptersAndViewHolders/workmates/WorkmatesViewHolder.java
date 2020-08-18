@@ -21,6 +21,7 @@ public class WorkmatesViewHolder extends RecyclerView.ViewHolder {
 	
 	public ImageView imageViewProfile;
 	public TextView  textViewProfile;
+	public User      currentUser;
 	
 	private @NonNull ContentItemsOfWorkmatesListViewBinding mFragmentContentWorkmatesListViewBinding;
 	
@@ -37,19 +38,22 @@ public class WorkmatesViewHolder extends RecyclerView.ViewHolder {
 	public void updateWorkmates(User user,
 	                            String currentUserId,
 	                            RequestManager glide) {
+		if (user.getNameRestaurant() != null) {
+			this.textViewProfile.setText(user.getUsername() + " is eating to " + user.getNameRestaurant());
+			this.textViewProfile.setOnClickListener(v -> {
+				//TODO requete place pour avoir les infos pour get Restaurant
 
-//		if ("GET_PLACENAME" != null){
-		this.textViewProfile.setText(user.getUsername() + " is eating to " + "GET_PLACENAME");
-
-//		}
-//		else {
-//			this.textViewProfile.setText(user.getUsername()+" hasn't decided yet");
-//		}
+//			RestaurantDetails.startActivity(textViewProfile.getContext(),
+//			                                restaurant
+//			                               );
+			});
+		} else {
+			this.textViewProfile.setText(user.getUsername() + " hasn't decided yet");
+		}
 		
 		glide
 				.load(user.getUrlPicture())
 				.apply(RequestOptions.circleCropTransform())
 				.into(imageViewProfile);
 	}
-	
 }
