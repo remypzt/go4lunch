@@ -49,6 +49,7 @@ public class RestaurantDetails extends AppCompatActivity {
 	public               List<String> firestoreLikedRestaurants;
 	public               int          mRatingScore;
 	public               double       mRatingScoreDouble;
+	public               Restaurant   restaurant;
 	
 	public  Drawable                         mEvaluationScore;
 	private RestaurantDetailsFragmentBinding mRestaurantDetailsFragmentBinding;
@@ -68,14 +69,13 @@ public class RestaurantDetails extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		mRestaurantDetailsFragmentBinding = RestaurantDetailsFragmentBinding.inflate(getLayoutInflater());
 		setContentView(mRestaurantDetailsFragmentBinding.getRoot());
-		displayingManagement();
 		
+		restaurant = (Restaurant) getIntent().getSerializableExtra(EXTRA_RESTAURANT);
+		displayingManagement(restaurant);
+		butonsManagement(restaurant);
 	}
 	
-	public void displayingManagement() {
-		Restaurant restaurant;
-		restaurant = (Restaurant) getIntent().getSerializableExtra(EXTRA_RESTAURANT);
-		
+	public void displayingManagement(Restaurant restaurant) {
 		restaurantPicture             = mRestaurantDetailsFragmentBinding.restaurantPicture;
 		userInterestImageButon        = mRestaurantDetailsFragmentBinding.userInterestImageButton;
 		restaurantName                = mRestaurantDetailsFragmentBinding.restaurantNameDetailsFragment;
@@ -84,7 +84,10 @@ public class RestaurantDetails extends AppCompatActivity {
 		callImageButon                = mRestaurantDetailsFragmentBinding.imageButtonCall;
 		likeImageButon                = mRestaurantDetailsFragmentBinding.imageButtonLike;
 		websiteImageButon             = mRestaurantDetailsFragmentBinding.imageButtonWebsite;
+		restaurantName.setText(restaurant.getName());
+		restaurantAdress.setText(restaurant.getAdress());
 		
+		//GLIDE
 		RequestOptions mRequestOption = new RequestOptions();
 		mRequestOption.placeholder(R.drawable.ic_launcher_background);
 		Glide
@@ -92,22 +95,10 @@ public class RestaurantDetails extends AppCompatActivity {
 				.load(restaurant.getUrlImage())
 				.apply(mRequestOption)
 				.into(restaurantPicture);
-		
-		restaurantName.setText(restaurant.getName());
-		
 		Glide
 				.with(restaurantEvaluationImageView.getContext())
 				.load(getRatingScorePicture(restaurant))
-//				.placeholder(R.drawable.ic_launcher_background)
 				.into(restaurantEvaluationImageView);
-		
-		restaurantAdress.setText(restaurant.getAdress());
-		
-		callImageButonManagement(restaurant);
-		websiteImageButtonManagement(restaurant);
-		likeImageButonManagement(restaurant);
-		userInterestImageButonManagement(restaurant);
-		
 	}
 	
 	public Drawable getRatingScorePicture(Restaurant restaurants) {
@@ -132,35 +123,34 @@ public class RestaurantDetails extends AppCompatActivity {
 		return mEvaluationScore;
 	}
 	
+	public void butonsManagement(Restaurant restaurant) {
+		callImageButonManagement(restaurant);
+		websiteImageButtonManagement(restaurant);
+		likeImageButonManagement(restaurant);
+		userInterestImageButonManagement(restaurant);
+	}
+	
 	public void callImageButonManagement(Restaurant restaurant) {
-		
 		callImageButon.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", restaurant.getMphoneNumber(), null)));
-				
 			}
 		});
 	}
 	
 	public void websiteImageButtonManagement(Restaurant restaurant) {
-		
 		websiteImageButon.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent Getintent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurant.getWebsite()));
 				startActivity(Getintent);
-				
 			}
 		});
 	}
 	
 	public void likeImageButonManagement(Restaurant restaurant) {
-		if (restaurant.getMplaceID() != null) {
-			firestorePlaceID = restaurant.getMplaceID();
-		}
-		getCurrentUserFromFirestore();
-		displayingRightLikeImageButon(firestorePlaceID, restaurant);
+		displayingRightUserInterestImageButon(getDatasFromCurrentUserFromFirestore(), restaurant);
 		likeImageButon.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -180,55 +170,8 @@ public class RestaurantDetails extends AppCompatActivity {
 		});
 	}
 	
-	public void displayingRightLikeImageButon(String firestorePlaceID,
-	                                          Restaurant restaurant) {
-		if (firestoreLikedRestaurants != null && firestoreLikedRestaurants.size() > 0 && firestoreLikedRestaurants.contains(restaurant.getMplaceID())) {
-			likeImageButon.setImageResource(R.drawable.ic_star);
-		} else {
-			likeImageButon.setImageResource(R.drawable.ic_star_border_24);
-			
-		}
-		
-	}
-	
-	private void getCurrentUserFromFirestore() {
-		UserHelper
-				.getUser(this
-						         .getCurrentUser()
-						         .getUid())
-				.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-					@Override
-					public void onSuccess(DocumentSnapshot documentSnapshot) {
-						currentUser      = documentSnapshot.toObject(User.class);
-						firestorePlaceID = TextUtils.isEmpty(currentUser.getPlaceID())
-						                   ? getString(R.string.info_no_username_found)
-						                   : currentUser.getPlaceID();
-						
-					}
-				});
-	}
-	
-	private void updateLikedRestaurantsInFirestore() {
-		UserHelper.updateLikedRestaurants(firestoreLikedRestaurants, uid);
-	}
-	
-	private void updateChosenRestaurantInFirestore() {
-		UserHelper.updateChosenRestaurant(firestorePlaceID, firestorerestaurantName, uid);
-	}
-	
-	@Nullable
-	protected FirebaseUser getCurrentUser() {
-		return FirebaseAuth
-				.getInstance()
-				.getCurrentUser();
-	}
-	
 	public void userInterestImageButonManagement(Restaurant restaurant) {
-		if (restaurant.getMplaceID() != null) {
-			firestorePlaceID = restaurant.getMplaceID();
-		}
-		getCurrentUserFromFirestore();
-		displayingRightUserInterestImageButon(firestorePlaceID, restaurant);
+		displayingRightUserInterestImageButon(getDatasFromCurrentUserFromFirestore(), restaurant);
 		userInterestImageButon.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -252,6 +195,47 @@ public class RestaurantDetails extends AppCompatActivity {
 		} else {
 			userInterestImageButon.setImageResource(R.drawable.ic_baseline_check_circle_24);
 		}
+	}
+	
+	private String getDatasFromCurrentUserFromFirestore() {
+		UserHelper
+				.getUser(uid)
+				.addOnSuccessListener((OnSuccessListener<DocumentSnapshot>) documentSnapshot -> {
+					currentUser      = documentSnapshot.toObject(User.class);
+					firestorePlaceID = TextUtils.isEmpty(currentUser.getPlaceID())
+					                   ? currentUser.getPlaceID()
+					                   : null;
+					//TODO return all datas
+//						firestoreLikedRestaurants = (currentUser.getLikedRestaurants() == null)
+//						                            ? currentUser.getLikedRestaurants()
+//						                            : null ;
+				});
+		
+		return firestorePlaceID;
+	}
+	
+	public void displayingRightLikeImageButon(String firestorePlaceID,
+	                                          Restaurant restaurant) {
+		if (firestoreLikedRestaurants != null && firestoreLikedRestaurants.size() > 0 && firestoreLikedRestaurants.contains(restaurant.getMplaceID())) {
+			likeImageButon.setImageResource(R.drawable.ic_star);
+		} else {
+			likeImageButon.setImageResource(R.drawable.ic_star_border_24);
+		}
+	}
+	
+	private void updateLikedRestaurantsInFirestore() {
+		UserHelper.updateLikedRestaurants(firestoreLikedRestaurants, uid);
+	}
+	
+	private void updateChosenRestaurantInFirestore() {
+		UserHelper.updateChosenRestaurant(firestorePlaceID, firestorerestaurantName, uid);
+	}
+	
+	@Nullable
+	protected FirebaseUser getCurrentUser() {
+		return FirebaseAuth
+				.getInstance()
+				.getCurrentUser();
 	}
 }
 	

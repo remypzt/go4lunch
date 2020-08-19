@@ -6,8 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,8 +72,7 @@ public class MainActivity extends AppCompatActivity {
 	
 	private AppBarConfiguration mAppBarConfiguration;
 	public  SharedPreferences   mPreferences;
-	private EditText            queryText;
-	private Button              mSearchButton;
+	private SearchView          mSearchView;
 	private TextView            mSearchResult;
 	private StringBuilder       mResult;
 	
@@ -97,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
 //		setSupportActionBar(mAppBarMainBinding.toolbar);
 		Toolbar toolbar = mActivityMainBinding.mainToolbar.toolbar;
-		queryText     = mActivityMainBinding.mainToolbar.inputEditText;
-		mSearchButton = mActivityMainBinding.mainToolbar.searchButton;
+		mSearchView = mActivityMainBinding.mainToolbar.placesAutocompleteSearchBarContainer;
 		
 		setSupportActionBar(toolbar);
 		navigationDrawerNavigationInitialize();
@@ -223,57 +220,64 @@ public class MainActivity extends AppCompatActivity {
 //		});
 		
 		//PROGRAMMATICALY
-		mSearchButton.setOnClickListener(v -> {
-			Toast
-					.makeText(MainActivity.this, queryText
-							.getText()
-							.toString(), Toast.LENGTH_SHORT)
-					.show();
-			// Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest,
-			// and once again when the user makes a selection (for example when calling fetchPlace()).
-			AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
-			
-			// Use the builder to create a FindAutocompletePredictionsRequest.
-			FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
-//			                                                                               .setLocationBias(bounds)
-                                                                                           .setLocationRestriction(bounds)
-//			                                                                               .setOrigin(new LatLng(latitude, longitude)
-                                                                                           .setTypeFilter(TypeFilter.ESTABLISHMENT)
-                                                                                           .setSessionToken(token)
-                                                                                           .setQuery(queryText
-		                                                                                                     .getText()
-		                                                                                                     .toString())
-                                                                                           .build();
-			
-			placesClient
-					.findAutocompletePredictions(request)
-					.addOnSuccessListener(response -> {
-						mResult = new StringBuilder();
-						for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
-							mResult
-									.append(" ")
-									.append(prediction.getFullText(null))
-									.append("\n");
+		mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+//				                                   Toast
+//						                                   .makeText(MainActivity.this, mSearchView
+//								                                   .getQuery()
+//								                                   .toString(), Toast.LENGTH_SHORT)
+//						                                   .show();
 //
-							Toast
-									.makeText(MainActivity.this, prediction.getPrimaryText(null) + "-" + prediction.getSecondaryText(null), Toast.LENGTH_LONG)
-									.show();
-						}
-						//TODO maj view
-						Toast
-								.makeText(this, String.valueOf(mResult), Toast.LENGTH_LONG)
-								.show();
+				AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
+				
+				// Use the builder to create a FindAutocompletePredictionsRequest.
+				FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
+//			                                                                               .setLocationBias(bounds)
+                                                                                               .setLocationRestriction(bounds)
+//			                                                                               .setOrigin(new LatLng(latitude, longitude)
+                                                                                               .setTypeFilter(TypeFilter.ESTABLISHMENT)
+                                                                                               .setSessionToken(token)
+                                                                                               .setQuery(mSearchView
+		                                                                                                         .getQuery()
+		                                                                                                         .toString())
+                                                                                               .build();
+				placesClient
+						.findAutocompletePredictions(request)
+						.addOnSuccessListener(response -> {
+							mResult = new StringBuilder();
+							for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
+								mResult
+										.append(" ")
+										.append(prediction.getFullText(null))
+										.append("\n");
+////
+								Toast
+										.makeText(MainActivity.this, prediction.getPrimaryText(null) + "-" + prediction.getSecondaryText(null), Toast.LENGTH_LONG)
+										.show();
+							}
+							//TODO maj view
+//							                                   Toast
+//									                                   .makeText(MainActivity.this, String.valueOf(mResult), Toast.LENGTH_LONG)
+//									                                   .show();
 						
-					})
-					.addOnFailureListener((exception) -> {
-						if (exception instanceof ApiException) {
-							ApiException apiException = (ApiException) exception;
+						})
+						.addOnFailureListener((exception) -> {
+							if (exception instanceof ApiException) {
+								ApiException apiException = (ApiException) exception;
 //					Log.e(TAG, "Place not found: " + apiException.getStatusCode());
-							Toast
-									.makeText(this, "error", Toast.LENGTH_LONG)
-									.show();
-						}
-					});
+								Toast
+										.makeText(MainActivity.this, "error", Toast.LENGTH_LONG)
+										.show();
+							}
+						});
+				return false;
+			}
+			
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				return false;
+			}
 		});
 		
 	}
