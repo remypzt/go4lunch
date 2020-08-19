@@ -15,7 +15,6 @@ public class RestaurantsListViewViewModel extends ViewModel {
 	
 	public RestaurantsListViewViewModel(double lat,
 	                                    double lng) {
-		
 		RestaurantsRepository localRestaurantsRepository = RestaurantsRepository.getInstance();
 		mRestaurants = localRestaurantsRepository.getRestaurants(lat, lng);
 		

@@ -1,7 +1,6 @@
 package remy.pouzet.go4lunch.data.service.realAPI;
 
 import remy.pouzet.go4lunch.data.service.realAPI.POJOdetailsRestaurants.ResponseOfPlaceDetailsRestaurants;
-import remy.pouzet.go4lunch.data.service.realAPI.POJOmatrix.ResponseOfMatrix;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOrestaurantsList.ResponseOfRestaurantsList;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -22,10 +21,5 @@ public interface RestaurantsApiInterfaceService {
 	Call<ResponseOfPlaceDetailsRestaurants> getResponseOfPlaceDetailsRestaurants(@Query("place_id") String placeID,
 	                                                                             @Query("key") String key);
 	
-	@GET("place/details/json?")
-	Call<ResponseOfMatrix> getResponseOfMatrix(@Query("units") String units,
-	                                           @Query("origins") String origins,
-	                                           @Query("destinations") String destinations,
-	                                           @Query("key") String key);
 	
 }

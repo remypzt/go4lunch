@@ -11,8 +11,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
+import remy.pouzet.go4lunch.BuildConfig;
+import remy.pouzet.go4lunch.data.repositories.RestaurantsRepository;
+import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 import remy.pouzet.go4lunch.data.repositories.models.User;
+import remy.pouzet.go4lunch.data.service.realAPI.POJOdetailsRestaurants.ResponseOfPlaceDetailsRestaurants;
 import remy.pouzet.go4lunch.databinding.ContentItemsOfWorkmatesListViewBinding;
+import remy.pouzet.go4lunch.view.fragments.RestaurantDetails;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Remy Pouzet on 31/07/2020.
@@ -20,8 +28,9 @@ import remy.pouzet.go4lunch.databinding.ContentItemsOfWorkmatesListViewBinding;
 public class WorkmatesViewHolder extends RecyclerView.ViewHolder {
 	
 	public ImageView imageViewProfile;
-	public TextView  textViewProfile;
-	public User      currentUser;
+	
+	public TextView textViewProfile;
+	public User     currentUser;
 	
 	private @NonNull ContentItemsOfWorkmatesListViewBinding mFragmentContentWorkmatesListViewBinding;
 	
@@ -41,11 +50,8 @@ public class WorkmatesViewHolder extends RecyclerView.ViewHolder {
 		if (user.getNameRestaurant() != null) {
 			this.textViewProfile.setText(user.getUsername() + " is eating to " + user.getNameRestaurant());
 			this.textViewProfile.setOnClickListener(v -> {
-				//TODO requete place pour avoir les infos pour get Restaurant
-
-//			RestaurantDetails.startActivity(textViewProfile.getContext(),
-//			                                restaurant
-//			                               );
+				
+				clickRestaurant(user.getPlaceID());
 			});
 		} else {
 			this.textViewProfile.setText(user.getUsername() + " hasn't decided yet");
@@ -55,5 +61,50 @@ public class WorkmatesViewHolder extends RecyclerView.ViewHolder {
 				.load(user.getUrlPicture())
 				.apply(RequestOptions.circleCropTransform())
 				.into(imageViewProfile);
+	}
+	
+	private void clickRestaurant(String placeID) {
+		RestaurantsRepository.getInstance().mRestaurantsApiInterfaceService
+				.getResponseOfPlaceDetailsRestaurants(placeID, BuildConfig.apiKey)
+				.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
+					@Override
+					public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
+					                       Response<ResponseOfPlaceDetailsRestaurants> response) {
+						if (response.isSuccessful()) {
+							
+							Restaurant restaurant = new Restaurant(placeID, "https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=" + response
+									.body()
+									.getResult()
+									.getPhotos()
+									.get(0)
+									.getPhotoReference() + "&key=" + BuildConfig.apiKey, response
+									                                       .body()
+									                                       .getResult()
+									                                       .getName(), response
+									                                       .body()
+									                                       .getResult()
+									                                       .getFormattedAddress(), response
+									                                       .body()
+									                                       .getStatus(), "distance", 0, response
+									                                       .body()
+									                                       .getResult()
+									                                       .getRating(), response
+									                                       .body()
+									                                       .getResult()
+									                                       .getInternationalPhoneNumber(), response
+									                                       .body()
+									                                       .getResult()
+									                                       .getWebsite(), 0, 0);
+							
+							RestaurantDetails.startActivity(textViewProfile.getContext(), restaurant);
+						}
+					}
+					
+					@Override
+					public void onFailure(Call<ResponseOfPlaceDetailsRestaurants> call,
+					                      Throwable t) {
+						//TODO toast
+					}
+				});
 	}
 }

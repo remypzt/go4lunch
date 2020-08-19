@@ -150,7 +150,7 @@ public class RestaurantDetails extends AppCompatActivity {
 	}
 	
 	public void likeImageButonManagement(Restaurant restaurant) {
-		displayingRightUserInterestImageButon(getDatasFromCurrentUserFromFirestore(), restaurant);
+		getDatasFromCurrentUserFromFirestore(restaurant);
 		likeImageButon.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -165,13 +165,49 @@ public class RestaurantDetails extends AppCompatActivity {
 					}
 				}
 				updateLikedRestaurantsInFirestore();
-				displayingRightLikeImageButon(firestorePlaceID, restaurant);
+				displayingRightLikeImageButon(firestoreLikedRestaurants, restaurant);
 			}
 		});
 	}
 	
+	private void getDatasFromCurrentUserFromFirestore(Restaurant restaurant) {
+		UserHelper
+				.getUser(uid)
+				.addOnSuccessListener((OnSuccessListener<DocumentSnapshot>) documentSnapshot -> {
+					currentUser               = documentSnapshot.toObject(User.class);
+					firestorePlaceID          = !TextUtils.isEmpty(currentUser.getPlaceID())
+					                            ? currentUser.getPlaceID()
+					                            : null;
+					firestoreLikedRestaurants = (currentUser.getLikedRestaurants() == null && currentUser
+							.getLikedRestaurants()
+							.contains(restaurant.getMplaceID()))
+					                            ? null
+					                            : currentUser.getLikedRestaurants();
+					displayingRightUserInterestImageButon(firestorePlaceID, restaurant);
+					displayingRightLikeImageButon(firestoreLikedRestaurants, restaurant);
+				});
+	}
+	
+	public void displayingRightLikeImageButon(List<String> firestoreLikedRestaurants,
+	                                          Restaurant restaurant) {
+		if (firestoreLikedRestaurants != null && firestoreLikedRestaurants.size() > 0 && firestoreLikedRestaurants.contains(restaurant.getMplaceID())) {
+			likeImageButon.setImageResource(R.drawable.ic_star);
+		} else {
+			likeImageButon.setImageResource(R.drawable.ic_star_border_24);
+		}
+	}
+	
+	public void displayingRightUserInterestImageButon(String firestorePlaceID,
+	                                                  Restaurant restaurant) {
+		if (firestorePlaceID != null && firestorePlaceID.equals(restaurant.getMplaceID())) {
+			userInterestImageButon.setImageResource(R.drawable.ic_baseline_check_circle_green_24);
+		} else {
+			userInterestImageButon.setImageResource(R.drawable.ic_baseline_check_circle_24);
+		}
+	}
+	
 	public void userInterestImageButonManagement(Restaurant restaurant) {
-		displayingRightUserInterestImageButon(getDatasFromCurrentUserFromFirestore(), restaurant);
+		getDatasFromCurrentUserFromFirestore(restaurant);
 		userInterestImageButon.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -186,41 +222,6 @@ public class RestaurantDetails extends AppCompatActivity {
 				displayingRightUserInterestImageButon(firestorePlaceID, restaurant);
 			}
 		});
-	}
-	
-	public void displayingRightUserInterestImageButon(String firestorePlaceID,
-	                                                  Restaurant restaurant) {
-		if (firestorePlaceID != null && firestorePlaceID.equals(restaurant.getMplaceID())) {
-			userInterestImageButon.setImageResource(R.drawable.ic_baseline_check_circle_green_24);
-		} else {
-			userInterestImageButon.setImageResource(R.drawable.ic_baseline_check_circle_24);
-		}
-	}
-	
-	private String getDatasFromCurrentUserFromFirestore() {
-		UserHelper
-				.getUser(uid)
-				.addOnSuccessListener((OnSuccessListener<DocumentSnapshot>) documentSnapshot -> {
-					currentUser      = documentSnapshot.toObject(User.class);
-					firestorePlaceID = TextUtils.isEmpty(currentUser.getPlaceID())
-					                   ? currentUser.getPlaceID()
-					                   : null;
-					//TODO return all datas
-//						firestoreLikedRestaurants = (currentUser.getLikedRestaurants() == null)
-//						                            ? currentUser.getLikedRestaurants()
-//						                            : null ;
-				});
-		
-		return firestorePlaceID;
-	}
-	
-	public void displayingRightLikeImageButon(String firestorePlaceID,
-	                                          Restaurant restaurant) {
-		if (firestoreLikedRestaurants != null && firestoreLikedRestaurants.size() > 0 && firestoreLikedRestaurants.contains(restaurant.getMplaceID())) {
-			likeImageButon.setImageResource(R.drawable.ic_star);
-		} else {
-			likeImageButon.setImageResource(R.drawable.ic_star_border_24);
-		}
 	}
 	
 	private void updateLikedRestaurantsInFirestore() {

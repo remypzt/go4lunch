@@ -28,7 +28,7 @@ public class RestaurantsRepository {
 	public static final String                         PREF_KEY_LATITUDE  = "PREF_KEY_LATITUDE";
 	public static final String                         PREF_KEY_LONGITUDE = "PREF_KEY_LONGITUDE";
 	private static      RestaurantsRepository          restaurantsApiRepository;
-	private final       RestaurantsApiInterfaceService mRestaurantsApiInterfaceService;
+	public final        RestaurantsApiInterfaceService mRestaurantsApiInterfaceService;
 	public              ImageView                      mPicture;
 	public              String                         origin;
 	public              String                         distance;
@@ -78,75 +78,82 @@ public class RestaurantsRepository {
 		return restaurants;
 	}
 	
-	private void getRestaurantsDetails(List<Restaurant> restaurantdetails,
-	                                   double userLat,
-	                                   double userLng) {
+	public void getRestaurantsDetails(List<Restaurant> restaurantdetails,
+	                                  double userLat,
+	                                  double userLng) {
 		//Todo pass by loop when project is finish ( it's like that for limitate google API free request)
-//		for (Restaurant restaurant : restaurantdetails) {
-		Restaurant restaurant = restaurantdetails.get(1);
-		mRestaurantsApiInterfaceService
-				.getResponseOfPlaceDetailsRestaurants(restaurant.getMplaceID(), BuildConfig.apiKey)
-				.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
-					@Override
-					public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
-					                       Response<ResponseOfPlaceDetailsRestaurants> response) {
-						if (response.isSuccessful()) {
-							
-							destination = "place_id:" + restaurant.getMplaceID();
-							
-							restaurant.setName(response
-									                   .body()
-									                   .getResult()
-									                   .getName());
-							restaurant.setAdress(response
-									                     .body()
-									                     .getResult()
-									                     .getFormattedAddress());
-							restaurant.setUrlImage("https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=" + response
-									.body()
-									.getResult()
-									.getPhotos()
-									.get(0)
-									.getPhotoReference() + "&key=" + BuildConfig.apiKey);
-							
-							restaurant.setEvaluation(response
-									                         .body()
-									                         .getResult()
-									                         .getRating());
-							
-							//TODO set lgn
-							destinationLat = response
-									.body()
-									.getResult()
-									.getGeometry()
-									.getLocation()
-									.getLat();
-							destinationLng = response
-									.body()
-									.getResult()
-									.getGeometry()
-									.getLocation()
-									.getLng();
-							
-							restaurant.setDistance(getDistance(destinationLat, destinationLng, userLat, userLng));
-							
-							restaurant.setHorair(getStatus(response));
+		for (Restaurant restaurant : restaurantdetails) {
+//		Restaurant restaurant = restaurantdetails.get(1);
+			mRestaurantsApiInterfaceService
+					.getResponseOfPlaceDetailsRestaurants(restaurant.getMplaceID(), BuildConfig.apiKey)
+					.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
+						@Override
+						public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
+						                       Response<ResponseOfPlaceDetailsRestaurants> response) {
+							if (response.isSuccessful()) {
+								
+								destination = "place_id:" + restaurant.getMplaceID();
+								
+								restaurant.setName(response
+										                   .body()
+										                   .getResult()
+										                   .getName());
+								restaurant.setAdress(response
+										                     .body()
+										                     .getResult()
+										                     .getFormattedAddress());
+								if (response
+										    .body()
+										    .getResult()
+										    .getPhotos() == null) {
+									restaurant.setUrlImage("https://i.ytimg.com/vi/OiH5YMXQwYg/maxresdefault.jpg");
+								} else {
+									restaurant.setUrlImage("https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=" + response
+											.body()
+											.getResult()
+											.getPhotos()
+											.get(0)
+											.getPhotoReference() + "&key=" + BuildConfig.apiKey);
+								}
+								
+								restaurant.setEvaluation(response
+										                         .body()
+										                         .getResult()
+										                         .getRating());
+								
+								//TODO set lgn
+								destinationLat = response
+										.body()
+										.getResult()
+										.getGeometry()
+										.getLocation()
+										.getLat();
+								destinationLng = response
+										.body()
+										.getResult()
+										.getGeometry()
+										.getLocation()
+										.getLng();
+								
+								restaurant.setDistance(getDistance(destinationLat, destinationLng, userLat, userLng));
+								
+								restaurant.setHorair(getStatus(response));
 
 //								restaurant.setType();
 //								restaurant.setWorkmatesInterrested();
-							
-							restaurant.setWebsite(response
-									                      .body()
-									                      .getResult()
-									                      .getWebsite());
-							restaurant.setMphoneNumber(response
-									                           .body()
-									                           .getResult()
-									                           .getInternationalPhoneNumber());
-							
-							restaurants.setValue(restaurantdetails);
-							
-						}
+								
+								restaurant.setWebsite(response
+										                      .body()
+										                      .getResult()
+										                      .getWebsite());
+								restaurant.setMphoneNumber(response
+										                           .body()
+										                           .getResult()
+										                           .getInternationalPhoneNumber());
+								
+								restaurants.setValue(restaurantdetails);
+								
+							}
 						}
 						
 						@Override
@@ -156,6 +163,33 @@ public class RestaurantsRepository {
 						}
 					});
 		}
+	}
+	
+	public String getStatus(Response<ResponseOfPlaceDetailsRestaurants> response) {
+		if (response != null && response.body() != null && response
+				                                                   .body()
+				                                                   .getResult() != null && response
+						                                                                           .body()
+						                                                                           .getResult()
+						                                                                           .getOpeningHours() != null && response
+								                                                                                                         .body()
+								                                                                                                         .getResult()
+								                                                                                                         .getOpeningHours()
+								                                                                                                         .getOpenNow() != null) {
+			if (response
+					.body()
+					.getResult()
+					.getOpeningHours()
+					.getOpenNow()) {
+				status = "ouvert";
+			} else {
+				status = "fermé";
+			}
+		} else {
+			status = "horaires indisponibles";
+		}
+		return status;
+	}
 
 //	}
 	
@@ -193,18 +227,25 @@ public class RestaurantsRepository {
 		return distance;
 	}
 	
-	public String getStatus(Response<ResponseOfPlaceDetailsRestaurants> response) {
-		if (response
-				.body()
-				.getResult()
-				.getOpeningHours()
-				.getOpenNow()) {
-			status = "ouvert";
-		} else {
-			status = "fermé";
-		}
-		return status;
-		
+	private void getRestaurantDetails(String placeID) {
+		mRestaurantsApiInterfaceService
+				.getResponseOfPlaceDetailsRestaurants(placeID, BuildConfig.apiKey)
+				.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
+					@Override
+					public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
+					                       Response<ResponseOfPlaceDetailsRestaurants> response) {
+						if (response.isSuccessful()) {
+//							Restaurant restaurant = new Restaurant(placeID, response.body().getResult().getUrl());
+						
+						}
+					}
+					
+					@Override
+					public void onFailure(Call<ResponseOfPlaceDetailsRestaurants> call,
+					                      Throwable t) {
+						//TODO toast
+					}
+				});
 	}
 	
 	public String getLocation() {
