@@ -19,7 +19,7 @@ import com.bumptech.glide.request.RequestOptions;
 import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 import remy.pouzet.go4lunch.databinding.ContentItemsOfRestaurantsListViewBinding;
-import remy.pouzet.go4lunch.view.fragments.RestaurantDetails;
+import remy.pouzet.go4lunch.view.activities.RestaurantDetailsActivity;
 
 /**
  * Created by Remy Pouzet on 14/07/2020.
@@ -90,7 +90,7 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 		this.mHorair.setText(restaurant.getHorair());
 		
 		this.mConstraintLayout.setOnClickListener(v -> {
-			RestaurantDetails.startActivity(mConstraintLayout.getContext(), restaurant);
+			RestaurantDetailsActivity.startActivity(mConstraintLayout.getContext(), restaurant);
 			
 		});
 
@@ -111,22 +111,32 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 	
 	public Drawable getRatingScorePicture(Restaurant restaurants) {
 		mRatingScoreDouble = restaurants.getEvaluation();
-		mRatingScoreDouble = (mRatingScoreDouble * 3) / 5;
-		mRatingScore       = ((int) Math.round(mRatingScoreDouble));
+//		mRatingScoreDouble = (mRatingScoreDouble * 3) / 5;
+//		mRatingScore       = ((int) Math.round(mRatingScoreDouble));
 		Resources resources = itemView.getResources();
+
+//		switch (mRatingScore) {
+//			case 1:
+//				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star_border_24, null);
+//				break;
+//			case 2:
+//				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_star_half_24, null);
+//				break;
+//			case 3:
+//				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star, null);
+//			default:
+//				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.invisible, null);
+//				break;
+//		}
 		
-		switch (mRatingScore) {
-			case 1:
-				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star_border_24, null);
-				break;
-			case 2:
-				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_star_half_24, null);
-				break;
-			case 3:
-				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star, null);
-			default:
-				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.invisible, null);
-				break;
+		if (mRatingScoreDouble < 1.6) {
+			mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star_border_24, null);
+		} else if (mRatingScoreDouble > 3.3) {
+			mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star, null);
+		} else if (mRatingScoreDouble > 1.6 && mRatingScoreDouble < 3.3) {
+			mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_star_half_24, null);
+		} else {
+			mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.invisible, null);
 		}
 		return mEvaluationScore;
 	}

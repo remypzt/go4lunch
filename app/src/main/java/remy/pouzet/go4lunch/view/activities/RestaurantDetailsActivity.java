@@ -1,4 +1,4 @@
-package remy.pouzet.go4lunch.view.fragments;
+package remy.pouzet.go4lunch.view.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,13 +15,15 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,36 +32,41 @@ import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 import remy.pouzet.go4lunch.data.repositories.models.User;
 import remy.pouzet.go4lunch.data.service.realAPI.UserHelper;
-import remy.pouzet.go4lunch.databinding.RestaurantDetailsFragmentBinding;
+import remy.pouzet.go4lunch.databinding.ActivityRestaurantDetailsBinding;
+import remy.pouzet.go4lunch.view.adaptersAndViewHolders.workmates.WorkmatesAdapter;
+import remy.pouzet.go4lunch.viewmodel.WorkmatesViewModel;
 
-public class RestaurantDetails extends AppCompatActivity {
+public class RestaurantDetailsActivity extends AppCompatActivity implements WorkmatesAdapter.Listener {
 	
-	private final static String       EXTRA_RESTAURANT = "EXTRA_RESTAURANT";
-	public               ImageView    restaurantPicture;
-	public               ImageButton  userInterestImageButon;
-	public               TextView     restaurantName;
-	public               ImageView    restaurantEvaluationImageView;
-	public               TextView     restaurantAdress;
-	public               ImageButton  callImageButon;
-	public               ImageButton  likeImageButon;
-	public               ImageButton  websiteImageButon;
-	public               User         currentUser;
-	public               String       firestorePlaceID;
-	public               String       firestorerestaurantName;
-	public               List<String> firestoreLikedRestaurants;
-	public               int          mRatingScore;
-	public               double       mRatingScoreDouble;
-	public               Restaurant   restaurant;
+	private final static String             EXTRA_RESTAURANT = "EXTRA_RESTAURANT";
+	public               ImageView          restaurantPicture;
+	public               ImageButton        userInterestImageButon;
+	public               TextView           restaurantName;
+	public               ImageView          restaurantEvaluationImageView;
+	public               TextView           restaurantAdress;
+	public               ImageButton        callImageButon;
+	public               ImageButton        likeImageButon;
+	public               ImageButton        websiteImageButon;
+	public               User               currentUser;
+	public               String             firestorePlaceID;
+	public               String             firestorerestaurantName;
+	public               List<String>       firestoreLikedRestaurants;
+	public               int                mRatingScore;
+	public               double             mRatingScoreDouble;
+	public               Restaurant         restaurant;
+	public               RecyclerView       recyclerView;
+	private              WorkmatesViewModel mWorkmatesViewModel;
+	private              WorkmatesAdapter   mWorkmatesAdapter;
 	
 	public  Drawable                         mEvaluationScore;
-	private RestaurantDetailsFragmentBinding mRestaurantDetailsFragmentBinding;
+	private ActivityRestaurantDetailsBinding mRestaurantDetailsFragmentBinding;
 	public  String                           uid = this
 			.getCurrentUser()
 			.getUid();
 	
 	public static void startActivity(Context context,
 	                                 Restaurant restaurant) {
-		Intent intent = new Intent(context, RestaurantDetails.class);
+		Intent intent = new Intent(context, RestaurantDetailsActivity.class);
 		intent.putExtra(EXTRA_RESTAURANT, restaurant);
 		context.startActivity(intent);
 	}
@@ -67,12 +74,14 @@ public class RestaurantDetails extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mRestaurantDetailsFragmentBinding = RestaurantDetailsFragmentBinding.inflate(getLayoutInflater());
+		mRestaurantDetailsFragmentBinding = ActivityRestaurantDetailsBinding.inflate(getLayoutInflater());
+		recyclerView                      = mRestaurantDetailsFragmentBinding.fragmentWorkmatesRecyclerView;
 		setContentView(mRestaurantDetailsFragmentBinding.getRoot());
 		
 		restaurant = (Restaurant) getIntent().getSerializableExtra(EXTRA_RESTAURANT);
 		displayingManagement(restaurant);
 		butonsManagement(restaurant);
+		configureRecyclerView();
 	}
 	
 	public void displayingManagement(Restaurant restaurant) {
@@ -101,26 +110,24 @@ public class RestaurantDetails extends AppCompatActivity {
 				.into(restaurantEvaluationImageView);
 	}
 	
-	public Drawable getRatingScorePicture(Restaurant restaurants) {
-		mRatingScoreDouble = restaurants.getEvaluation();
-		mRatingScoreDouble = (mRatingScoreDouble * 3) / 5;
-		mRatingScore       = ((int) Math.round(mRatingScoreDouble));
-		Resources resources = getResources();
+	private void configureRecyclerView() {
+		//Configure Adapter & RecyclerView
+		this.mWorkmatesAdapter = new WorkmatesAdapter(generateOptionsForAdapter(UserHelper.getInterestedUsers("user", restaurant.getMplaceID())), Glide.with(this), this, uid);
+
+//		new WorkmatesAdapter(generateOptionsForAdapter(UserHelper.getAllUsers("user")),
+//		                     Glide.with(this),
+//		                     this,
+//		                     uid);
 		
-		switch (mRatingScore) {
-			case 1:
-				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star_border_24, null);
-				break;
-			case 2:
-				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_star_half_24, null);
-				break;
-			case 3:
-				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star, null);
-			default:
-				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.invisible, null);
-				break;
-		}
-		return mEvaluationScore;
+		mWorkmatesAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+			@Override
+			public void onItemRangeInserted(int positionStart,
+			                                int itemCount) {
+				recyclerView.smoothScrollToPosition(mWorkmatesAdapter.getItemCount());
+			}
+		});
+		recyclerView.setLayoutManager(new LinearLayoutManager(this));
+		recyclerView.setAdapter(this.mWorkmatesAdapter);
 	}
 	
 	public void butonsManagement(Restaurant restaurant) {
@@ -170,22 +177,11 @@ public class RestaurantDetails extends AppCompatActivity {
 		});
 	}
 	
-	private void getDatasFromCurrentUserFromFirestore(Restaurant restaurant) {
-		UserHelper
-				.getUser(uid)
-				.addOnSuccessListener((OnSuccessListener<DocumentSnapshot>) documentSnapshot -> {
-					currentUser               = documentSnapshot.toObject(User.class);
-					firestorePlaceID          = !TextUtils.isEmpty(currentUser.getPlaceID())
-					                            ? currentUser.getPlaceID()
-					                            : null;
-					firestoreLikedRestaurants = (currentUser.getLikedRestaurants() == null && currentUser
-							.getLikedRestaurants()
-							.contains(restaurant.getMplaceID()))
-					                            ? null
-					                            : currentUser.getLikedRestaurants();
-					displayingRightUserInterestImageButon(firestorePlaceID, restaurant);
-					displayingRightLikeImageButon(firestoreLikedRestaurants, restaurant);
-				});
+	private FirestoreRecyclerOptions<User> generateOptionsForAdapter(Query query) {
+		return new FirestoreRecyclerOptions.Builder<User>()
+				.setQuery(query, User.class)
+				.setLifecycleOwner(this)
+				.build();
 	}
 	
 	public void displayingRightLikeImageButon(List<String> firestoreLikedRestaurants,
@@ -237,6 +233,61 @@ public class RestaurantDetails extends AppCompatActivity {
 		return FirebaseAuth
 				.getInstance()
 				.getCurrentUser();
+	}
+	
+	public Drawable getRatingScorePicture(Restaurant restaurants) {
+		mRatingScoreDouble = restaurants.getEvaluation();
+//		mRatingScoreDouble = (mRatingScoreDouble * 3) / 5;
+//		mRatingScore       = ((int) Math.round(mRatingScoreDouble));
+		Resources resources = getResources();
+
+//		switch (mRatingScore) {
+//			case 1:
+//				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star_border_24, null);
+//				break;
+//			case 2:
+//				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_star_half_24, null);
+//				break;
+//			case 3:
+//				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star, null);
+//			default:
+//				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.invisible, null);
+//				break;
+//		}
+		
+		if (mRatingScoreDouble < 1.6) {
+			mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star_border_24, null);
+		} else if (mRatingScoreDouble > 3.3) {
+			mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star, null);
+		} else if (mRatingScoreDouble > 1.6 && mRatingScoreDouble < 3.3) {
+			mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_star_half_24, null);
+		} else {
+			mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.invisible, null);
+		}
+		return mEvaluationScore;
+	}
+	
+	private void getDatasFromCurrentUserFromFirestore(Restaurant restaurant) {
+		UserHelper
+				.getUser(uid)
+				.addOnSuccessListener(documentSnapshot -> {
+					currentUser               = documentSnapshot.toObject(User.class);
+					firestorePlaceID          = !TextUtils.isEmpty(currentUser.getPlaceID())
+					                            ? currentUser.getPlaceID()
+					                            : null;
+					firestoreLikedRestaurants = (currentUser.getLikedRestaurants() == null && currentUser
+							.getLikedRestaurants()
+							.contains(restaurant.getMplaceID()))
+					                            ? null
+					                            : currentUser.getLikedRestaurants();
+					displayingRightUserInterestImageButon(firestorePlaceID, restaurant);
+					displayingRightLikeImageButon(firestoreLikedRestaurants, restaurant);
+				});
+	}
+	
+	@Override
+	public void onDataChanged() {
+	
 	}
 }
 	

@@ -45,10 +45,14 @@ import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.data.repositories.RestaurantsRepository;
 import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 import remy.pouzet.go4lunch.data.repositories.models.User;
+import remy.pouzet.go4lunch.data.service.realAPI.POJOdetailsRestaurants.ResponseOfPlaceDetailsRestaurants;
 import remy.pouzet.go4lunch.data.service.realAPI.UserHelper;
 import remy.pouzet.go4lunch.databinding.ActivityMainBinding;
 import remy.pouzet.go4lunch.databinding.AppBarMainBinding;
 import remy.pouzet.go4lunch.databinding.NavHeaderMainBinding;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 //------------------------------------------------------//
 
@@ -80,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
 	private TextView            mSearchResult;
 	private StringBuilder       mResult;
 	
+	public User   currentUser;
+	public String firestorePlaceID;
+	
 	// Creating identifier to identify REST REQUEST (Update username)
 	private static final int    UPDATE_USERNAME = 30;
 	private              double latitude, longitude;
@@ -106,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
 		bottomNavigationInitialize();
 		updateWithUserStatus();
 		signOutButton();
-		chatButton();
+		chatButon();
+		yourLunchButon();
 		setSearchViewVisibilityFragmentDepends();
 		
 	}
@@ -400,7 +408,7 @@ public class MainActivity extends AppCompatActivity {
 				});
 	}
 	
-	public void chatButton() {
+	public void chatButon() {
 		mActivityMainBinding.navView
 				.getMenu()
 				.findItem(R.id.nav_chat)
@@ -408,6 +416,82 @@ public class MainActivity extends AppCompatActivity {
 					Intent chatActivityIntent = new Intent(this, ChatActivity.class);
 					startActivity(chatActivityIntent);
 					return true;
+				});
+	}
+	
+	private void yourLunchButon() {
+		mActivityMainBinding.navView
+				.getMenu()
+				.findItem(R.id.nav_your_lunch)
+				.setOnMenuItemClickListener(menuItem -> {
+					UserHelper
+							.getUser(FirebaseAuth
+									         .getInstance()
+									         .getCurrentUser()
+									         .getUid())
+							.addOnSuccessListener(documentSnapshot -> {
+								currentUser      = documentSnapshot.toObject(User.class);
+								firestorePlaceID = !TextUtils.isEmpty(currentUser.getPlaceID())
+								                   ? currentUser.getPlaceID()
+								                   : null;
+								
+								if (firestorePlaceID != null) {
+									intentDetailsRestaurant(firestorePlaceID);
+									
+								} else {
+									Toast
+											.makeText(this, "vous n'avez pas encore selectionné de restaurant pour ce midi", Toast.LENGTH_LONG)
+											.show();
+								}
+								
+							});
+					return true;
+				});
+		
+	}
+	
+	private void intentDetailsRestaurant(String placeID) {
+		RestaurantsRepository.getInstance().mRestaurantsApiInterfaceService
+				.getResponseOfPlaceDetailsRestaurants(placeID, BuildConfig.apiKey)
+				.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
+					@Override
+					public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
+					                       Response<ResponseOfPlaceDetailsRestaurants> response) {
+						if (response.isSuccessful()) {
+							
+							Restaurant restaurant = new Restaurant(placeID, "https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=" + response
+									.body()
+									.getResult()
+									.getPhotos()
+									.get(0)
+									.getPhotoReference() + "&key=" + BuildConfig.apiKey, response
+									                                       .body()
+									                                       .getResult()
+									                                       .getName(), response
+									                                       .body()
+									                                       .getResult()
+									                                       .getFormattedAddress(), response
+									                                       .body()
+									                                       .getStatus(), "distance", 0, response
+									                                       .body()
+									                                       .getResult()
+									                                       .getRating(), response
+									                                       .body()
+									                                       .getResult()
+									                                       .getInternationalPhoneNumber(), response
+									                                       .body()
+									                                       .getResult()
+									                                       .getWebsite(), 0, 0);
+							RestaurantDetailsActivity.startActivity(MainActivity.this, restaurant);
+							
+						}
+					}
+					
+					@Override
+					public void onFailure(Call<ResponseOfPlaceDetailsRestaurants> call,
+					                      Throwable t) {
+						//TODO toast
+					}
 				});
 	}
 	

@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
 
-    tools:context=".view.fragments.RestaurantDetails">
+    tools:context=".view.activities.RestaurantDetailsActivity">
 
     <ImageView
         android:id="@+id/restaurant_picture"
@@ -128,7 +128,6 @@
         app:layout_constraintStart_toStartOf="@id/imageButtonWebsite"
         app:layout_constraintTop_toBottomOf="@id/imageButtonWebsite" />
 
-
     <View
         android:id="@+id/separation_restaurant_details"
         android:layout_width="match_parent"
@@ -137,20 +136,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageButtonCall_title" />
 
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:padding="20dip"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/separation_restaurant_details">-->
 
-    <RelativeLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fragment_workmates_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/separation_restaurant_details" />
 
-        app:layout_constraintTop_toBottomOf="@id/separation_restaurant_details"
-        tools:ignore="UselessParent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_workmates_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </RelativeLayout>
-
+    <!--    </LinearLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

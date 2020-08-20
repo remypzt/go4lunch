@@ -17,7 +17,7 @@ import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 import remy.pouzet.go4lunch.data.repositories.models.User;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOdetailsRestaurants.ResponseOfPlaceDetailsRestaurants;
 import remy.pouzet.go4lunch.databinding.ContentItemsOfWorkmatesListViewBinding;
-import remy.pouzet.go4lunch.view.fragments.RestaurantDetails;
+import remy.pouzet.go4lunch.view.activities.RestaurantDetailsActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -96,7 +96,7 @@ public class WorkmatesViewHolder extends RecyclerView.ViewHolder {
 									                                       .getResult()
 									                                       .getWebsite(), 0, 0);
 							
-							RestaurantDetails.startActivity(textViewProfile.getContext(), restaurant);
+							RestaurantDetailsActivity.startActivity(textViewProfile.getContext(), restaurant);
 						}
 					}
 					

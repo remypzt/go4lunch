@@ -57,6 +57,16 @@ public class UserHelper {
 				;
 	}
 	
+	public static Query getInterestedUsers(String user,
+	                                       String placeID) {
+		return UserHelper
+				.getUsersCollection()
+				.whereEqualTo("placeID", placeID)
+				//TODO configure field place id in firebase
+//				.orderBy("placeid")
+				;
+	}
+	
 	// --- UPDATE ---
 	
 	public static Task<Void> updateUsername(String username,

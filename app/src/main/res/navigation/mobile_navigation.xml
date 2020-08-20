@@ -45,6 +45,6 @@
         android:id="@+id/nav_restaurants_details"
         android:name="remy.pouzet.go4lunch.ui.restaurantDetails.RestaurantDetailsFragment"
         android:label="restaurants details"
-        tools:layout="@layout/restaurant_details_fragment" />
+        tools:layout="@layout/activity_restaurant_details" />
 
 </navigation>

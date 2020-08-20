@@ -38,6 +38,7 @@ import java.util.List;
 
 import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
+import remy.pouzet.go4lunch.view.activities.RestaurantDetailsActivity;
 import remy.pouzet.go4lunch.viewmodel.RestaurantsListViewViewModel;
 //------------------------------------------------------//
 // ------------------    Adapter    ------------------- //
@@ -212,7 +213,7 @@ public class MapViewFragment extends Fragment {
 			mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
 			mMap.setOnInfoWindowClickListener(parameterMarker -> {
 				Restaurant r = (Restaurant) parameterMarker.getTag();
-				RestaurantDetails.startActivity(getActivity(), r);
+				RestaurantDetailsActivity.startActivity(getActivity(), r);
 				clickedRestaurants.add(r.getName());
 			});
 		}
