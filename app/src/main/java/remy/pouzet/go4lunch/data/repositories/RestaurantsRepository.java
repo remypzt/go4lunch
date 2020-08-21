@@ -116,10 +116,15 @@ public class RestaurantsRepository {
 											.getPhotoReference() + "&key=" + BuildConfig.apiKey);
 								}
 								
-								restaurant.setEvaluation(response
-										                         .body()
-										                         .getResult()
-										                         .getRating());
+								if (response
+										    .body()
+										    .getResult()
+										    .getRating() != null) {
+									restaurant.setEvaluation(response
+											                         .body()
+											                         .getResult()
+											                         .getRating());
+								}
 								
 								//TODO set lgn
 								destinationLat = response

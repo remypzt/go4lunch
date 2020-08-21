@@ -33,6 +33,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
+import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
@@ -266,12 +267,15 @@ public class MainActivity extends AppCompatActivity {
 							mResult = new StringBuilder();
 							ArrayList<Restaurant> restaurantsList = new ArrayList<>();
 							for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
-								
-								//It's work for listview but not for map
-								Restaurant restaurant = new Restaurant(prediction.getPlaceId(), "multimediaUrl", "Name", "Adress", "Horair", "Distance", 0, 0, "phone number", "website",
-								                                       //TODO get latlng and loop for mapview
-								                                       latitude, longitude);
-								restaurantsList.add(restaurant);
+								if (prediction
+										.getPlaceTypes()
+										.contains(Place.Type.RESTAURANT)) {
+									//It's work for listview but not for map
+									Restaurant restaurant = new Restaurant(prediction.getPlaceId(), "multimediaUrl", "Name", "Adress", "Horair", "Distance", 0, 0f, "phone number", "website",
+									                                       //TODO get latlng and loop for mapview
+									                                       latitude, longitude);
+									restaurantsList.add(restaurant);
+								}
 
 //								getRestaurantsDetails(restaurantsList);
 
@@ -284,6 +288,9 @@ public class MainActivity extends AppCompatActivity {
 //										.makeText(MainActivity.this, prediction.getPrimaryText(null) + "-" + prediction.getSecondaryText(null), Toast.LENGTH_LONG)
 //										.show();
 							}
+							Toast
+									.makeText(MainActivity.this, String.valueOf(restaurantsList.size()), Toast.LENGTH_LONG)
+									.show();
 							RestaurantsRepository
 									.getInstance()
 									.getRestaurantsDetails(restaurantsList, latitude, longitude);
@@ -299,6 +306,7 @@ public class MainActivity extends AppCompatActivity {
 										.show();
 							}
 						});
+				
 				return false;
 			}
 			

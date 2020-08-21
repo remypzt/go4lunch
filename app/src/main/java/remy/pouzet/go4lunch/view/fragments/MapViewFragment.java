@@ -32,15 +32,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.core.Query;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
-import remy.pouzet.go4lunch.data.service.realAPI.UserHelper;
 import remy.pouzet.go4lunch.view.activities.RestaurantDetailsActivity;
 import remy.pouzet.go4lunch.viewmodel.RestaurantsListViewViewModel;
 //------------------------------------------------------//
@@ -202,13 +199,13 @@ public class MapViewFragment extends Fragment {
 			double lng         = restaurant.getMlon();
 			
 			LatLng latLng = new LatLng(lat, lng);
-			
-			if (getInterrestedWorkmatesFromFirebase(restaurant) == true) {
-				markerColor = BitmapDescriptorFactory.HUE_AZURE;
-			} else {
-				markerColor = BitmapDescriptorFactory.HUE_RED;
-			}
-
+//
+//			if (getInterrestedWorkmatesFromFirebase(restaurant) == true) {
+//				markerColor = BitmapDescriptorFactory.HUE_AZURE;
+//			} else {
+//				markerColor = BitmapDescriptorFactory.HUE_RED;
+//			}
+			markerColor = BitmapDescriptorFactory.HUE_AZURE;
 //			float  markerColor = (clickedRestaurants.contains(restaurant.getName()))
 //			                     ? BitmapDescriptorFactory.HUE_AZURE
 //			                     : BitmapDescriptorFactory.HUE_RED;
@@ -232,20 +229,20 @@ public class MapViewFragment extends Fragment {
 	
 	public boolean getInterrestedWorkmatesFromFirebase(Restaurant restaurant) {
 		boolean response = false;
-		UserHelper
-				.getInterestedUsers("user", restaurant.getMplaceID())
-				.get()
-				.addOnSuccessListener(new OnSuccessListener<Query>() {
-					@Override
-					public void onSuccess(Query parameterQuery) {
-						if (UserHelper
-								    .getInterestedUsers("user", restaurant.getMplaceID())
-								    .get()
-								    .getResult() != null) {
-							response = true;
-						}
-					}
-				});
+//		UserHelper
+//				.getInterestedUsers("user", restaurant.getMplaceID())
+//				.get()
+//				.addOnSuccessListener(new OnSuccessListener<Query>() {
+//					@Override
+//					public void onSuccess(Query parameterQuery) {
+//						if (UserHelper
+//								    .getInterestedUsers("user", restaurant.getMplaceID())
+//								    .get()
+//								    .getResult() != null) {
+////							response = true;
+//						}
+//					}
+//				});
 
 //		 if (UserHelper.getInterestedUsers("user", restaurant.getMplaceID()).get().isSuccessful() &&
 //		     UserHelper.getInterestedUsers("user", restaurant.getMplaceID()).get().getResult() != null) {
