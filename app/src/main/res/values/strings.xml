@@ -53,6 +53,10 @@
     <string name="title_activity_maps2">Map</string>
     <string name="ApplicationName">Go4Lunch</string>
 
+    <!-- NOTIFICATION SERVICE -->
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="notification_title">"Vous avez reçu une notification"</string>
+
 
     <!-- SETTINGS FRAGEMENT -->
     <string name="button_update_account">Mettre à jour le nom d\'utilisateur</string>

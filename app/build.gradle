@@ -54,7 +54,10 @@ dependencies {
 
     //FIREBASE
     // FirebaseUI
-    implementation "com.google.firebase:firebase-core:17.4.4"
+    implementation "com.google.firebase:firebase-core:17.5.0"
+    implementation 'com.google.firebase:firebase-messaging:20.2.4'
+
+
 
     // Firebase
     implementation 'com.firebaseui:firebase-ui-auth:6.2.1'

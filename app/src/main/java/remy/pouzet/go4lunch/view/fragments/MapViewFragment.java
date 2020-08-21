@@ -32,12 +32,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.core.Query;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
+import remy.pouzet.go4lunch.data.service.realAPI.UserHelper;
 import remy.pouzet.go4lunch.view.activities.RestaurantDetailsActivity;
 import remy.pouzet.go4lunch.viewmodel.RestaurantsListViewViewModel;
 //------------------------------------------------------//
@@ -54,7 +57,7 @@ public class MapViewFragment extends Fragment {
 	String restaurant = "restaurant";
 	private int    ProximityRadius = 100;
 	private double latitude, longitude;
-	public  ArrayList<String> clickedRestaurants = new ArrayList<>();
+	//	public  ArrayList<String> clickedRestaurants = new ArrayList<>();
 	private GoogleMap         mMap;
 	
 	public static final  String                PREF_KEY_LONGITUDE                       = "PREF_KEY_LONGITUDE";
@@ -189,6 +192,7 @@ public class MapViewFragment extends Fragment {
 	}
 	
 	public void displayRestaurants(List<Restaurant> restaurants) {
+		float markerColor;
 		mMap.clear();
 		for (Restaurant restaurant : restaurants) {
 			MarkerOptions markerOptions = new MarkerOptions();
@@ -197,10 +201,17 @@ public class MapViewFragment extends Fragment {
 			double lat         = restaurant.getMlat();
 			double lng         = restaurant.getMlon();
 			
-			LatLng latLng      = new LatLng(lat, lng);
-			float  markerColor = (clickedRestaurants.contains(restaurant.getName()))
-			                     ? BitmapDescriptorFactory.HUE_AZURE
-			                     : BitmapDescriptorFactory.HUE_RED;
+			LatLng latLng = new LatLng(lat, lng);
+			
+			if (getInterrestedWorkmatesFromFirebase(restaurant) == true) {
+				markerColor = BitmapDescriptorFactory.HUE_AZURE;
+			} else {
+				markerColor = BitmapDescriptorFactory.HUE_RED;
+			}
+
+//			float  markerColor = (clickedRestaurants.contains(restaurant.getName()))
+//			                     ? BitmapDescriptorFactory.HUE_AZURE
+//			                     : BitmapDescriptorFactory.HUE_RED;
 			markerOptions
 					.position(latLng)
 					.title(nameOfPlace)
@@ -214,10 +225,33 @@ public class MapViewFragment extends Fragment {
 			mMap.setOnInfoWindowClickListener(parameterMarker -> {
 				Restaurant r = (Restaurant) parameterMarker.getTag();
 				RestaurantDetailsActivity.startActivity(getActivity(), r);
-				clickedRestaurants.add(r.getName());
+//				clickedRestaurants.add(r.getName());
 			});
 		}
-		
+	}
+	
+	public boolean getInterrestedWorkmatesFromFirebase(Restaurant restaurant) {
+		boolean response = false;
+		UserHelper
+				.getInterestedUsers("user", restaurant.getMplaceID())
+				.get()
+				.addOnSuccessListener(new OnSuccessListener<Query>() {
+					@Override
+					public void onSuccess(Query parameterQuery) {
+						if (UserHelper
+								    .getInterestedUsers("user", restaurant.getMplaceID())
+								    .get()
+								    .getResult() != null) {
+							response = true;
+						}
+					}
+				});
+
+//		 if (UserHelper.getInterestedUsers("user", restaurant.getMplaceID()).get().isSuccessful() &&
+//		     UserHelper.getInterestedUsers("user", restaurant.getMplaceID()).get().getResult() != null) {
+//		 	response = true;
+//		 }
+		return response;
 	}
 	
 	@Override

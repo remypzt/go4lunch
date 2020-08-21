@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -25,8 +26,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
@@ -37,6 +40,8 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.ArrayList;
 
@@ -108,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 		Toolbar toolbar = mActivityMainBinding.mainToolbar.toolbar;
 		mSearchView = mActivityMainBinding.mainToolbar.placesAutocompleteSearchBarContainer;
 		
+		getTokenFCM();
 		setSupportActionBar(toolbar);
 		navigationDrawerNavigationInitialize();
 		bottomNavigationInitialize();
@@ -631,6 +637,27 @@ public class MainActivity extends AppCompatActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 //		getMenuInflater().inflate(R.menu.bottom_nav_menu, menu);
 		return true;
+	}
+	
+	public void getTokenFCM() {
+		FirebaseInstanceId
+				.getInstance()
+				.getInstanceId()
+				.addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+					@Override
+					public void onComplete(@NonNull Task<InstanceIdResult> task) {
+						if (!task.isSuccessful()) {
+							Log.w(TAG, "getInstanceId failed", task.getException());
+							return;
+						}
+						
+						// Get new Instance ID token
+						String token = task
+								.getResult()
+								.getToken();
+						
+					}
+				});
 	}
 	
 }
