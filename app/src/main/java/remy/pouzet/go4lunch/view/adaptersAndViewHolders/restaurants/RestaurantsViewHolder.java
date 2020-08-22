@@ -1,7 +1,6 @@
 package remy.pouzet.go4lunch.view.adaptersAndViewHolders.restaurants;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -27,12 +26,10 @@ import remy.pouzet.go4lunch.view.activities.RestaurantDetailsActivity;
 class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 	
 	public int    mWorkmartesScore;
-	public int    mRatingScore;
 	public double mRatingScoreDouble;
 	
 	public  ImageView                                mPicture;
 	public  TextView                                 mName;
-	//	public  TextView                                 mType;
 	public  TextView                                 mAdress;
 	public  TextView                                 mHorair;
 	public  ConstraintLayout                         mConstraintLayout;
@@ -42,8 +39,6 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 	public  Drawable                                 mEvaluationScore;
 	public  ImageView                                mWorkmatesInterrestedScore;
 	private ContentItemsOfRestaurantsListViewBinding mContentItemsOfRestaurantsListViewBinding;
-	public  Activity                                 activity;
-	public  Restaurant                               mRestaurant;
 
 // TODO worksmate and evaluation
 	
@@ -57,7 +52,6 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 		mWorkmatesInterrested = mContentItemsOfRestaurantsListViewBinding.interrestingWorkmatesNumber;
 		mName                 = mContentItemsOfRestaurantsListViewBinding.restaurantName;
 		mPicture              = mContentItemsOfRestaurantsListViewBinding.restaurantPicture;
-//		mType                 = mContentItemsOfRestaurantsListViewBinding.restaurantType;
 		mAdress           = mContentItemsOfRestaurantsListViewBinding.restaurantAdress;
 		mHorair           = mContentItemsOfRestaurantsListViewBinding.restaurantHorairInformations;
 		mConstraintLayout = mContentItemsOfRestaurantsListViewBinding.ArticlesLayout;
@@ -82,7 +76,6 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 		Glide
 				.with(mEvaluation.getContext())
 				.load(getRatingScorePicture(restaurant))
-//				.placeholder(R.drawable.ic_launcher_background)
 				.into(mEvaluation);
 		
 		this.mDistance.setText(restaurant.getDistance());
@@ -111,23 +104,7 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 	
 	public Drawable getRatingScorePicture(Restaurant restaurants) {
 		mRatingScoreDouble = restaurants.getEvaluation();
-//		mRatingScoreDouble = (mRatingScoreDouble * 3) / 5;
-//		mRatingScore       = ((int) Math.round(mRatingScoreDouble));
 		Resources resources = itemView.getResources();
-
-//		switch (mRatingScore) {
-//			case 1:
-//				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star_border_24, null);
-//				break;
-//			case 2:
-//				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_star_half_24, null);
-//				break;
-//			case 3:
-//				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star, null);
-//			default:
-//				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.invisible, null);
-//				break;
-//		}
 		
 		if (mRatingScoreDouble < 1.6) {
 			mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star_border_24, null);
@@ -141,34 +118,6 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 		return mEvaluationScore;
 	}
 
-//	public void getWorkmatesScorePicture (Restaurant restaurants){
-//			mWorkmartesScore = restaurants.getWorkmatesInterrested();
-//		switch (mWorkmartesScore) {
-//			case 0:
-//
-//				break;
-//			case 1:
-//
-//				break;
-//			case 2 :
-//
-//				break;
-//			case 3 :
-//
-//				break;
-//			case 4 :
-//
-//				break;
-//			case 5 :
-//
-//				break;
-//			default:
-//
-//				break;
-//		}
-//		return mWorkmatesInterrestedScore;
-//	}
-//
 }
 
 
