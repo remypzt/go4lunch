@@ -24,14 +24,9 @@ public class UtilsForRestaurantsList {
 		}
 		return restauraurantsListRestaurants;
 	}
-
 	
 	private static Restaurant addArticleFromRestaurantsList(Result resultsItemOfRestaurantsList) {
-		
-		//TODO getrestaurantsdetails
-		
 		return new Restaurant(resultsItemOfRestaurantsList.getPlaceId(),
-//				R.drawable.ic_launcher_background,
                               "multimediaUrl", "Name", "Adress", "Horair", "Distance", 1, 2, "phone number", "website", resultsItemOfRestaurantsList
 				                      .getGeometry()
 				                      .getLocation()
@@ -40,6 +35,5 @@ public class UtilsForRestaurantsList {
 				                      .getLocation()
 				                      .getLng());
 	}
-	
 	
 }

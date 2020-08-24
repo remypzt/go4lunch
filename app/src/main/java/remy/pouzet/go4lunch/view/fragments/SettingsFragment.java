@@ -169,47 +169,6 @@ public class SettingsFragment extends Fragment {
 	// ------------------Navigation & UI------------------- //
 	//------------------------------------------------------//
 	
-	public void seekBarManagement() {
-		binding.seekBar2.setMax(5000);
-		binding.seekBar2.setProgress(100);
-		binding.customizeRadiusTextView.setText(getString(R.string.rayon_de_recherche) + binding.seekBar2.getProgress() + getString(R.string.metres));
-		binding.seekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			@Override
-			public void onProgressChanged(SeekBar seekBar,
-			                              int progress,
-			                              boolean fromUser) {
-				// this operation is to define  set an intertval step
-				progress = (progress / 20) * 20;
-				seekBar.setProgress(progress);
-//				progress = binding.seekBar2.getProgress();
-				binding.customizeRadiusTextView.setText(getString(R.string.rayon_de_recherche) + binding.seekBar2.getProgress() + getString(R.string.metres));
-				
-			}
-			
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			
-			}
-			
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				binding.customizeRadiusTextView.setText(getString(R.string.rayon_de_recherche) + binding.seekBar2.getProgress() + getString(R.string.metres));
-				
-			}
-		});
-	}
-	
-	//------------------------------------------------------//
-	// 9-----------------      Data     ------------------- //
-	//------------------------------------------------------//
-	
-	@Nullable
-	protected FirebaseUser getCurrentUser() {
-		return FirebaseAuth
-				.getInstance()
-				.getCurrentUser();
-	}
-	
 	public void updateUIWhenCreating() {
 		//Get picture URL from Firebase
 		if (this
@@ -256,10 +215,51 @@ public class SettingsFragment extends Fragment {
 						User currentUser = documentSnapshot.toObject(User.class);
 						String username = TextUtils.isEmpty(currentUser.getUsername())
 						                  ? getString(R.string.info_no_username_found)
-						                     : currentUser.getUsername();
+						                  : currentUser.getUsername();
 //				textInputEditTextUsername.setText(username);
 					}
 				});
+	}
+	
+	//------------------------------------------------------//
+	// 9-----------------      Data     ------------------- //
+	//------------------------------------------------------//
+	
+	@Nullable
+	protected FirebaseUser getCurrentUser() {
+		return FirebaseAuth
+				.getInstance()
+				.getCurrentUser();
+	}
+	
+	public void seekBarManagement() {
+		binding.seekBar2.setMax(5000);
+		binding.seekBar2.setProgress(100);
+		binding.customizeRadiusTextView.setText(getString(R.string.rayon_de_recherche) + binding.seekBar2.getProgress() + getString(R.string.metres));
+		binding.seekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar,
+			                              int progress,
+			                              boolean fromUser) {
+				// this operation is to define  set an intertval step
+				progress = (progress / 20) * 20;
+				seekBar.setProgress(progress);
+//				progress = binding.seekBar2.getProgress();
+				binding.customizeRadiusTextView.setText(getString(R.string.rayon_de_recherche) + binding.seekBar2.getProgress() + getString(R.string.metres));
+				
+			}
+			
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			
+			}
+			
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				binding.customizeRadiusTextView.setText(getString(R.string.rayon_de_recherche) + binding.seekBar2.getProgress() + getString(R.string.metres));
+				
+			}
+		});
 	}
 }
 

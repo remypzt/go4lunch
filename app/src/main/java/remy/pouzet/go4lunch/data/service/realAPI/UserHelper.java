@@ -51,20 +51,14 @@ public class UserHelper {
 	}
 	
 	public static Query getAllUsers(String user) {
-		return UserHelper.getUsersCollection()
-				//TODO configure field place id in firebase
-//				.orderBy("placeid")
-				;
+		return UserHelper.getUsersCollection();
 	}
 	
 	public static Query getInterestedUsers(String user,
 	                                       String placeID) {
 		return UserHelper
 				.getUsersCollection()
-				.whereEqualTo("placeID", placeID)
-				//TODO configure field place id in firebase
-//				.orderBy("placeid")
-				;
+				.whereEqualTo("placeID", placeID);
 	}
 	
 	// --- UPDATE ---

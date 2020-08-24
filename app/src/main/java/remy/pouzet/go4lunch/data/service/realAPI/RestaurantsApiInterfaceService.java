@@ -21,5 +21,4 @@ public interface RestaurantsApiInterfaceService {
 	Call<ResponseOfPlaceDetailsRestaurants> getResponseOfPlaceDetailsRestaurants(@Query("place_id") String placeID,
 	                                                                             @Query("key") String key);
 	
-	
 }

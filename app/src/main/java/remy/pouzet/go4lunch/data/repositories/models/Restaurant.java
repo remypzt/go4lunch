@@ -6,6 +6,10 @@ import java.io.Serializable;
  * Created by Remy Pouzet on 14/07/2020.
  */
 public class Restaurant implements Serializable {
+	String mphoneNumber;
+	String mWebsite;
+	double mlat;
+	double mlon;
 	private String mplaceID;
 	//	private int    mDrawableImage;
 	private String mUrlImage;
@@ -16,11 +20,6 @@ public class Restaurant implements Serializable {
 	private String mDistance;
 	private int    mWorkmatesInterrested;
 	private double mEvaluation;
-	String mphoneNumber;
-	String mWebsite;
-	
-	double mlat;
-	double mlon;
 	
 	public Restaurant(String placeID,
 //	                  int drawableImage,
@@ -53,12 +52,6 @@ public class Restaurant implements Serializable {
 		
 	}
 	
-	public void setEvaluation(double parameterEvaluation) {
-		mEvaluation = parameterEvaluation;
-	}
-	
-
-	
 	public String getWebsite() {
 		return mWebsite;
 	}
@@ -74,14 +67,14 @@ public class Restaurant implements Serializable {
 	public void setMplaceID(String parameterMplaceID) {
 		mplaceID = parameterMplaceID;
 	}
-
-//	public int getDrawableImage() {
-//		return mDrawableImage;
-//	}
 	
 	public String getMphoneNumber() {
 		return mphoneNumber;
 	}
+
+//	public int getDrawableImage() {
+//		return mDrawableImage;
+//	}
 	
 	public void setMphoneNumber(String parameterMphoneNumber) {
 		mphoneNumber = parameterMphoneNumber;
@@ -102,14 +95,14 @@ public class Restaurant implements Serializable {
 	public void setMlon(double parameterMlon) {
 		mlon = parameterMlon;
 	}
-
-//	public void setDrawableImage(int parameterDrawableImage) {
-//		mDrawableImage = parameterDrawableImage;
-//	}
 	
 	public String getUrlImage() {
 		return mUrlImage;
 	}
+
+//	public void setDrawableImage(int parameterDrawableImage) {
+//		mDrawableImage = parameterDrawableImage;
+//	}
 	
 	public void setUrlImage(String parameterUrlImage) {
 		mUrlImage = parameterUrlImage;
@@ -166,6 +159,10 @@ public class Restaurant implements Serializable {
 	
 	public double getEvaluation() {
 		return mEvaluation;
+	}
+	
+	public void setEvaluation(double parameterEvaluation) {
+		mEvaluation = parameterEvaluation;
 	}
 	
 	public void setEvaluation(Double parameterEvaluation) {

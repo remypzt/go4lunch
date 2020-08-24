@@ -34,13 +34,12 @@ public class RestaurantsListViewFragment extends Fragment {
 
 // ------------------   Variables   ------------------- //
 	
-	public RecyclerView mRestaurantsReyclerView;
-	
-	private             List<Restaurant>   mRestaurants;
-	private             RestaurantsAdapter mRestaurantsAdapter;
 	public static final String             PREF_KEY_LATITUDE  = "PREF_KEY_LATITUDE";
 	public static final String             PREF_KEY_LONGITUDE = "PREF_KEY_LONGITUDE";
+	public              RecyclerView       mRestaurantsReyclerView;
 	public              SharedPreferences  mPreferences;
+	private             List<Restaurant>   mRestaurants;
+	private             RestaurantsAdapter mRestaurantsAdapter;
 	private             double             latitude, longitude;
 	
 	// ------------------   LifeCycle   ------------------- //
@@ -79,18 +78,18 @@ public class RestaurantsListViewFragment extends Fragment {
 		longitude    = getDouble(mPreferences, PREF_KEY_LONGITUDE, 2.0);
 	}
 	
-	public double getDouble(final SharedPreferences prefs,
-	                        final String key,
-	                        final double defaultValue) {
-		return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
-	}
-	
 	public void updateList(List<Restaurant> restaurantsList) {
 		mRestaurants.clear();
 		if (restaurantsList != null) {
 			mRestaurants.addAll(restaurantsList);
 			mRestaurantsAdapter.notifyDataSetChanged();
 		}
+	}
+	
+	public double getDouble(final SharedPreferences prefs,
+	                        final String key,
+	                        final double defaultValue) {
+		return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
 	}
 	
 	private void configureRecyclerView() {

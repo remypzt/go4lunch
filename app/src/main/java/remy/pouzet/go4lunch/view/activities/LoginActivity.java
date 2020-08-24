@@ -145,6 +145,15 @@ public class LoginActivity extends AppCompatActivity
 		finish();
 	}
 	
+	@Override
+	protected void onActivityResult(int requestCode,
+	                                int resultCode,
+	                                Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		//  Handle SignIn Activity response on activity result
+		this.handleResponseAfterSignIn(requestCode, resultCode, data);
+	}
+	
 	//  Method that handles response after SignIn Activity close
 	private void handleResponseAfterSignIn(int requestCode,
 	                                       int resultCode,
@@ -175,6 +184,10 @@ public class LoginActivity extends AppCompatActivity
 			}
 		}
 	}
+
+//------------------------------------------------------//
+// ------------------Navigation & UI------------------- //
+//------------------------------------------------------//
 	
 	// 1 - Http request that create user in firestore
 	private void createUserInFirestore() {
@@ -204,19 +217,18 @@ public class LoginActivity extends AppCompatActivity
 					.addOnFailureListener(this.onFailureListener());
 		}
 	}
-
-//------------------------------------------------------//
-// ------------------Navigation & UI------------------- //
-//------------------------------------------------------//
 	
-	@Override
-	protected void onActivityResult(int requestCode,
-	                                int resultCode,
-	                                Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		//  Handle SignIn Activity response on activity result
-		this.handleResponseAfterSignIn(requestCode, resultCode, data);
+	// 2 - Show Snack Bar with a message
+	private void showSnackBar(CoordinatorLayout coordinatorLayout,
+	                          String message) {
+		Snackbar
+				.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT)
+				.show();
 	}
+	
+	//------------------------------------------------------//
+	// ------------------ Miscellaneous ------------------- //
+	//------------------------------------------------------//
 	
 	@Nullable
 	protected FirebaseUser getCurrentUser() {
@@ -225,9 +237,9 @@ public class LoginActivity extends AppCompatActivity
 				.getCurrentUser();
 	}
 	
-	//------------------------------------------------------//
-	// ------------------ Miscellaneous ------------------- //
-	//------------------------------------------------------//
+	// --------------------
+	// UTILS
+	// --------------------
 	
 	protected OnFailureListener onFailureListener() {
 		return new OnFailureListener() {
@@ -238,18 +250,6 @@ public class LoginActivity extends AppCompatActivity
 						.show();
 			}
 		};
-	}
-	
-	// --------------------
-	// UTILS
-	// --------------------
-	
-	// 2 - Show Snack Bar with a message
-	private void showSnackBar(CoordinatorLayout coordinatorLayout,
-	                          String message) {
-		Snackbar
-				.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT)
-				.show();
 	}
 }
 	

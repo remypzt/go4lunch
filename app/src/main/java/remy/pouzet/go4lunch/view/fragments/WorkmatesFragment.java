@@ -36,16 +36,15 @@ public class WorkmatesFragment extends Fragment implements WorkmatesAdapter.List
 	// ------------------   Variables   ------------------- //
 	//------------------------------------------------------//
 	
-	private WorkmatesViewModel mWorkmatesViewModel;
-	
 	public FragmentWorkmatesListViewBinding mFragmentWorkmatesListViewBinding;
 	// FOR DESIGN
 	// 1 - Getting all views needed
 	RecyclerView recyclerView;
+	private           WorkmatesViewModel mWorkmatesViewModel;
 	// FOR DATA
 	// 2 - Declaring Adapter and data
-	private           WorkmatesAdapter mWorkmatesAdapter;
-	@Nullable private User             modelCurrentUser;
+	private           WorkmatesAdapter   mWorkmatesAdapter;
+	@Nullable private User               modelCurrentUser;
 	
 	//------------------------------------------------------//
 	// ------------------   LifeCycle   ------------------- //

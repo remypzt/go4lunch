@@ -8,7 +8,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,8 +36,8 @@ import remy.pouzet.go4lunch.view.adaptersAndViewHolders.chat.ChatAdapter;
 public class ChatActivity extends AppCompatActivity implements ChatAdapter.Listener {
 	
 	// STATIC DATA FOR CHAT (3)
-	private static final String CHAT_NAME_ANDROID  = "android";
-
+	private static final String              CHAT_NAME_ANDROID = "android";
+	public               ActivityChatBinding mActivityChatBinding;
 	// FOR DESIGN
 	// 1 - Getting all views needed
 	RecyclerView      recyclerView;
@@ -51,7 +49,6 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 	private           ChatAdapter         mentorChatAdapter;
 	@Nullable private User                modelCurrentUser;
 	private           String              currentChatName;
-	public            ActivityChatBinding mActivityChatBinding;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,16 +105,10 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 				// 1 - Check if text field is not empty and current user properly downloaded from Firestore
 				if (!TextUtils.isEmpty(editTextMessage.getText()) && modelCurrentUser != null) {
 					// 2 - Create a new Message to Firestore
-					MessageHelper
-							.createMessageForChat(editTextMessage
-									                      .getText()
-									                      .toString(), currentChatName, modelCurrentUser)
-							.addOnFailureListener(new OnFailureListener() {
-								@Override
-								public void onFailure(@NonNull Exception parameterE) {
-									//todo manage if usefull
-								}
-							});
+					MessageHelper.createMessageForChat(editTextMessage
+							                                   .getText()
+							                                   .toString(), currentChatName, modelCurrentUser);
+					
 					// 3 - Reset text field
 					editTextMessage.setText("");
 				}
@@ -128,7 +119,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 	
 	// 8 - Re-Configure the RecyclerView depending chosen chat
 	public void onClickChatButtons() {
-		ImageButton androidChatButton  = mActivityChatBinding.activityChatAndroidChatButton;
+		ImageButton androidChatButton = mActivityChatBinding.activityChatAndroidChatButton;
 		
 		androidChatButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -169,8 +160,6 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 //	public int getFragmentLayout() {
 //		return R.layout.activity_chat;
 //	}
-	
-	
 	
 	@OnClick(R.id.activity_chat_add_file_button)
 	public void onClickAddFile() {

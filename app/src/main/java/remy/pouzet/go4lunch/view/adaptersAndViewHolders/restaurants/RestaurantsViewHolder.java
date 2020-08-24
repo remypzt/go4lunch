@@ -39,8 +39,6 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 	public  Drawable                                 mEvaluationScore;
 	public  ImageView                                mWorkmatesInterrestedScore;
 	private ContentItemsOfRestaurantsListViewBinding mContentItemsOfRestaurantsListViewBinding;
-
-// TODO worksmate and evaluation
 	
 	public RestaurantsViewHolder(View itemView) {
 		super(itemView);
@@ -52,10 +50,10 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 		mWorkmatesInterrested = mContentItemsOfRestaurantsListViewBinding.interrestingWorkmatesNumber;
 		mName                 = mContentItemsOfRestaurantsListViewBinding.restaurantName;
 		mPicture              = mContentItemsOfRestaurantsListViewBinding.restaurantPicture;
-		mAdress           = mContentItemsOfRestaurantsListViewBinding.restaurantAdress;
-		mHorair           = mContentItemsOfRestaurantsListViewBinding.restaurantHorairInformations;
-		mConstraintLayout = mContentItemsOfRestaurantsListViewBinding.ArticlesLayout;
-		mDistance         = mContentItemsOfRestaurantsListViewBinding.restaurantDistanceFromTheUser;
+		mAdress               = mContentItemsOfRestaurantsListViewBinding.restaurantAdress;
+		mHorair               = mContentItemsOfRestaurantsListViewBinding.restaurantHorairInformations;
+		mConstraintLayout     = mContentItemsOfRestaurantsListViewBinding.ArticlesLayout;
+		mDistance             = mContentItemsOfRestaurantsListViewBinding.restaurantDistanceFromTheUser;
 		
 	}
 	
@@ -117,7 +115,7 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 		}
 		return mEvaluationScore;
 	}
-
+	
 }
 
 

@@ -30,11 +30,11 @@ public class User {
 		this.likedRestaurants = likedRestaurants;
 	}
 	
-	public List<String> getLikedRestaurants() {
-		return likedRestaurants;
+	public User() {
 	}
 	
-	public User() {
+	public List<String> getLikedRestaurants() {
+		return likedRestaurants;
 	}
 	
 	public void setLikedRestaurants(List<String> parameterLikedRestaurants) {

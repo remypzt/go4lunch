@@ -81,18 +81,18 @@ public class RestaurantsRepository {
 	public void getRestaurantsDetails(List<Restaurant> restaurantdetails,
 	                                  double userLat,
 	                                  double userLng) {
-		//Todo pass by loop when project is finish ( it's like that for limitate google API free request)
-//		for (Restaurant restaurant : restaurantdetails) {
-		Restaurant restaurant = restaurantdetails.get(1);
-		mRestaurantsApiInterfaceService
-				.getResponseOfPlaceDetailsRestaurants(restaurant.getMplaceID(), BuildConfig.apiKey)
-				.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
-					@Override
-					public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
-					                       Response<ResponseOfPlaceDetailsRestaurants> response) {
-						if (response.isSuccessful()) {
-							
-							destination = "place_id:" + restaurant.getMplaceID();
+		//LIMITE
+		for (Restaurant restaurant : restaurantdetails) {
+//		Restaurant restaurant = restaurantdetails.get(1);
+			mRestaurantsApiInterfaceService
+					.getResponseOfPlaceDetailsRestaurants(restaurant.getMplaceID(), BuildConfig.apiKey)
+					.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
+						@Override
+						public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
+						                       Response<ResponseOfPlaceDetailsRestaurants> response) {
+							if (response.isSuccessful()) {
+								
+								destination = "place_id:" + restaurant.getMplaceID();
 								
 								restaurant.setName(response
 										                   .body()
@@ -126,7 +126,6 @@ public class RestaurantsRepository {
 											                         .getRating());
 								}
 								
-								//TODO set lgn
 								destinationLat = response
 										.body()
 										.getResult()
@@ -164,39 +163,10 @@ public class RestaurantsRepository {
 						@Override
 						public void onFailure(Call<ResponseOfPlaceDetailsRestaurants> call,
 						                      Throwable t) {
-							//TODO toast
 						}
 					});
-//		}
-	}
-	
-	public String getStatus(Response<ResponseOfPlaceDetailsRestaurants> response) {
-		if (response != null && response.body() != null && response
-				                                                   .body()
-				                                                   .getResult() != null && response
-						                                                                           .body()
-						                                                                           .getResult()
-						                                                                           .getOpeningHours() != null && response
-								                                                                                                         .body()
-								                                                                                                         .getResult()
-								                                                                                                         .getOpeningHours()
-								                                                                                                         .getOpenNow() != null) {
-			if (response
-					.body()
-					.getResult()
-					.getOpeningHours()
-					.getOpenNow()) {
-				status = "ouvert";
-			} else {
-				status = "fermé";
-			}
-		} else {
-			status = "horaires indisponibles";
 		}
-		return status;
 	}
-
-//	}
 	
 	public String getDistance(double destinationLat,
 	                          double destinationLng,
@@ -231,33 +201,37 @@ public class RestaurantsRepository {
 		
 		return distance;
 	}
+
+//	}
 	
-	private void getRestaurantDetails(String placeID) {
-		mRestaurantsApiInterfaceService
-				.getResponseOfPlaceDetailsRestaurants(placeID, BuildConfig.apiKey)
-				.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
-					@Override
-					public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
-					                       Response<ResponseOfPlaceDetailsRestaurants> response) {
-						if (response.isSuccessful()) {
-//							Restaurant restaurant = new Restaurant(placeID, response.body().getResult().getUrl());
-						
-						}
-					}
-					
-					@Override
-					public void onFailure(Call<ResponseOfPlaceDetailsRestaurants> call,
-					                      Throwable t) {
-						//TODO toast
-					}
-				});
+	public String getStatus(Response<ResponseOfPlaceDetailsRestaurants> response) {
+		if (response != null && response.body() != null && response
+				                                                   .body()
+				                                                   .getResult() != null && response
+						                                                                           .body()
+						                                                                           .getResult()
+						                                                                           .getOpeningHours() != null && response
+								                                                                                                         .body()
+								                                                                                                         .getResult()
+								                                                                                                         .getOpeningHours()
+								                                                                                                         .getOpenNow() != null) {
+			if (response
+					.body()
+					.getResult()
+					.getOpeningHours()
+					.getOpenNow()) {
+				status = "ouvert";
+			} else {
+				status = "fermé";
+			}
+		} else {
+			status = "horaires indisponibles";
+		}
+		return status;
 	}
 	
 	public String getLocation() {
-		//TODO get location as origin parameter
-		
 		origin = latitude + "|" + longitude;
-		
 		return origin;
 	}
 }

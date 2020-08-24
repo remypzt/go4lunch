@@ -39,30 +39,29 @@ import remy.pouzet.go4lunch.viewmodel.WorkmatesViewModel;
 public class RestaurantDetailsActivity extends AppCompatActivity implements WorkmatesAdapter.Listener {
 	
 	private final static String             EXTRA_RESTAURANT = "EXTRA_RESTAURANT";
-	public               ImageView          restaurantPicture;
-	public               ImageButton        userInterestImageButon;
-	public               TextView           restaurantName;
-	public               ImageView          restaurantEvaluationImageView;
-	public               TextView           restaurantAdress;
-	public               ImageButton        callImageButon;
-	public               ImageButton        likeImageButon;
-	public               ImageButton        websiteImageButon;
-	public               User               currentUser;
-	public               String             firestorePlaceID;
-	public               String             firestorerestaurantName;
-	public               List<String>       firestoreLikedRestaurants;
-	public               int                mRatingScore;
-	public               double             mRatingScoreDouble;
-	public               Restaurant         restaurant;
-	public               RecyclerView       recyclerView;
-	private              WorkmatesViewModel mWorkmatesViewModel;
-	private              WorkmatesAdapter   mWorkmatesAdapter;
-	
+	public  ImageView                        restaurantPicture;
+	public  ImageButton                      userInterestImageButon;
+	public  TextView                         restaurantName;
+	public  ImageView                        restaurantEvaluationImageView;
+	public  TextView                         restaurantAdress;
+	public  ImageButton                      callImageButon;
+	public  ImageButton                      likeImageButon;
+	public  ImageButton                      websiteImageButon;
+	public  User                             currentUser;
+	public  String                           firestorePlaceID;
+	public  String                           firestorerestaurantName;
+	public  List<String>                     firestoreLikedRestaurants;
+	public  int                              mRatingScore;
+	public  double                           mRatingScoreDouble;
+	public  Restaurant                       restaurant;
+	public  RecyclerView                     recyclerView;
 	public  Drawable                         mEvaluationScore;
-	private ActivityRestaurantDetailsBinding mRestaurantDetailsFragmentBinding;
 	public  String                           uid = this
 			.getCurrentUser()
 			.getUid();
+	private WorkmatesViewModel               mWorkmatesViewModel;
+	private WorkmatesAdapter                 mWorkmatesAdapter;
+	private ActivityRestaurantDetailsBinding mRestaurantDetailsFragmentBinding;
 	
 	public static void startActivity(Context context,
 	                                 Restaurant restaurant) {
@@ -268,6 +267,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity implements Work
 	}
 	
 	private void getDatasFromCurrentUserFromFirestore(Restaurant restaurant) {
+		
 		UserHelper
 				.getUser(uid)
 				.addOnSuccessListener(documentSnapshot -> {
@@ -275,7 +275,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity implements Work
 					firestorePlaceID          = !TextUtils.isEmpty(currentUser.getPlaceID())
 					                            ? currentUser.getPlaceID()
 					                            : null;
-					firestoreLikedRestaurants = (currentUser.getLikedRestaurants() == null && currentUser
+					firestoreLikedRestaurants = (currentUser.getLikedRestaurants() != null && currentUser
 							.getLikedRestaurants()
 							.contains(restaurant.getMplaceID()))
 					                            ? null

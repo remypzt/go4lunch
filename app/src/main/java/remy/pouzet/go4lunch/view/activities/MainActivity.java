@@ -76,27 +76,23 @@ public class MainActivity extends AppCompatActivity {
 	// ------------------   Variables   ------------------- //
 	//------------------------------------------------------//
 	
-	private static final int                 SIGN_OUT_TASK    = 10;
-	private static final int                 DELETE_USER_TASK = 20;
+	public static final  String              PREF_KEY_LATITUDE  = "PREF_KEY_LATITUDE";
+	public static final  String              PREF_KEY_LONGITUDE = "PREF_KEY_LONGITUDE";
+	private static final int                 SIGN_OUT_TASK      = 10;
+	private static final int                 DELETE_USER_TASK   = 20;
+	private static final String              TAG                = MainActivity.class.getSimpleName();
+	// Creating identifier to identify REST REQUEST (Update username)
+	private static final int                 UPDATE_USERNAME    = 30;
+	public               SharedPreferences   mPreferences;
+	public               User                currentUser;
+	public               String              firestorePlaceID;
 	private              ActivityMainBinding mActivityMainBinding;
 	private              AppBarMainBinding   mAppBarMainBinding;
-	
-	public static final  String PREF_KEY_LATITUDE  = "PREF_KEY_LATITUDE";
-	public static final  String PREF_KEY_LONGITUDE = "PREF_KEY_LONGITUDE";
-	private static final String TAG                = MainActivity.class.getSimpleName();
-	
-	private AppBarConfiguration mAppBarConfiguration;
-	public  SharedPreferences   mPreferences;
-	private SearchView          mSearchView;
-	private TextView            mSearchResult;
-	private StringBuilder       mResult;
-	
-	public User   currentUser;
-	public String firestorePlaceID;
-	
-	// Creating identifier to identify REST REQUEST (Update username)
-	private static final int    UPDATE_USERNAME = 30;
-	private              double latitude, longitude;
+	private              AppBarConfiguration mAppBarConfiguration;
+	private              SearchView          mSearchView;
+	private              TextView            mSearchResult;
+	private              StringBuilder       mResult;
+	private              double              latitude, longitude;
 	
 	//TODO MAJ username
 //	@OnClick(R.id.profile_activity_button_update)
@@ -119,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 		navigationDrawerNavigationInitialize();
 		bottomNavigationInitialize();
+		autoCompleteSearchAPI();
 		updateWithUserStatus();
 		signOutButton();
 		chatButon();
@@ -135,6 +132,31 @@ public class MainActivity extends AppCompatActivity {
 		return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
 	}
 	
+	public void getTokenFCM() {
+		FirebaseInstanceId
+				.getInstance()
+				.getInstanceId()
+				.addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+					@Override
+					public void onComplete(@NonNull Task<InstanceIdResult> task) {
+						if (!task.isSuccessful()) {
+							Log.w(TAG, "getInstanceId failed", task.getException());
+							return;
+						}
+						
+						// Get new Instance ID token
+						String token = task
+								.getResult()
+								.getToken();
+						
+					}
+				});
+	}
+	
+	//------------------------------------------------------//
+	// ------------------Navigation & UI------------------- //
+	//------------------------------------------------------//
+	
 	public void navigationDrawerNavigationInitialize() {
 		
 		//Navigation drawer menu
@@ -146,10 +168,6 @@ public class MainActivity extends AppCompatActivity {
 		NavigationUI.setupWithNavController(mActivityMainBinding.navView, navController);
 	}
 	
-	//------------------------------------------------------//
-	// ------------------Navigation & UI------------------- //
-	//------------------------------------------------------//
-	
 	public void bottomNavigationInitialize() {
 		//Bottom navigation menu
 		mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_map_view, R.id.navigation_list_view, R.id.navigation_workmates)
@@ -158,8 +176,6 @@ public class MainActivity extends AppCompatActivity {
 		NavController navControllerBottom = Navigation.findNavController(this, R.id.nav_host_fragment);
 		NavigationUI.setupActionBarWithNavController(this, navControllerBottom, mAppBarConfiguration);
 		NavigationUI.setupWithNavController(mActivityMainBinding.navViewBottom, navControllerBottom);
-		
-		autoCompleteSearchAPI();
 		
 		navControllerBottom.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
 			@Override
@@ -185,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
 		});
 	}
 	
-	
 	public void autoCompleteSearchAPI() {
 		getLocation();
 		String apiKey = BuildConfig.apiKey;
@@ -199,36 +214,6 @@ public class MainActivity extends AppCompatActivity {
 		
 		RectangularBounds bounds = RectangularBounds.newInstance(getCoordinate(latitude, longitude, -10000, -10000), getCoordinate(latitude, longitude, 10000, 10000));
 		
-		//WIDGET
-//		// Initialize the AutocompleteSupportFragment.
-//		AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-//				getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-//
-//		// Specify the types of place data to return.
-//		assert autocompleteFragment != null;
-//		autocompleteFragment
-//				.setLocationRestriction(bounds)
-////				.setTypeFilter(TypeFilter.ESTABLISHMENT)
-//
-//
-//				.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-//
-//		// Set up a PlaceSelectionListener to handle the response.
-//		autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-//			@Override
-//			public void onPlaceSelected(@NonNull Place place) {
-//				// TODO: Get info about the selected place.
-//
-//				Log.i("TAG", "Place: " + place.getName() + ", " + place.getId());
-//			}
-//
-//
-//			@Override
-//			public void onError(@NonNull Status status) {
-//				// TODO: Handle the error.
-//				Log.i("TAG", "An error occurred: " + status);
-//			}
-//		});
 		
 		//PROGRAMMATICALY
 		mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -240,68 +225,11 @@ public class MainActivity extends AppCompatActivity {
 			
 			@Override
 			public boolean onQueryTextChange(String newText) {
-//				searchFunction(newText, bounds, placesClient);
-//				return searchFunction(newText, bounds, placesClient);
-				return false;
+				searchFunction(newText, bounds, placesClient);
+				return searchFunction(newText, bounds, placesClient);
 			}
 		});
 		
-	}
-	
-	public boolean searchFunction(String query,
-	                              RectangularBounds bounds,
-	                              PlacesClient placesClient) {
-		AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
-		
-		// Use the builder to create a FindAutocompletePredictionsRequest.
-		FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest
-				.builder()
-				.setLocationRestriction(bounds)
-				.setTypeFilter(TypeFilter.ESTABLISHMENT)
-				.setSessionToken(token)
-				.setQuery(mSearchView
-						          .getQuery()
-						          .toString())
-				.build();
-		placesClient
-				.findAutocompletePredictions(request)
-				.addOnSuccessListener(response -> {
-					mResult = new StringBuilder();
-					ArrayList<Restaurant> restaurantsList = new ArrayList<>();
-					for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
-						if (prediction
-								.getPlaceTypes()
-								.contains(Place.Type.RESTAURANT)) {
-							Restaurant restaurant = new Restaurant(prediction.getPlaceId(), "multimediaUrl", "Name", "Adress", "Horair", "Distance", 0, 0f, "phone number", "website",
-							
-							                                       latitude, longitude);
-							restaurantsList.add(restaurant);
-						}
-						
-					}
-					
-					RestaurantsRepository
-							.getInstance()
-							.getRestaurantsDetails(restaurantsList, latitude, longitude);
-					
-				})
-				.addOnFailureListener((exception) -> {
-					if (exception instanceof ApiException) {
-						ApiException apiException = (ApiException) exception;
-						
-						Toast
-								.makeText(MainActivity.this, "error", Toast.LENGTH_LONG)
-								.show();
-					}
-				});
-		
-		return false;
-	}
-	
-	public void getLocation() {
-		mPreferences = getPreferences(Context.MODE_PRIVATE);
-		latitude     = getDouble(mPreferences, PREF_KEY_LATITUDE, 2.0);
-		longitude    = getDouble(mPreferences, PREF_KEY_LONGITUDE, 2.0);
 	}
 	
 	private void updateWithUserStatus() {
@@ -366,56 +294,10 @@ public class MainActivity extends AppCompatActivity {
 		
 	}
 	
-	private void intentDetailsRestaurant(String placeID) {
-		RestaurantsRepository.getInstance().mRestaurantsApiInterfaceService
-				.getResponseOfPlaceDetailsRestaurants(placeID, BuildConfig.apiKey)
-				.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
-					@Override
-					public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
-					                       Response<ResponseOfPlaceDetailsRestaurants> response) {
-						if (response.isSuccessful()) {
-							
-							Restaurant restaurant = new Restaurant(placeID, "https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=" + response
-									.body()
-									.getResult()
-									.getPhotos()
-									.get(0)
-									.getPhotoReference() + "&key=" + BuildConfig.apiKey, response
-									                                       .body()
-									                                       .getResult()
-									                                       .getName(), response
-									                                       .body()
-									                                       .getResult()
-									                                       .getFormattedAddress(), response
-									                                       .body()
-									                                       .getStatus(), "distance", 0, response
-									                                       .body()
-									                                       .getResult()
-									                                       .getRating(), response
-									                                       .body()
-									                                       .getResult()
-									                                       .getInternationalPhoneNumber(), response
-									                                       .body()
-									                                       .getResult()
-									                                       .getWebsite(), 0, 0);
-							RestaurantDetailsActivity.startActivity(MainActivity.this, restaurant);
-							
-						}
-					}
-					
-					@Override
-					public void onFailure(Call<ResponseOfPlaceDetailsRestaurants> call,
-					                      Throwable t) {
-						//TODO toast
-					}
-				});
-	}
-	
-	@Nullable
-	protected FirebaseUser getCurrentUser() {
-		return FirebaseAuth
-				.getInstance()
-				.getCurrentUser();
+	public void getLocation() {
+		mPreferences = getPreferences(Context.MODE_PRIVATE);
+		latitude     = getDouble(mPreferences, PREF_KEY_LATITUDE, 2.0);
+		longitude    = getDouble(mPreferences, PREF_KEY_LONGITUDE, 2.0);
 	}
 	
 	public static LatLng getCoordinate(double lat0,
@@ -428,7 +310,60 @@ public class MainActivity extends AppCompatActivity {
 		return new LatLng(lat, lng);
 	}
 	
-	//TODO this method could be share with SettingsFragment
+	public boolean searchFunction(String query,
+	                              RectangularBounds bounds,
+	                              PlacesClient placesClient) {
+		AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
+		
+		// Use the builder to create a FindAutocompletePredictionsRequest.
+		FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest
+				.builder()
+				.setLocationRestriction(bounds)
+				.setTypeFilter(TypeFilter.ESTABLISHMENT)
+				.setSessionToken(token)
+				.setQuery(mSearchView
+						          .getQuery()
+						          .toString())
+				.build();
+		placesClient
+				.findAutocompletePredictions(request)
+				.addOnSuccessListener(response -> {
+					mResult = new StringBuilder();
+					ArrayList<Restaurant> restaurantsList = new ArrayList<>();
+					for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
+						if (prediction
+								.getPlaceTypes()
+								.contains(Place.Type.RESTAURANT)) {
+							Restaurant restaurant = new Restaurant(prediction.getPlaceId(), "multimediaUrl", "Name", "Adress", "Horair", "Distance", 0, 0f, "phone number", "website",
+							
+							                                       latitude, longitude);
+							restaurantsList.add(restaurant);
+						}
+					}
+					RestaurantsRepository
+							.getInstance()
+							.getRestaurantsDetails(restaurantsList, latitude, longitude);
+					
+				})
+				.addOnFailureListener((exception) -> {
+					if (exception instanceof ApiException) {
+						ApiException apiException = (ApiException) exception;
+						
+						Toast
+								.makeText(MainActivity.this, "error", Toast.LENGTH_LONG)
+								.show();
+					}
+				});
+		
+		return false;
+	}
+	
+	public double getDouble(final SharedPreferences prefs,
+	                        final String key,
+	                        final double defaultValue) {
+		return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
+	}
+	
 	public void updateUIWhenCreating() {
 		NavHeaderMainBinding header = NavHeaderMainBinding.bind(mActivityMainBinding.navView.getHeaderView(0));
 		//Get picture URL from Firebase
@@ -481,12 +416,6 @@ public class MainActivity extends AppCompatActivity {
 				});
 	}
 	
-	public double getDouble(final SharedPreferences prefs,
-	                        final String key,
-	                        final double defaultValue) {
-		return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
-	}
-	
 	public void passByLoginActivity() {
 		Intent loginActivityIntent = new Intent(this, LoginActivity.class);
 		startActivity(loginActivityIntent);
@@ -499,9 +428,64 @@ public class MainActivity extends AppCompatActivity {
 				.addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
 	}
 	
+	@Nullable
+	protected FirebaseUser getCurrentUser() {
+		return FirebaseAuth
+				.getInstance()
+				.getCurrentUser();
+	}
+	
 	//------------------------------------------------------//
 	// 9-----------------      Data     ------------------- //
 	//------------------------------------------------------//
+	
+	private void intentDetailsRestaurant(String placeID) {
+		RestaurantsRepository.getInstance().mRestaurantsApiInterfaceService
+				.getResponseOfPlaceDetailsRestaurants(placeID, BuildConfig.apiKey)
+				.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
+					@Override
+					public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
+					                       Response<ResponseOfPlaceDetailsRestaurants> response) {
+						if (response.isSuccessful()) {
+							
+							Restaurant restaurant = new Restaurant(placeID, "https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=" + response
+									.body()
+									.getResult()
+									.getPhotos()
+									.get(0)
+									.getPhotoReference() + "&key=" + BuildConfig.apiKey, response
+									                                       .body()
+									                                       .getResult()
+									                                       .getName(), response
+									                                       .body()
+									                                       .getResult()
+									                                       .getFormattedAddress(), response
+									                                       .body()
+									                                       .getStatus(), "distance", 0, response
+									                                       .body()
+									                                       .getResult()
+									                                       .getRating(), response
+									                                       .body()
+									                                       .getResult()
+									                                       .getInternationalPhoneNumber(), response
+									                                       .body()
+									                                       .getResult()
+									                                       .getWebsite(), 0, 0);
+							RestaurantDetailsActivity.startActivity(MainActivity.this, restaurant);
+							
+						}
+					}
+					
+					@Override
+					public void onFailure(Call<ResponseOfPlaceDetailsRestaurants> call,
+					                      Throwable t) {
+					}
+				});
+	}
+	
+	// --------------------
+	// ERROR HANDLER
+	// --------------------
 	
 	//TODO could be share with SettingsFragment
 	// Create OnCompleteListener called after tasks ended
@@ -524,10 +508,6 @@ public class MainActivity extends AppCompatActivity {
 		};
 	}
 	
-	// --------------------
-	// ERROR HANDLER
-	// --------------------
-	
 	protected OnFailureListener onFailureListener() {
 		return new OnFailureListener() {
 			@Override
@@ -547,27 +527,6 @@ public class MainActivity extends AppCompatActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 //		getMenuInflater().inflate(R.menu.bottom_nav_menu, menu);
 		return true;
-	}
-	
-	public void getTokenFCM() {
-		FirebaseInstanceId
-				.getInstance()
-				.getInstanceId()
-				.addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-					@Override
-					public void onComplete(@NonNull Task<InstanceIdResult> task) {
-						if (!task.isSuccessful()) {
-							Log.w(TAG, "getInstanceId failed", task.getException());
-							return;
-						}
-						
-						// Get new Instance ID token
-						String token = task
-								.getResult()
-								.getToken();
-						
-					}
-				});
 	}
 	
 }

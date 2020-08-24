@@ -53,20 +53,24 @@ import remy.pouzet.go4lunch.viewmodel.RestaurantsListViewViewModel;
 
 public class MapViewFragment extends Fragment {
 	
-	public static final String PREFS = "PREFS";
-	String restaurant = "restaurant";
+	public static final  String            PREFS                                    = "PREFS";
+	public static final  String            PREF_KEY_LONGITUDE                       = "PREF_KEY_LONGITUDE";
+	public static final  String            PREF_KEY_LATITUDE                        = "PREF_KEY_LATITUDE";
+	private static final int               PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+	public               SharedPreferences mPreferences;
+	String                      restaurant = "restaurant";
+	//--------------------------------------------------//
+	// ------------------   Variables   --------------- //
+	//--------------------------------------------------//
+//	private MapViewViewModel MmapViewViewModel;
+	//	private RestaurantsListViewViewModel       mRestaurantsListViewViewModel;
+	FusedLocationProviderClient mFusedLocationClient;
 	private int    ProximityRadius = 100;
 	private double latitude, longitude;
 	//	public  ArrayList<String> clickedRestaurants = new ArrayList<>();
-	private GoogleMap         mMap;
-	
-	public static final  String                PREF_KEY_LONGITUDE                       = "PREF_KEY_LONGITUDE";
-	public static final  String                PREF_KEY_LATITUDE                        = "PREF_KEY_LATITUDE";
-	private static final int                   PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-	public               SharedPreferences     mPreferences;
-	private              ArrayList<Restaurant> mRestaurants                             = new ArrayList<>();
-	
-	public LocationCallback locationCallback = new LocationCallback() {
+	private GoogleMap             mMap;
+	private ArrayList<Restaurant> mRestaurants     = new ArrayList<>();
+	public  LocationCallback      locationCallback = new LocationCallback() {
 		@SuppressLint("CommitPrefEdits")
 		@Override
 		public void onLocationResult(LocationResult locationResult) {
@@ -94,17 +98,11 @@ public class MapViewFragment extends Fragment {
 			}
 		}
 	};
-	private              boolean           locationPermissionGranted;
-	//--------------------------------------------------//
-	// ------------------   Variables   --------------- //
-	//--------------------------------------------------//
-//	private MapViewViewModel MmapViewViewModel;
-	//	private RestaurantsListViewViewModel       mRestaurantsListViewViewModel;
-	FusedLocationProviderClient mFusedLocationClient;
+	private boolean               locationPermissionGranted;
 	//------------------------------------------------------//
 	// ------------------   Callbacks   ------------------- //
 	//------------------------------------------------------/
-	private OnMapReadyCallback callback = new OnMapReadyCallback() {
+	private OnMapReadyCallback    callback         = new OnMapReadyCallback() {
 		
 		@Override
 		public void onMapReady(GoogleMap map) {
@@ -113,6 +111,35 @@ public class MapViewFragment extends Fragment {
 			updateLocationUI();
 		}
 	};
+	
+	public void saveLocation() {
+		mPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+		putDouble(mPreferences.edit(), PREF_KEY_LATITUDE, latitude).apply();
+		putDouble(mPreferences.edit(), PREF_KEY_LONGITUDE, longitude).apply();
+	}
+	
+	public SharedPreferences.Editor putDouble(final SharedPreferences.Editor edit,
+	                                          final String key,
+	                                          final double value) {
+		return edit.putLong(key, Double.doubleToRawLongBits(value));
+	}
+	
+	@Override
+	public void onRequestPermissionsResult(int requestCode,
+	                                       String[] permissions,
+	                                       int[] grantResults) {
+		switch (requestCode) {
+			case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
+				// If request is cancelled, the result arrays are empty.
+				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					
+					// permission was granted, proceed to the normal flow.
+					locationPermissionGranted = true;
+					updateLocationUI();
+					getLocationAndCheckPermission();
+				}
+		}
+	}
 	
 	//--------------------------------------------------//
 	// ------------------ LifeCycle ------------------- //
@@ -123,25 +150,11 @@ public class MapViewFragment extends Fragment {
 	                         @Nullable ViewGroup container,
 	                         @Nullable Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.fragment_map_view, container, false);
-		
-		//TODO understand if I still need this part of code
-	/*	MmapViewViewModel = ViewModelProviders
-				.of(this)
-				.get(MapViewViewModel.class);
-		View           root     = inflater.inflate(R.layout.fragment_map_view, container, false);
-		final TextView textView = root.findViewById(R.id.text_map_view);
-
-		MmapViewViewModel
-				.getText()
-				.observe(getViewLifecycleOwner(), new Observer<String>() {
-					@Override
-					public void onChanged(@Nullable String s) {
-						textView.setText(s);
-					}
-				});
-		return root;*/
-		
 	}
+	
+	//------------------------------------------------------//
+	// ------------------   Functions   ------------------- //
+	//------------------------------------------------------//
 	
 	@SuppressLint("MissingPermission")
 	@Override
@@ -174,22 +187,6 @@ public class MapViewFragment extends Fragment {
 		mFusedLocationClient.removeLocationUpdates(locationCallback);
 	}
 	
-	//------------------------------------------------------//
-	// ------------------   Functions   ------------------- //
-	//------------------------------------------------------//
-	
-	public void saveLocation() {
-		mPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-		putDouble(mPreferences.edit(), PREF_KEY_LATITUDE, latitude).apply();
-		putDouble(mPreferences.edit(), PREF_KEY_LONGITUDE, longitude).apply();
-	}
-	
-	public SharedPreferences.Editor putDouble(final SharedPreferences.Editor edit,
-	                                          final String key,
-	                                          final double value) {
-		return edit.putLong(key, Double.doubleToRawLongBits(value));
-	}
-	
 	public void displayRestaurants(List<Restaurant> restaurants) {
 		mMap.clear();
 		for (Restaurant restaurant : restaurants) {
@@ -197,7 +194,24 @@ public class MapViewFragment extends Fragment {
 		}
 	}
 	
+	private void updateLocationUI() {
+		if (mMap == null) {
+			return;
+		}
+		try {
+			if (locationPermissionGranted) {
+				mMap.setMyLocationEnabled(true);
+			} else {
+				mMap.setMyLocationEnabled(false);
+			}
+		}
+		catch (SecurityException e) {
+			Log.e("Exception: %s", e.getMessage());
+		}
+	}
+	
 	public void getInterrestedWorkmatesFromFirebase(Restaurant restaurant) {
+		
 		UserHelper
 				.getInterestedUsers("user", restaurant.getMplaceID())
 				.get()
@@ -207,6 +221,28 @@ public class MapViewFragment extends Fragment {
 						manageMarker(restaurant);
 					}
 				});
+	}
+	
+	@SuppressLint("MissingPermission")
+	public void getLocationAndCheckPermission() {
+		
+		LocationRequest locationRequest = LocationRequest
+				.create()
+				.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+				.setSmallestDisplacement(50)
+				.setInterval(20 * 1000);
+		getLocationPermission();
+		mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+	}
+	
+	private void getLocationPermission() {
+		
+		if (ContextCompat.checkSelfPermission(this.requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+			locationPermissionGranted = true;
+			
+		} else {
+			ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+		}
 	}
 	
 	public void manageMarker(Restaurant restaurant) {
@@ -239,64 +275,9 @@ public class MapViewFragment extends Fragment {
 		mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 		mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
 		mMap.setOnInfoWindowClickListener(parameterMarker -> {
-			Restaurant r = (Restaurant) parameterMarker.getTag();
-			RestaurantDetailsActivity.startActivity(getActivity(), r);
+			Restaurant localRestaurant = (Restaurant) parameterMarker.getTag();
+			RestaurantDetailsActivity.startActivity(getActivity(), localRestaurant);
 		});
-	}
-	
-	@Override
-	public void onRequestPermissionsResult(int requestCode,
-	                                       String[] permissions,
-	                                       int[] grantResults) {
-		switch (requestCode) {
-			case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
-				// If request is cancelled, the result arrays are empty.
-				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					
-					// permission was granted, proceed to the normal flow.
-					locationPermissionGranted = true;
-					updateLocationUI();
-					getLocationAndCheckPermission();
-				}
-		}
-	}
-	
-	private void updateLocationUI() {
-		if (mMap == null) {
-			return;
-		}
-		try {
-			if (locationPermissionGranted) {
-				mMap.setMyLocationEnabled(true);
-			} else {
-				mMap.setMyLocationEnabled(false);
-			}
-		}
-		catch (SecurityException e) {
-			Log.e("Exception: %s", e.getMessage());
-		}
-	}
-	
-	@SuppressLint("MissingPermission")
-	public void getLocationAndCheckPermission() {
-		
-		LocationRequest locationRequest = LocationRequest
-				.create()
-				.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-				.setSmallestDisplacement(50)
-				.setInterval(20 * 1000);
-		getLocationPermission();
-		mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-	}
-	
-	private void getLocationPermission() {
-		
-		if (ContextCompat.checkSelfPermission(this.requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-			locationPermissionGranted = true;
-			
-		} else {
-			ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-		}
 	}
 }
 

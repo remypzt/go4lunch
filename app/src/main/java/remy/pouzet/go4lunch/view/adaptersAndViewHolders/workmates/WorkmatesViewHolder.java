@@ -107,7 +107,6 @@ public class WorkmatesViewHolder extends RecyclerView.ViewHolder {
 					@Override
 					public void onFailure(Call<ResponseOfPlaceDetailsRestaurants> call,
 					                      Throwable t) {
-						//TODO toast
 					}
 				});
 	}
