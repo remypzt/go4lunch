@@ -14,9 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
+import remy.pouzet.go4lunch.data.service.realAPI.UserHelper;
 import remy.pouzet.go4lunch.databinding.ContentItemsOfRestaurantsListViewBinding;
 import remy.pouzet.go4lunch.view.activities.RestaurantDetailsActivity;
 
@@ -25,7 +28,7 @@ import remy.pouzet.go4lunch.view.activities.RestaurantDetailsActivity;
  */
 class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 	
-	public int    mWorkmartesScore;
+	public String mWorkmartesScore;
 	public double mRatingScoreDouble;
 	
 	public  ImageView                                mPicture;
@@ -35,7 +38,7 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 	public  ConstraintLayout                         mConstraintLayout;
 	public  TextView                                 mDistance;
 	public  ImageView                                mEvaluation;
-	public  ImageView                                mWorkmatesInterrested;
+	public  TextView                                 mWorkmatesInterrested;
 	public  Drawable                                 mEvaluationScore;
 	public  ImageView                                mWorkmatesInterrestedScore;
 	private ContentItemsOfRestaurantsListViewBinding mContentItemsOfRestaurantsListViewBinding;
@@ -84,20 +87,37 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 			RestaurantDetailsActivity.startActivity(mConstraintLayout.getContext(), restaurant);
 			
 		});
-
-//		Glide
-//				.with(mWorkmatesInterrested.getContext())
-//				.load(
-//						getWorkmatesScorePicture();
-//				     )
-////				.placeholder(R.drawable.ic_launcher_background)
-//				.into(mWorkmatesInterrested);
-
-//		this.mConstraintLayout.setOnClickListener(v -> {
-//
-//			this.activity = activity;
-//			activity.startActivity(new Intent(activity, RestaurantDetails.class));
-//}
+		
+		manageWorkmatesNumber(restaurant);
+		
+	}
+	
+	public void manageWorkmatesNumber(Restaurant restaurant) {
+		UserHelper
+				.getInterestedUsers("user", restaurant.getMplaceID())
+				.get()
+				.addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+					@Override
+					public void onSuccess(QuerySnapshot parameterQueryDocumentSnapshots) {
+						if (UserHelper
+								    .getInterestedUsers("user", restaurant.getMplaceID())
+								    .get()
+								    .isSuccessful() && UserHelper
+										                       .getInterestedUsers("user", restaurant.getMplaceID())
+										                       .get()
+										                       .getResult() != null) {
+							mWorkmartesScore = String.valueOf(UserHelper
+									                                  .getInterestedUsers("user", restaurant.getMplaceID())
+									                                  .get()
+									                                  .getResult()
+									                                  .size());
+						} else {
+							mWorkmartesScore = "0";
+						}
+					}
+				});
+		this.mWorkmatesInterrested.setText(mWorkmartesScore);
+		
 	}
 	
 	public Drawable getRatingScorePicture(Restaurant restaurants) {
