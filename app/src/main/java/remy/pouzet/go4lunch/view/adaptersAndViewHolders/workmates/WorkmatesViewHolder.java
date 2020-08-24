@@ -12,6 +12,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
 import remy.pouzet.go4lunch.BuildConfig;
+import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.data.repositories.RestaurantsRepository;
 import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
 import remy.pouzet.go4lunch.data.repositories.models.User;
@@ -57,8 +58,11 @@ public class WorkmatesViewHolder extends RecyclerView.ViewHolder {
 			this.textViewProfile.setText(user.getUsername() + " hasn't decided yet");
 		}
 		
+		RequestOptions mRequestOption = new RequestOptions();
+		mRequestOption.placeholder(R.drawable.ic_anon_user_48dp);
 		glide
 				.load(user.getUrlPicture())
+				.apply(mRequestOption)
 				.apply(RequestOptions.circleCropTransform())
 				.into(imageViewProfile);
 	}

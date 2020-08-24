@@ -32,12 +32,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import remy.pouzet.go4lunch.R;
 import remy.pouzet.go4lunch.data.repositories.models.Restaurant;
+import remy.pouzet.go4lunch.data.service.realAPI.UserHelper;
 import remy.pouzet.go4lunch.view.activities.RestaurantDetailsActivity;
 import remy.pouzet.go4lunch.viewmodel.RestaurantsListViewViewModel;
 //------------------------------------------------------//
@@ -163,7 +166,6 @@ public class MapViewFragment extends Fragment {
 		if (mMap != null) {
 			displayRestaurants(mRestaurants);
 		}
-		
 	}
 	
 	@Override
@@ -189,66 +191,57 @@ public class MapViewFragment extends Fragment {
 	}
 	
 	public void displayRestaurants(List<Restaurant> restaurants) {
-		float markerColor;
 		mMap.clear();
 		for (Restaurant restaurant : restaurants) {
-			MarkerOptions markerOptions = new MarkerOptions();
-			
-			String nameOfPlace = restaurant.getName();
-			double lat         = restaurant.getMlat();
-			double lng         = restaurant.getMlon();
-			
-			LatLng latLng = new LatLng(lat, lng);
-//
-//			if (getInterrestedWorkmatesFromFirebase(restaurant) == true) {
-//				markerColor = BitmapDescriptorFactory.HUE_AZURE;
-//			} else {
-//				markerColor = BitmapDescriptorFactory.HUE_RED;
-//			}
-			markerColor = BitmapDescriptorFactory.HUE_AZURE;
-//			float  markerColor = (clickedRestaurants.contains(restaurant.getName()))
-//			                     ? BitmapDescriptorFactory.HUE_AZURE
-//			                     : BitmapDescriptorFactory.HUE_RED;
-			markerOptions
-					.position(latLng)
-					.title(nameOfPlace)
-//			.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_your_lunch))
-					.icon(BitmapDescriptorFactory.defaultMarker(markerColor));
-			
-			Marker marker = mMap.addMarker(markerOptions);
-			marker.setTag(restaurant);
-			mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-			mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
-			mMap.setOnInfoWindowClickListener(parameterMarker -> {
-				Restaurant r = (Restaurant) parameterMarker.getTag();
-				RestaurantDetailsActivity.startActivity(getActivity(), r);
-//				clickedRestaurants.add(r.getName());
-			});
+			getInterrestedWorkmatesFromFirebase(restaurant);
 		}
 	}
 	
-	public boolean getInterrestedWorkmatesFromFirebase(Restaurant restaurant) {
-		boolean response = false;
-//		UserHelper
-//				.getInterestedUsers("user", restaurant.getMplaceID())
-//				.get()
-//				.addOnSuccessListener(new OnSuccessListener<Query>() {
-//					@Override
-//					public void onSuccess(Query parameterQuery) {
-//						if (UserHelper
-//								    .getInterestedUsers("user", restaurant.getMplaceID())
-//								    .get()
-//								    .getResult() != null) {
-////							response = true;
-//						}
-//					}
-//				});
-
-//		 if (UserHelper.getInterestedUsers("user", restaurant.getMplaceID()).get().isSuccessful() &&
-//		     UserHelper.getInterestedUsers("user", restaurant.getMplaceID()).get().getResult() != null) {
-//		 	response = true;
-//		 }
-		return response;
+	public void getInterrestedWorkmatesFromFirebase(Restaurant restaurant) {
+		UserHelper
+				.getInterestedUsers("user", restaurant.getMplaceID())
+				.get()
+				.addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+					@Override
+					public void onSuccess(QuerySnapshot parameterQueryDocumentSnapshots) {
+						manageMarker(restaurant);
+					}
+				});
+	}
+	
+	public void manageMarker(Restaurant restaurant) {
+		MarkerOptions markerOptions = new MarkerOptions();
+		float         markerColor;
+		String        nameOfPlace   = restaurant.getName();
+		double        lat           = restaurant.getMlat();
+		double        lng           = restaurant.getMlon();
+		LatLng        latLng        = new LatLng(lat, lng);
+		
+		if (UserHelper
+				    .getInterestedUsers("user", restaurant.getMplaceID())
+				    .get()
+				    .isSuccessful() && UserHelper
+						                       .getInterestedUsers("user", restaurant.getMplaceID())
+						                       .get()
+						                       .getResult() != null) {
+			markerColor = BitmapDescriptorFactory.HUE_AZURE;
+		} else {
+			markerColor = BitmapDescriptorFactory.HUE_RED;
+		}
+		
+		markerOptions
+				.position(latLng)
+				.title(nameOfPlace)
+				.icon(BitmapDescriptorFactory.defaultMarker(markerColor));
+		
+		Marker marker = mMap.addMarker(markerOptions);
+		marker.setTag(restaurant);
+		mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+		mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+		mMap.setOnInfoWindowClickListener(parameterMarker -> {
+			Restaurant r = (Restaurant) parameterMarker.getTag();
+			RestaurantDetailsActivity.startActivity(getActivity(), r);
+		});
 	}
 	
 	@Override
@@ -305,6 +298,5 @@ public class MapViewFragment extends Fragment {
 			ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 		}
 	}
-	
 }
 

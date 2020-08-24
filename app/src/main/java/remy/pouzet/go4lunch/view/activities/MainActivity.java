@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -122,8 +123,6 @@ public class MainActivity extends AppCompatActivity {
 		signOutButton();
 		chatButon();
 		yourLunchButon();
-		setSearchViewVisibilityFragmentDepends();
-		
 	}
 	
 	//------------------------------------------------------//
@@ -167,10 +166,8 @@ public class MainActivity extends AppCompatActivity {
 			public void onDestinationChanged(@NonNull NavController controller,
 			                                 @NonNull NavDestination destination,
 			                                 @Nullable Bundle arguments) {
-
-//				android.widget.fragment localSearchView = mActivityMainBinding.mainToolbar.autocompleteFragment;
-//				SearchView localSearchView = mActivityMainBinding.mainToolbar.placesAutocompleteSearchBarContainer;
 				
+				SearchView localSearchView = mActivityMainBinding.mainToolbar.placesAutocompleteSearchBarContainer;
 				if (destination
 						    .getLabel()
 						    .toString()
@@ -178,21 +175,16 @@ public class MainActivity extends AppCompatActivity {
 								                            .getLabel()
 								                            .toString()
 								                            .equals("List View"))) {
-
-//					localSearchView.setVisibility(View.VISIBLE);
+					
+					localSearchView.setVisibility(View.VISIBLE);
 				} else {
-//					localSearchView.setVisibility(View.INVISIBLE);
-				
+					localSearchView.setVisibility(View.INVISIBLE);
+					
 				}
 			}
 		});
 	}
 	
-	private void setSearchViewVisibilityFragmentDepends() {
-//		SearchView localSearchView = mActivityMainBinding.mainToolbar.placesAutocompleteSearchBarContainer;
-//		localSearchView.setVisibility(View.INVISIBLE);
-	
-	}
 	
 	public void autoCompleteSearchAPI() {
 		getLocation();
@@ -242,159 +234,69 @@ public class MainActivity extends AppCompatActivity {
 		mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-//				                                   Toast
-//						                                   .makeText(MainActivity.this, mSearchView
-//								                                   .getQuery()
-//								                                   .toString(), Toast.LENGTH_SHORT)
-//						                                   .show();
-//
-				AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
-				
-				// Use the builder to create a FindAutocompletePredictionsRequest.
-				FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
-//			                                                                                    .setLocationBias(bounds)
-				                                                                               .setLocationRestriction(bounds)
-//			                                                                                    .setOrigin(new LatLng(latitude, longitude)
-				                                                                               .setTypeFilter(TypeFilter.ESTABLISHMENT)
-				                                                                               .setSessionToken(token)
-				                                                                               .setQuery(mSearchView
-		                                                                                                         .getQuery()
-		                                                                                                         .toString())
-				                                                                               .build();
-				placesClient
-						.findAutocompletePredictions(request)
-						.addOnSuccessListener(response -> {
-							mResult = new StringBuilder();
-							ArrayList<Restaurant> restaurantsList = new ArrayList<>();
-							for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
-								if (prediction
-										.getPlaceTypes()
-										.contains(Place.Type.RESTAURANT)) {
-									//It's work for listview but not for map
-									Restaurant restaurant = new Restaurant(prediction.getPlaceId(), "multimediaUrl", "Name", "Adress", "Horair", "Distance", 0, 0f, "phone number", "website",
-									                                       //TODO get latlng and loop for mapview
-									                                       latitude, longitude);
-									restaurantsList.add(restaurant);
-								}
-
-//								getRestaurantsDetails(restaurantsList);
-
-//								mResult
-//										.append(" ")
-//										.append(prediction.getFullText(null))
-//										.append("\n");
-//////
-//								Toast
-//										.makeText(MainActivity.this, prediction.getPrimaryText(null) + "-" + prediction.getSecondaryText(null), Toast.LENGTH_LONG)
-//										.show();
-							}
-							Toast
-									.makeText(MainActivity.this, String.valueOf(restaurantsList.size()), Toast.LENGTH_LONG)
-									.show();
-							RestaurantsRepository
-									.getInstance()
-									.getRestaurantsDetails(restaurantsList, latitude, longitude);
-//
-//
-						})
-						.addOnFailureListener((exception) -> {
-							if (exception instanceof ApiException) {
-								ApiException apiException = (ApiException) exception;
-//					Log.e(TAG, "Place not found: " + apiException.getStatusCode());
-								Toast
-										.makeText(MainActivity.this, "error", Toast.LENGTH_LONG)
-										.show();
-							}
-						});
-				
-				return false;
+				searchFunction(query, bounds, placesClient);
+				return searchFunction(query, bounds, placesClient);
 			}
 			
 			@Override
 			public boolean onQueryTextChange(String newText) {
+//				searchFunction(newText, bounds, placesClient);
+//				return searchFunction(newText, bounds, placesClient);
 				return false;
 			}
 		});
 		
 	}
-
-//	private void getRestaurantsDetails(List<Restaurant> restaurants) {
-//
-//		for (String placeID : placeIDs) {
-//
-//			RestaurantsRepository.getInstance().mRestaurantsApiInterfaceService
-//					.getResponseOfPlaceDetailsRestaurants(placeID, BuildConfig.apiKey)
-//					.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
-//						@Override
-//						public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
-//						                       Response<ResponseOfPlaceDetailsRestaurants> response) {
-//							if (response.isSuccessful()) {
-//
-////								destination = "place_id:" + restaurant.getMplaceID();
-////
-////								restaurant.setName(response
-////										                   .body()
-////										                   .getResult()
-////										                   .getName());
-////								restaurant.setAdress(response
-////										                     .body()
-////										                     .getResult()
-////										                     .getFormattedAddress());
-////								restaurant.setUrlImage("https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=" + response
-////										.body()
-////										.getResult()
-////										.getPhotos()
-////										.get(0)
-////										.getPhotoReference() + "&key=" + BuildConfig.apiKey);
-////
-////								restaurant.setEvaluation(response
-////										                         .body()
-////										                         .getResult()
-////										                         .getRating());
-////
-////								//TODO set lgn
-////								destinationLat = response
-////										.body()
-////										.getResult()
-////										.getGeometry()
-////										.getLocation()
-////										.getLat();
-////								destinationLng = response
-////										.body()
-////										.getResult()
-////										.getGeometry()
-////										.getLocation()
-////										.getLng();
-////
-////								restaurant.setDistance(getDistance(destinationLat, destinationLng, userLat, userLng));
-////
-////								restaurant.setHorair(getStatus(response));
-////
-//////								restaurant.setType();
-//////								restaurant.setWorkmatesInterrested();
-////
-////								restaurant.setWebsite(response
-////										                      .body()
-////										                      .getResult()
-////										                      .getWebsite());
-////								restaurant.setMphoneNumber(response
-////										                           .body()
-////										                           .getResult()
-////										                           .getInternationalPhoneNumber());
-////
-////								restaurants.setValue(restaurantdetails);
-//
-//							}
-//						}
-//
-//						@Override
-//						public void onFailure(Call<ResponseOfPlaceDetailsRestaurants> call,
-//						                      Throwable t) {
-//							//TODO toast
-//						}
-//					});
-//		}
-//	}
+	
+	public boolean searchFunction(String query,
+	                              RectangularBounds bounds,
+	                              PlacesClient placesClient) {
+		AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
+		
+		// Use the builder to create a FindAutocompletePredictionsRequest.
+		FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest
+				.builder()
+				.setLocationRestriction(bounds)
+				.setTypeFilter(TypeFilter.ESTABLISHMENT)
+				.setSessionToken(token)
+				.setQuery(mSearchView
+						          .getQuery()
+						          .toString())
+				.build();
+		placesClient
+				.findAutocompletePredictions(request)
+				.addOnSuccessListener(response -> {
+					mResult = new StringBuilder();
+					ArrayList<Restaurant> restaurantsList = new ArrayList<>();
+					for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
+						if (prediction
+								.getPlaceTypes()
+								.contains(Place.Type.RESTAURANT)) {
+							Restaurant restaurant = new Restaurant(prediction.getPlaceId(), "multimediaUrl", "Name", "Adress", "Horair", "Distance", 0, 0f, "phone number", "website",
+							
+							                                       latitude, longitude);
+							restaurantsList.add(restaurant);
+						}
+						
+					}
+					
+					RestaurantsRepository
+							.getInstance()
+							.getRestaurantsDetails(restaurantsList, latitude, longitude);
+					
+				})
+				.addOnFailureListener((exception) -> {
+					if (exception instanceof ApiException) {
+						ApiException apiException = (ApiException) exception;
+						
+						Toast
+								.makeText(MainActivity.this, "error", Toast.LENGTH_LONG)
+								.show();
+					}
+				});
+		
+		return false;
+	}
 	
 	public void getLocation() {
 		mPreferences = getPreferences(Context.MODE_PRIVATE);

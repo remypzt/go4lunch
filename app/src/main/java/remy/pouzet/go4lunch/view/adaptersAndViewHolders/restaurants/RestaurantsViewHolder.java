@@ -65,7 +65,7 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 		this.mName.setText(restaurant.getName());
 		this.mAdress.setText(restaurant.getAdress());
 		RequestOptions mRequestOption = new RequestOptions();
-		mRequestOption.placeholder(R.drawable.ic_launcher_background);
+		mRequestOption.placeholder(R.drawable.flou);
 		
 		Glide
 				.with(mPicture.getContext())
