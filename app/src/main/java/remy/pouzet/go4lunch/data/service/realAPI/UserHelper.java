@@ -25,8 +25,9 @@ public class UserHelper {
 	                                    String urlPicture,
 	                                    String placeID,
 	                                    String resaurantName,
+	                                    String adressRestaurant,
 	                                    List<String> likedRestaurants) {
-		User userToCreate = new User(uid, username, urlPicture, placeID, resaurantName, likedRestaurants);
+		User userToCreate = new User(uid, username, urlPicture, placeID, resaurantName, adressRestaurant, likedRestaurants);
 		return UserHelper
 				.getUsersCollection()
 				.document(uid)

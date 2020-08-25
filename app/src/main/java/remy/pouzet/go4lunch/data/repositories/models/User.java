@@ -14,6 +14,7 @@ public class User {
 	@Nullable private String       urlPicture;
 	private           String       placeID;
 	private           String       nameRestaurant;
+	private           String       adressRestaurant;
 	private           List<String> likedRestaurants;
 	
 	public User(String uid,
@@ -21,16 +22,26 @@ public class User {
 	            String urlPicture,
 	            String placeID,
 	            String nameRestaurant,
+	            String adressRestaurant,
 	            List<String> likedRestaurants) {
 		this.uid              = uid;
 		this.username         = username;
 		this.urlPicture       = urlPicture;
 		this.placeID          = placeID;
 		this.nameRestaurant   = nameRestaurant;
+		this.adressRestaurant = adressRestaurant;
 		this.likedRestaurants = likedRestaurants;
 	}
 	
 	public User() {
+	}
+	
+	public String getAdressRestaurant() {
+		return adressRestaurant;
+	}
+	
+	public void setAdressRestaurant(String parameterAdressRestaurant) {
+		adressRestaurant = parameterAdressRestaurant;
 	}
 	
 	public List<String> getLikedRestaurants() {

@@ -210,10 +210,11 @@ public class LoginActivity extends AppCompatActivity
 					.getUid();
 			String       placeID          = "test";
 			String       restaurantName   = null;
+			String       adressRestaurant = null;
 			List<String> likedRestaurants = null;
 			
 			UserHelper
-					.createUser(uid, username, urlPicture, placeID, restaurantName, likedRestaurants)
+					.createUser(uid, username, urlPicture, placeID, restaurantName, adressRestaurant, likedRestaurants)
 					.addOnFailureListener(this.onFailureListener());
 		}
 	}
