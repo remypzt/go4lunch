@@ -208,7 +208,7 @@ public class LoginActivity extends AppCompatActivity
 			String uid = this
 					.getCurrentUser()
 					.getUid();
-			String       placeID          = "test";
+			String       placeID          = null;
 			String       restaurantName   = null;
 			String       adressRestaurant = null;
 			List<String> likedRestaurants = null;

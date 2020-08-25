@@ -214,7 +214,6 @@ public class MainActivity extends AppCompatActivity {
 		
 		RectangularBounds bounds = RectangularBounds.newInstance(getCoordinate(latitude, longitude, -10000, -10000), getCoordinate(latitude, longitude, 10000, 10000));
 		
-		
 		//PROGRAMMATICALY
 		mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
@@ -408,11 +407,15 @@ public class MainActivity extends AppCompatActivity {
 					@Override
 					public void onSuccess(DocumentSnapshot documentSnapshot) {
 						User currentUser = documentSnapshot.toObject(User.class);
-						String username = TextUtils.isEmpty(currentUser.getUsername())
-						                  ? getString(R.string.info_no_username_found)
-						                  : currentUser.getUsername();
-//				textInputEditTextUsername.setText(username);
+						if (currentUser != null) {
+							String username = TextUtils.isEmpty(currentUser.getUsername())
+							                  ? getString(R.string.info_no_username_found)
+							                  : currentUser.getUsername();
+						} else {
+							String username = "non renseigné";
+						}
 					}
+//				textInputEditTextUsername.setText(username);
 				});
 	}
 	

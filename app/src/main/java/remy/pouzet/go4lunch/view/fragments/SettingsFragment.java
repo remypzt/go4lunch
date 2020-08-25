@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -17,10 +18,8 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,6 +49,9 @@ public class SettingsFragment extends Fragment {
 	private SettingsViewModel       mSettingsViewModel;
 	private FragmentSettingsBinding binding;
 	private ActivityMainBinding     mMainBinding;
+	
+	private static final int SIGN_OUT_TASK    = 10;
+	private static final int DELETE_USER_TASK = 20;
 
 //------------------------------------------------------//
 // ------------------   LifeCycle   ------------------- //
@@ -63,24 +65,10 @@ public class SettingsFragment extends Fragment {
 		View view = binding.getRoot();
 		
 		updateUIWhenCreating();
+		updateUsernameInFirebase();
 		seekBarManagement();
 		return view;
-
-//		mSettingsViewModel = ViewModelProviders
-//				.of(this)
-//				.get(SettingsViewModel.class);
-//		View           root     = inflater.inflate(R.layout.fragment_settings, container, false);
-//
-//		mSettingsViewModel
-//				.getText()
-//				.observe(this, new Observer<String>() {
-//					@Override
-//					public void onChanged(@Nullable String s) {
-//
-//					}
-//				});
-//		return root;
-	
+		
 	}
 	
 	@Override
@@ -114,29 +102,36 @@ public class SettingsFragment extends Fragment {
 		});
 	}
 	
-	private void deleteUserFromFirebase() {
-		FirebaseUser user = FirebaseAuth
-				.getInstance()
-				.getCurrentUser();
-		
-		AuthCredential credential = EmailAuthProvider.getCredential("user@example.com", "password1234");
-
-// Prompt the user to re-provide their sign-in credentials
-		user
-				.reauthenticate(credential)
-				.addOnCompleteListener(new OnCompleteListener<Void>() {
-					@Override
-					public void onComplete(@NonNull Task<Void> task) {
-						//4 - We also delete user from firestore storage
+	private void updateUsernameInFirebase() {
+		binding.settingsFragmentButtonUpdate.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				EditText usernameEdit = binding.settingsFragmentEditTextUsername;
+				String username = usernameEdit
+						.getText()
+						.toString();
+				FirebaseUser user = FirebaseAuth
+						.getInstance()
+						.getCurrentUser();
+				
+				if (user != null) {
+					if (!username.isEmpty() && !username.equals(getString(R.string.info_no_username_found))) {
 						UserHelper
-								.deleteUser(getCurrentUser().getUid())
-								.addOnFailureListener(onFailureListener());
-						user.delete();
-						Intent intent = new Intent(requireContext(), MainActivity.class);
-						startActivity(intent);
+								.updateUsername(username, user.getUid())
+								.addOnFailureListener(onFailureListener())
+								.addOnSuccessListener(new OnSuccessListener<Void>() {
+									@Override
+									public void onSuccess(Void parameterVoid) {
+										Toast
+												.makeText(requireContext(), "username is update", Toast.LENGTH_LONG)
+												.show();
+									}
+								});
+						
 					}
-					
-				});
+				}
+			}
+		});
 		
 	}
 	
@@ -151,19 +146,30 @@ public class SettingsFragment extends Fragment {
 		};
 	}
 	
-	//TODO MAJ username
-	// 3 - Update User Username
-//	private void updateUsernameInFirebase(){
-//
-//		this.progressBar.setVisibility(View.VISIBLE);
-//		String username = this.textInputEditTextUsername.getText().toString();
-//
-//		if (this.getCurrentUser() != null){
-//			if (!username.isEmpty() &&  !username.equals(getString(R.string.info_no_username_found))){
-//				UserHelper.updateUsername(username, this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener()).addOnSuccessListener(this.updateUIAfterRESTRequestsCompleted(UPDATE_USERNAME));
-//			}
-//		}
-//	}
+	private void deleteUserFromFirebase() {
+		FirebaseUser user = FirebaseAuth
+				.getInstance()
+				.getCurrentUser();
+		
+		AuthCredential credential = EmailAuthProvider.getCredential("user@example.com", "password1234");
+
+// Prompt the user to re-provide their sign-in credentials
+		user
+				.reauthenticate(credential)
+				.addOnSuccessListener(new OnSuccessListener<Void>() {
+					@Override
+					public void onSuccess(Void parameterVoid) {
+						//4 - We also delete user from firestore storage
+						UserHelper
+								.deleteUser(getCurrentUser().getUid())
+								.addOnFailureListener(onFailureListener());
+						user.delete();
+						Intent intent = new Intent(requireContext(), MainActivity.class);
+						startActivity(intent);
+					}
+				});
+		
+	}
 	
 	//------------------------------------------------------//
 	// ------------------Navigation & UI------------------- //

@@ -82,27 +82,27 @@ public class RestaurantsRepository {
 	                                  double userLat,
 	                                  double userLng) {
 		//LIMITE
-		for (Restaurant restaurant : restaurantdetails) {
-//		Restaurant restaurant = restaurantdetails.get(1);
-			mRestaurantsApiInterfaceService
-					.getResponseOfPlaceDetailsRestaurants(restaurant.getMplaceID(), BuildConfig.apiKey)
-					.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
-						@Override
-						public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
-						                       Response<ResponseOfPlaceDetailsRestaurants> response) {
-							if (response.isSuccessful()) {
-								
-								destination = "place_id:" + restaurant.getMplaceID();
-								
-								restaurant.setName(response
-										                   .body()
-										                   .getResult()
-										                   .getName());
-								restaurant.setAdress(response
-										                     .body()
-										                     .getResult()
-										                     .getFormattedAddress());
-								if (response
+//		for (Restaurant restaurant : restaurantdetails) {
+		Restaurant restaurant = restaurantdetails.get(0);
+		mRestaurantsApiInterfaceService
+				.getResponseOfPlaceDetailsRestaurants(restaurant.getMplaceID(), BuildConfig.apiKey)
+				.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
+					@Override
+					public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
+					                       Response<ResponseOfPlaceDetailsRestaurants> response) {
+						if (response.isSuccessful()) {
+							
+							destination = "place_id:" + restaurant.getMplaceID();
+							
+							restaurant.setName(response
+									                   .body()
+									                   .getResult()
+									                   .getName());
+							restaurant.setAdress(response
+									                     .body()
+									                     .getResult()
+									                     .getFormattedAddress());
+							if (response
 										    .body()
 										    .getResult()
 										    .getPhotos() == null) {
@@ -142,9 +142,6 @@ public class RestaurantsRepository {
 								restaurant.setDistance(getDistance(destinationLat, destinationLng, userLat, userLng));
 								
 								restaurant.setHorair(getStatus(response));
-
-//								restaurant.setType();
-//								restaurant.setWorkmatesInterrested();
 								
 								restaurant.setWebsite(response
 										                      .body()
@@ -156,7 +153,6 @@ public class RestaurantsRepository {
 										                           .getInternationalPhoneNumber());
 								
 								restaurants.setValue(restaurantdetails);
-								
 							}
 						}
 						
@@ -166,7 +162,7 @@ public class RestaurantsRepository {
 						}
 					});
 		}
-	}
+//	}
 	
 	public String getDistance(double destinationLat,
 	                          double destinationLng,
