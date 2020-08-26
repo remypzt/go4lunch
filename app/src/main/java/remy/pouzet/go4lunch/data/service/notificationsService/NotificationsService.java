@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -75,11 +76,23 @@ public class NotificationsService extends FirebaseMessagingService {
 						                          ? getString(R.string.info_no_username_found)
 						                          : currentUser.getAdressRestaurant();
 						
+						UserHelper
+								.getInterestedUsers("user", placeID)
+								.get()
+								.addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+									@Override
+									public void onSuccess(QuerySnapshot parameterQueryDocumentSnapshots) {
+//								DocumentSnapshot doc =
+//								parameterQueryDocumentSnapshots.getDocuments().get(0).get().
+
+//								String message = "Bonjour" + username + ", vous avez sélectionné " + restaurantName + "comme restaurant pour ce midi. Retrouvez y " + workmatesNames + " à " + restaurantAdress;
+//
+//								sendVisualNotification(message);
+									}
+								});
+						
 						String workmatesNames = String.valueOf(UserHelper.getInterestedUsers("user", placeID));
-						
-						String message = "Bonjour" + username + ", vous avez sélectionné " + restaurantName + "comme restaurant pour ce midi. Retrouvez y " + workmatesNames + " à " + restaurantAdress;
-						
-						sendVisualNotification(message);
+
 //
 //						List<String> datasFromFireBaseList = new ArrayList<>();
 //						datasFromFireBaseList.add(username);

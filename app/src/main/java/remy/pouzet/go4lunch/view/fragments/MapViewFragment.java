@@ -218,7 +218,7 @@ public class MapViewFragment extends Fragment {
 				.addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 					@Override
 					public void onSuccess(QuerySnapshot parameterQueryDocumentSnapshots) {
-						manageMarker(restaurant);
+						manageMarker(restaurant, parameterQueryDocumentSnapshots.size());
 					}
 				});
 	}
@@ -245,7 +245,8 @@ public class MapViewFragment extends Fragment {
 		}
 	}
 	
-	public void manageMarker(Restaurant restaurant) {
+	public void manageMarker(Restaurant restaurant,
+	                         int nbWorkmates) {
 		MarkerOptions markerOptions = new MarkerOptions();
 		float         markerColor;
 		String        nameOfPlace   = restaurant.getName();
@@ -253,13 +254,7 @@ public class MapViewFragment extends Fragment {
 		double        lng           = restaurant.getMlon();
 		LatLng        latLng        = new LatLng(lat, lng);
 		
-		if (UserHelper
-				    .getInterestedUsers("user", restaurant.getMplaceID())
-				    .get()
-				    .isSuccessful() && UserHelper
-						                       .getInterestedUsers("user", restaurant.getMplaceID())
-						                       .get()
-						                       .getResult() != null) {
+		if (nbWorkmates > 0) {
 			markerColor = BitmapDescriptorFactory.HUE_AZURE;
 		} else {
 			markerColor = BitmapDescriptorFactory.HUE_RED;

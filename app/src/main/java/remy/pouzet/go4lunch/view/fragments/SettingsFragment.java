@@ -20,8 +20,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -151,23 +149,31 @@ public class SettingsFragment extends Fragment {
 				.getInstance()
 				.getCurrentUser();
 		
-		AuthCredential credential = EmailAuthProvider.getCredential("user@example.com", "password1234");
+		//4 - We also delete user from firestore storage
+		UserHelper
+				.deleteUser(getCurrentUser().getUid())
+				.addOnFailureListener(onFailureListener());
+		user.delete();
+		Intent intent = new Intent(requireContext(), MainActivity.class);
+		startActivity(intent);
 
-// Prompt the user to re-provide their sign-in credentials
-		user
-				.reauthenticate(credential)
-				.addOnSuccessListener(new OnSuccessListener<Void>() {
-					@Override
-					public void onSuccess(Void parameterVoid) {
-						//4 - We also delete user from firestore storage
-						UserHelper
-								.deleteUser(getCurrentUser().getUid())
-								.addOnFailureListener(onFailureListener());
-						user.delete();
-						Intent intent = new Intent(requireContext(), MainActivity.class);
-						startActivity(intent);
-					}
-				});
+//		AuthCredential credential = EmailAuthProvider.getCredential("user@example.com", "password1234");
+//
+//// Prompt the user to re-provide their sign-in credentials
+//		user
+//				.reauthenticate(credential)
+//				.addOnSuccessListener(new OnSuccessListener<Void>() {
+//					@Override
+//					public void onSuccess(Void parameterVoid) {
+//						//4 - We also delete user from firestore storage
+//						UserHelper
+//								.deleteUser(getCurrentUser().getUid())
+//								.addOnFailureListener(onFailureListener());
+//						user.delete();
+//						Intent intent = new Intent(requireContext(), MainActivity.class);
+//						startActivity(intent);
+//					}
+//				});
 		
 	}
 	

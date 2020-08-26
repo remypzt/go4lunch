@@ -122,6 +122,12 @@ public class MainActivity extends AppCompatActivity {
 		yourLunchButon();
 	}
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		updateWithUserStatus();
+	}
+	
 	//------------------------------------------------------//
 	// ------------------   Functions   ------------------- //
 	//------------------------------------------------------//
@@ -356,7 +362,6 @@ public class MainActivity extends AppCompatActivity {
 		
 		return false;
 	}
-	
 	public double getDouble(final SharedPreferences prefs,
 	                        final String key,
 	                        final double defaultValue) {
@@ -496,10 +501,10 @@ public class MainActivity extends AppCompatActivity {
 		return aVoid -> {
 			switch (origin) {
 				case SIGN_OUT_TASK:
-					finish();
+//					finish();
 					break;
 				case DELETE_USER_TASK:
-					finish();
+//					finish();
 					break;
 				// 8 - Hiding Progress bar after request completed
 				case UPDATE_USERNAME:

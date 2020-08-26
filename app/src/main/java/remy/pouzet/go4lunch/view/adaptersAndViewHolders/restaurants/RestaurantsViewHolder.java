@@ -99,24 +99,14 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 				.addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 					@Override
 					public void onSuccess(QuerySnapshot parameterQueryDocumentSnapshots) {
-						if (UserHelper
-								    .getInterestedUsers("user", restaurant.getMplaceID())
-								    .get()
-								    .isSuccessful() && UserHelper
-										                       .getInterestedUsers("user", restaurant.getMplaceID())
-										                       .get()
-										                       .getResult() != null) {
-							mWorkmartesScore = String.valueOf(UserHelper
-									                                  .getInterestedUsers("user", restaurant.getMplaceID())
-									                                  .get()
-									                                  .getResult()
-									                                  .size());
-						} else {
-							mWorkmartesScore = "0";
+						if (parameterQueryDocumentSnapshots != null) {
+							mWorkmatesInterrested.setText(String.valueOf(parameterQueryDocumentSnapshots.size()));
 						}
+
+//
 					}
 				});
-		this.mWorkmatesInterrested.setText(mWorkmartesScore);
+//
 		
 	}
 	
