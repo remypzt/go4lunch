@@ -82,17 +82,17 @@ public class RestaurantsRepository {
 	                                  double userLat,
 	                                  double userLng) {
 		//LIMITE
-		for (Restaurant restaurant : restaurantdetails) {
-//		Restaurant restaurant = restaurantdetails.get(0);
-			mRestaurantsApiInterfaceService
-					.getResponseOfPlaceDetailsRestaurants(restaurant.getMplaceID(), BuildConfig.apiKey)
-					.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
-						@Override
-						public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
-						                       Response<ResponseOfPlaceDetailsRestaurants> response) {
-							if (response.isSuccessful()) {
-								
-								destination = "place_id:" + restaurant.getMplaceID();
+//		for (Restaurant restaurant : restaurantdetails) {
+		Restaurant restaurant = restaurantdetails.get(0);
+		mRestaurantsApiInterfaceService
+				.getResponseOfPlaceDetailsRestaurants(restaurant.getMplaceID(), BuildConfig.apiKey)
+				.enqueue(new Callback<ResponseOfPlaceDetailsRestaurants>() {
+					@Override
+					public void onResponse(Call<ResponseOfPlaceDetailsRestaurants> call,
+					                       Response<ResponseOfPlaceDetailsRestaurants> response) {
+						if (response.isSuccessful()) {
+							
+							destination = "place_id:" + restaurant.getMplaceID();
 								
 								restaurant.setName(response
 										                   .body()
@@ -162,7 +162,7 @@ public class RestaurantsRepository {
 						}
 					});
 		}
-	}
+//	}
 	
 	public String getDistance(double destinationLat,
 	                          double destinationLng,

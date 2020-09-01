@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -154,6 +155,11 @@ public class SettingsFragment extends Fragment {
 				.deleteUser(getCurrentUser().getUid())
 				.addOnFailureListener(onFailureListener());
 		user.delete();
+		
+		AuthUI
+				.getInstance()
+				.signOut(requireContext());
+		
 		Intent intent = new Intent(requireContext(), MainActivity.class);
 		startActivity(intent);
 
@@ -174,7 +180,7 @@ public class SettingsFragment extends Fragment {
 //						startActivity(intent);
 //					}
 //				});
-		
+	
 	}
 	
 	//------------------------------------------------------//
