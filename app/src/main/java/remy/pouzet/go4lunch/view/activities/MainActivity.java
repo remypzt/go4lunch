@@ -94,10 +94,7 @@ public class MainActivity extends AppCompatActivity {
 	private              StringBuilder       mResult;
 	private              double              latitude, longitude;
 	
-	//TODO MAJ username
-//	@OnClick(R.id.profile_activity_button_update)
-//	public void onClickUpdateButton() { this.updateUsernameInFirebase();
-	
+
 	//------------------------------------------------------//
 	// ------------------   LifeCycle   ------------------- //
 	//------------------------------------------------------//
@@ -106,8 +103,7 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		mActivityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
 		setContentView(mActivityMainBinding.getRoot());
-
-//		setSupportActionBar(mAppBarMainBinding.toolbar);
+		
 		Toolbar toolbar = mActivityMainBinding.mainToolbar.toolbar;
 		mSearchView = mActivityMainBinding.mainToolbar.placesAutocompleteSearchBarContainer;
 		
