@@ -36,7 +36,6 @@ public class RestaurantsRepository {
 	public              String                         horairs, status;
 	public  SharedPreferences                 mPreferences;
 	private MutableLiveData<List<Restaurant>> restaurants;
-	//	private             ContentItemsOfRestaurantsListViewBinding binding;
 	private double                            latitude, longitude, destinationLat, destinationLng;
 	private float unformatedDistance;
 	
@@ -197,8 +196,6 @@ public class RestaurantsRepository {
 		
 		return distance;
 	}
-
-//	}
 	
 	public String getStatus(Response<ResponseOfPlaceDetailsRestaurants> response) {
 		if (response != null && response.body() != null && response

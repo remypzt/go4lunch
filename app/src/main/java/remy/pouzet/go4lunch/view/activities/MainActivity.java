@@ -418,7 +418,6 @@ public class MainActivity extends AppCompatActivity {
 							String username = "non renseigné";
 						}
 					}
-//				textInputEditTextUsername.setText(username);
 				});
 	}
 	
@@ -499,14 +498,11 @@ public class MainActivity extends AppCompatActivity {
 		return aVoid -> {
 			switch (origin) {
 				case SIGN_OUT_TASK:
-//					finish();
 					break;
 				case DELETE_USER_TASK:
-//					finish();
 					break;
 				// 8 - Hiding Progress bar after request completed
 				case UPDATE_USERNAME:
-//					progressBar.setVisibility(View.INVISIBLE);
 					break;
 				default:
 					break;

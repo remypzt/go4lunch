@@ -83,24 +83,6 @@ public class WorkmatesFragment extends Fragment implements WorkmatesAdapter.List
 		recyclerView.setAdapter(this.mWorkmatesAdapter);
 	}
 	
-	// --------------------
-//	// REST REQUESTS
-//	// --------------------
-//	// 4 - Get Current User from Firestore
-//	private void getCurrentUserFromFirestore() {
-//		UserHelper
-//				.getUser(FirebaseAuth
-//						         .getInstance()
-//						         .getCurrentUser()
-//						         .getUid())
-//				.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//					@Override
-//					public void onSuccess(DocumentSnapshot documentSnapshot) {
-//						modelCurrentUser = documentSnapshot.toObject(User.class);
-//					}
-//				});
-//	}
-	
 	// 6 - Create options for RecyclerView from a Query
 	private FirestoreRecyclerOptions<User> generateOptionsForAdapter(Query query) {
 		return new FirestoreRecyclerOptions.Builder<User>()

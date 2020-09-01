@@ -66,7 +66,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 		onClickSendMessage();
 		onClickChatButtons();
 		this.configureRecyclerView(CHAT_NAME_ANDROID);
-//		this.configureToolbar();
+
 		this.getCurrentUserFromFirestore();
 	}
 	
@@ -86,7 +86,8 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 			@Override
 			public void onItemRangeInserted(int positionStart,
 			                                int itemCount) {
-				recyclerView.smoothScrollToPosition(mentorChatAdapter.getItemCount()); // Scroll to bottom on new messages
+				recyclerView.smoothScrollToPosition(mentorChatAdapter.getItemCount());
+				// Scroll to bottom on new messages
 			}
 		});
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -155,11 +156,6 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 				.setLifecycleOwner(this)
 				.build();
 	}
-
-//	@Override
-//	public int getFragmentLayout() {
-//		return R.layout.activity_chat;
-//	}
 	
 	@OnClick(R.id.activity_chat_add_file_button)
 	public void onClickAddFile() {

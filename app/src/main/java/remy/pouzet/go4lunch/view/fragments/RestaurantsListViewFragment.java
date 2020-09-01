@@ -47,11 +47,6 @@ public class RestaurantsListViewFragment extends Fragment {
 	                         ViewGroup container,
 	                         Bundle savedInstanceState) {
 
-//		mRestaurantsListViewViewModel = ViewModelProviders
-//				.of(this)
-//				.get(RestaurantsListViewViewModel.class);
-//
-		//	private RestaurantsListViewViewModel       mRestaurantsListViewViewModel;
 		remy.pouzet.go4lunch.databinding.FragmentRestaurantsListViewBinding localFragmentRestaurantsListViewBinding = FragmentRestaurantsListViewBinding.inflate(getLayoutInflater());
 		mRestaurantsReyclerView = localFragmentRestaurantsListViewBinding.fragmentRestaurantsRecyclerView;
 		View rootView = localFragmentRestaurantsListViewBinding.getRoot();

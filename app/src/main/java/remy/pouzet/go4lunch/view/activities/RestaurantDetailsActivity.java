@@ -112,11 +112,6 @@ public class RestaurantDetailsActivity extends AppCompatActivity implements Work
 	private void configureRecyclerView() {
 		//Configure Adapter & RecyclerView
 		this.mWorkmatesAdapter = new WorkmatesAdapter(generateOptionsForAdapter(UserHelper.getInterestedUsers("user", restaurant.getMplaceID())), Glide.with(this), this, uid);
-
-//		new WorkmatesAdapter(generateOptionsForAdapter(UserHelper.getAllUsers("user")),
-//		                     Glide.with(this),
-//		                     this,
-//		                     uid);
 		
 		mWorkmatesAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
 			@Override
@@ -236,23 +231,8 @@ public class RestaurantDetailsActivity extends AppCompatActivity implements Work
 	
 	public Drawable getRatingScorePicture(Restaurant restaurants) {
 		mRatingScoreDouble = restaurants.getEvaluation();
-//		mRatingScoreDouble = (mRatingScoreDouble * 3) / 5;
-//		mRatingScore       = ((int) Math.round(mRatingScoreDouble));
 		Resources resources = getResources();
 
-//		switch (mRatingScore) {
-//			case 1:
-//				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star_border_24, null);
-//				break;
-//			case 2:
-//				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_star_half_24, null);
-//				break;
-//			case 3:
-//				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star, null);
-//			default:
-//				mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.invisible, null);
-//				break;
-//		}
 		
 		if (mRatingScoreDouble < 1.6) {
 			mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.ic_star_border_24, null);

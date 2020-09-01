@@ -92,19 +92,21 @@ public class NotificationsService extends FirebaseMessagingService {
 															.getDocuments()
 															.get(i);
 													User user = doc.toObject(User.class);
-//											if (!user.getUsername().equals(username)){
-													if (i == queryDocumentSnapshots
-															         .getDocuments()
-															         .size() - 1) {
-														totalWorkmates.append("et " + user.getUsername() + ".");
-													} else {
-														totalWorkmates.append(user.getUsername() + ", ");
+													if (!user
+															.getUsername()
+															.equals(username)) {
+														if (i == queryDocumentSnapshots
+																         .getDocuments()
+																         .size() - 1) {
+															totalWorkmates.append("et " + user.getUsername() + ".");
+														} else {
+															totalWorkmates.append(user.getUsername() + ", ");
+														}
 													}
-//											}
 												}
 												messagePart2 = "Retrouvez y " + totalWorkmates;
 											}
-//
+
 											
 											String messagePart1 = "Bonjour " + username + ", vous avez sélectionné " + restaurantName + " comme restaurant pour ce midi.";
 											message = messagePart1;
@@ -123,17 +125,9 @@ public class NotificationsService extends FirebaseMessagingService {
 							sendVisualNotification(message);
 						}
 						
-	
-//						List<String> datasFromFireBaseList = new ArrayList<>();
-//						datasFromFireBaseList.add(username);
-//						datasFromFireBaseList.add(restaurantName);
-//						datasFromFireBaseList.add(workmatesNames);
-//						datasFromFireBaseList.add(restaurantAdress);
 					}
 				});
 	}
-	
-	// ---
 	
 	private void sendVisualNotification(String messageBody) {
 		
@@ -141,9 +135,6 @@ public class NotificationsService extends FirebaseMessagingService {
 		Intent        intent        = new Intent(this, MainActivity.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
-//		// 2 - Create a Style for the Notification
-//		NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-//		inboxStyle.addLine(messageBody);
 		
 		// 3 - Create a Channel (Android 8)
 		String channelId = getString(R.string.default_notification_channel_id);

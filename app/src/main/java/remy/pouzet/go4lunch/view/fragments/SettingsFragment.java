@@ -181,24 +181,6 @@ public class SettingsFragment extends Fragment {
 		
 		Intent intent = new Intent(requireContext(), MainActivity.class);
 		startActivity(intent);
-
-//		AuthCredential credential = EmailAuthProvider.getCredential("user@example.com", "password1234");
-//
-//// Prompt the user to re-provide their sign-in credentials
-//		user
-//				.reauthenticate(credential)
-//				.addOnSuccessListener(new OnSuccessListener<Void>() {
-//					@Override
-//					public void onSuccess(Void parameterVoid) {
-//						//4 - We also delete user from firestore storage
-//						UserHelper
-//								.deleteUser(getCurrentUser().getUid())
-//								.addOnFailureListener(onFailureListener());
-//						user.delete();
-//						Intent intent = new Intent(requireContext(), MainActivity.class);
-//						startActivity(intent);
-//					}
-//				});
 	
 	}
 	
@@ -253,7 +235,6 @@ public class SettingsFragment extends Fragment {
 						String username = TextUtils.isEmpty(currentUser.getUsername())
 						                  ? getString(R.string.info_no_username_found)
 						                  : currentUser.getUsername();
-//				textInputEditTextUsername.setText(username);
 					}
 				});
 	}
@@ -281,7 +262,6 @@ public class SettingsFragment extends Fragment {
 				// this operation is to define  set an intertval step
 				progress = (progress / 20) * 20;
 				seekBar.setProgress(progress);
-//				progress = binding.seekBar2.getProgress();
 				binding.customizeRadiusTextView.setText(getString(R.string.rayon_de_recherche) + binding.seekBar2.getProgress() + getString(R.string.metres));
 				
 			}

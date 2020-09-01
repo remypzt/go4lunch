@@ -62,12 +62,9 @@ public class MapViewFragment extends Fragment {
 	//--------------------------------------------------//
 	// ------------------   Variables   --------------- //
 	//--------------------------------------------------//
-//	private MapViewViewModel MmapViewViewModel;
-	//	private RestaurantsListViewViewModel       mRestaurantsListViewViewModel;
 	FusedLocationProviderClient mFusedLocationClient;
 	private int    ProximityRadius = 100;
 	private double latitude, longitude;
-	//	public  ArrayList<String> clickedRestaurants = new ArrayList<>();
 	private GoogleMap             mMap;
 	private ArrayList<Restaurant> mRestaurants     = new ArrayList<>();
 	public  LocationCallback      locationCallback = new LocationCallback() {

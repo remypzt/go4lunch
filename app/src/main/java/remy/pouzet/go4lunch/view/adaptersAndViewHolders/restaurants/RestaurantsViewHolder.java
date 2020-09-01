@@ -102,12 +102,8 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 						if (parameterQueryDocumentSnapshots != null) {
 							mWorkmatesInterrested.setText(String.valueOf(parameterQueryDocumentSnapshots.size()));
 						}
-
-//
 					}
 				});
-//
-		
 	}
 	
 	public Drawable getRatingScorePicture(Restaurant restaurants) {

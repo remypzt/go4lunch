@@ -11,10 +11,10 @@ public class Restaurant implements Serializable {
 	double mlat;
 	double mlon;
 	private String mplaceID;
-	//	private int    mDrawableImage;
+	
 	private String mUrlImage;
 	private String mName;
-	//	private String mType;
+	
 	private String mAdress;
 	private String mHorair;
 	private String mDistance;
@@ -22,10 +22,8 @@ public class Restaurant implements Serializable {
 	private double mEvaluation;
 	
 	public Restaurant(String placeID,
-//	                  int drawableImage,
                       String urlImage,
                       String name,
-//	                  String type,
                       String adress,
                       String horair,
                       String distance,
@@ -36,10 +34,8 @@ public class Restaurant implements Serializable {
                       double lat,
                       double lon) {
 		mplaceID = placeID;
-//		mDrawableImage        = drawableImage;
 		mUrlImage = urlImage;
 		mName     = name;
-//		mType                 = type;
 		mAdress               = adress;
 		mHorair               = horair;
 		mDistance             = distance;
@@ -72,9 +68,6 @@ public class Restaurant implements Serializable {
 		return mphoneNumber;
 	}
 
-//	public int getDrawableImage() {
-//		return mDrawableImage;
-//	}
 	
 	public void setMphoneNumber(String parameterMphoneNumber) {
 		mphoneNumber = parameterMphoneNumber;
@@ -99,10 +92,6 @@ public class Restaurant implements Serializable {
 	public String getUrlImage() {
 		return mUrlImage;
 	}
-
-//	public void setDrawableImage(int parameterDrawableImage) {
-//		mDrawableImage = parameterDrawableImage;
-//	}
 	
 	public void setUrlImage(String parameterUrlImage) {
 		mUrlImage = parameterUrlImage;
@@ -116,15 +105,6 @@ public class Restaurant implements Serializable {
 		mName = parameterName;
 	}
 	
-	//
-//	public String getType() {
-//		return mType;
-//	}
-//
-//	public void setType(String parameterType) {
-//		mType = parameterType;
-//	}
-//
 	public String getAdress() {
 		return mAdress;
 	}
