@@ -46,9 +46,9 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 	ImageView         imageViewPreview;
 	// FOR DATA
 	// 2 - Declaring Adapter and data
-	private           ChatAdapter         mentorChatAdapter;
-	@Nullable private User                modelCurrentUser;
-	private           String              currentChatName;
+	private           ChatAdapter mentorChatAdapter;
+	@Nullable private User        modelCurrentUser;
+	private           String      currentChatName;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 		onClickSendMessage();
 		onClickChatButtons();
 		this.configureRecyclerView(CHAT_NAME_ANDROID);
-
+		
 		this.getCurrentUserFromFirestore();
 	}
 	

@@ -46,7 +46,7 @@ public class RestaurantsListViewFragment extends Fragment {
 	public View onCreateView(@NonNull LayoutInflater inflater,
 	                         ViewGroup container,
 	                         Bundle savedInstanceState) {
-
+		
 		remy.pouzet.go4lunch.databinding.FragmentRestaurantsListViewBinding localFragmentRestaurantsListViewBinding = FragmentRestaurantsListViewBinding.inflate(getLayoutInflater());
 		mRestaurantsReyclerView = localFragmentRestaurantsListViewBinding.fragmentRestaurantsRecyclerView;
 		View rootView = localFragmentRestaurantsListViewBinding.getRoot();

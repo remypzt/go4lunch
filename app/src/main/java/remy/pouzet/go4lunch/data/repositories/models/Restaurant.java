@@ -22,20 +22,20 @@ public class Restaurant implements Serializable {
 	private double mEvaluation;
 	
 	public Restaurant(String placeID,
-                      String urlImage,
-                      String name,
-                      String adress,
-                      String horair,
-                      String distance,
-                      int workmates,
-                      double evaluation,
-                      String phoneNumber,
-                      String webSite,
-                      double lat,
-                      double lon) {
-		mplaceID = placeID;
-		mUrlImage = urlImage;
-		mName     = name;
+	                  String urlImage,
+	                  String name,
+	                  String adress,
+	                  String horair,
+	                  String distance,
+	                  int workmates,
+	                  double evaluation,
+	                  String phoneNumber,
+	                  String webSite,
+	                  double lat,
+	                  double lon) {
+		mplaceID              = placeID;
+		mUrlImage             = urlImage;
+		mName                 = name;
 		mAdress               = adress;
 		mHorair               = horair;
 		mDistance             = distance;
@@ -67,7 +67,6 @@ public class Restaurant implements Serializable {
 	public String getMphoneNumber() {
 		return mphoneNumber;
 	}
-
 	
 	public void setMphoneNumber(String parameterMphoneNumber) {
 		mphoneNumber = parameterMphoneNumber;

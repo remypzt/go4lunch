@@ -125,16 +125,14 @@ public class MapViewFragment extends Fragment {
 	public void onRequestPermissionsResult(int requestCode,
 	                                       String[] permissions,
 	                                       int[] grantResults) {
-		switch (requestCode) {
-			case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
-				// If request is cancelled, the result arrays are empty.
-				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					
-					// permission was granted, proceed to the normal flow.
-					locationPermissionGranted = true;
-					updateLocationUI();
-					getLocationAndCheckPermission();
-				}
+		if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {// If request is cancelled, the result arrays are empty.
+			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+				
+				// permission was granted, proceed to the normal flow.
+				locationPermissionGranted = true;
+				updateLocationUI();
+				getLocationAndCheckPermission();
+			}
 		}
 	}
 	
@@ -191,22 +189,6 @@ public class MapViewFragment extends Fragment {
 		}
 	}
 	
-	private void updateLocationUI() {
-		if (mMap == null) {
-			return;
-		}
-		try {
-			if (locationPermissionGranted) {
-				mMap.setMyLocationEnabled(true);
-			} else {
-				mMap.setMyLocationEnabled(false);
-			}
-		}
-		catch (SecurityException e) {
-			Log.e("Exception: %s", e.getMessage());
-		}
-	}
-	
 	public void getInterrestedWorkmatesFromFirebase(Restaurant restaurant) {
 		
 		UserHelper
@@ -218,28 +200,6 @@ public class MapViewFragment extends Fragment {
 						manageMarker(restaurant, parameterQueryDocumentSnapshots.size());
 					}
 				});
-	}
-	
-	@SuppressLint("MissingPermission")
-	public void getLocationAndCheckPermission() {
-		
-		LocationRequest locationRequest = LocationRequest
-				.create()
-				.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-				.setSmallestDisplacement(50)
-				.setInterval(20 * 1000);
-		getLocationPermission();
-		mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-	}
-	
-	private void getLocationPermission() {
-		
-		if (ContextCompat.checkSelfPermission(this.requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-			locationPermissionGranted = true;
-			
-		} else {
-			ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-		}
 	}
 	
 	public void manageMarker(Restaurant restaurant,
@@ -270,6 +230,44 @@ public class MapViewFragment extends Fragment {
 			Restaurant localRestaurant = (Restaurant) parameterMarker.getTag();
 			RestaurantDetailsActivity.startActivity(getActivity(), localRestaurant);
 		});
+	}
+	
+	private void updateLocationUI() {
+		if (mMap == null) {
+			return;
+		}
+		try {
+			if (locationPermissionGranted) {
+				mMap.setMyLocationEnabled(true);
+			} else {
+				mMap.setMyLocationEnabled(false);
+			}
+		}
+		catch (SecurityException e) {
+			Log.e("Exception: %s", e.getMessage());
+		}
+	}
+	
+	@SuppressLint("MissingPermission")
+	public void getLocationAndCheckPermission() {
+		
+		LocationRequest locationRequest = LocationRequest
+				.create()
+				.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+				.setSmallestDisplacement(50)
+				.setInterval(20 * 1000);
+		getLocationPermission();
+		mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+	}
+	
+	private void getLocationPermission() {
+		
+		if (ContextCompat.checkSelfPermission(this.requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+			locationPermissionGranted = true;
+			
+		} else {
+			ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+		}
 	}
 }
 

@@ -93,6 +93,5 @@ public class WorkmatesFragment extends Fragment implements WorkmatesAdapter.List
 	
 	@Override
 	public void onDataChanged() {
-	
 	}
 }

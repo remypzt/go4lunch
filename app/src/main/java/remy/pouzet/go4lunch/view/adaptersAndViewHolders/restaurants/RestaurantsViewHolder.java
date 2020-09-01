@@ -92,20 +92,6 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 		
 	}
 	
-	public void manageWorkmatesNumber(Restaurant restaurant) {
-		UserHelper
-				.getInterestedUsers("user", restaurant.getMplaceID())
-				.get()
-				.addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-					@Override
-					public void onSuccess(QuerySnapshot parameterQueryDocumentSnapshots) {
-						if (parameterQueryDocumentSnapshots != null) {
-							mWorkmatesInterrested.setText(String.valueOf(parameterQueryDocumentSnapshots.size()));
-						}
-					}
-				});
-	}
-	
 	public Drawable getRatingScorePicture(Restaurant restaurants) {
 		mRatingScoreDouble = restaurants.getEvaluation();
 		Resources resources = itemView.getResources();
@@ -120,6 +106,20 @@ class RestaurantsViewHolder extends RecyclerView.ViewHolder {
 			mEvaluationScore = ResourcesCompat.getDrawable(resources, R.drawable.invisible, null);
 		}
 		return mEvaluationScore;
+	}
+	
+	public void manageWorkmatesNumber(Restaurant restaurant) {
+		UserHelper
+				.getInterestedUsers("user", restaurant.getMplaceID())
+				.get()
+				.addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+					@Override
+					public void onSuccess(QuerySnapshot parameterQueryDocumentSnapshots) {
+						if (parameterQueryDocumentSnapshots != null) {
+							mWorkmatesInterrested.setText(String.valueOf(parameterQueryDocumentSnapshots.size()));
+						}
+					}
+				});
 	}
 	
 }

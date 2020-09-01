@@ -45,15 +45,14 @@ import remy.pouzet.go4lunch.viewmodel.SettingsViewModel;
 // ------------------Navigation & UI------------------- //
 
 public class SettingsFragment extends Fragment {
+	private static final int                     SIGN_OUT_TASK    = 10;
+	private static final int                     DELETE_USER_TASK = 20;
 	//------------------------------------------------------//
 // ------------------   Variables   ------------------- //
 //------------------------------------------------------//
-	private SettingsViewModel       mSettingsViewModel;
-	private FragmentSettingsBinding binding;
-	private ActivityMainBinding     mMainBinding;
-	
-	private static final int SIGN_OUT_TASK    = 10;
-	private static final int DELETE_USER_TASK = 20;
+	private              SettingsViewModel       mSettingsViewModel;
+	private              FragmentSettingsBinding binding;
+	private              ActivityMainBinding     mMainBinding;
 
 //------------------------------------------------------//
 // ------------------   LifeCycle   ------------------- //
@@ -104,66 +103,6 @@ public class SettingsFragment extends Fragment {
 		});
 	}
 	
-	private void updateUsernameInFirebase() {
-		binding.settingsFragmentButtonUpdate.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				EditText usernameEdit = binding.settingsFragmentEditTextUsername;
-				String username = usernameEdit
-						.getText()
-						.toString();
-				FirebaseUser user = FirebaseAuth
-						.getInstance()
-						.getCurrentUser();
-				
-				if (user != null) {
-					if (!username.isEmpty() && !username.equals(getString(R.string.info_no_username_found))) {
-						UserHelper
-								.updateUsername(username, user.getUid())
-								.addOnFailureListener(onFailureListener())
-								.addOnSuccessListener(new OnSuccessListener<Void>() {
-									@Override
-									public void onSuccess(Void parameterVoid) {
-										FirebaseUser user = FirebaseAuth
-												.getInstance()
-												.getCurrentUser();
-										
-										UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-												.setDisplayName(username)
-												.build();
-										
-										user
-												.updateProfile(profileUpdates)
-												.addOnCompleteListener(new OnCompleteListener<Void>() {
-													@Override
-													public void onComplete(@NonNull Task<Void> task) {
-														if (task.isSuccessful()) {
-															Toast
-																	.makeText(requireContext(), "username is update", Toast.LENGTH_LONG)
-																	.show();
-														}
-													}
-												});
-									}
-								});
-					}
-				}
-			}
-		});
-		
-	}
-	
-	protected OnFailureListener onFailureListener() {
-		return new OnFailureListener() {
-			@Override
-			public void onFailure(@NonNull Exception e) {
-				Toast
-						.makeText(requireContext(), getString(R.string.error_unknown_error), Toast.LENGTH_LONG)
-						.show();
-			}
-		};
-	}
-	
 	private void deleteUserFromFirebase() {
 		FirebaseUser user = FirebaseAuth
 				.getInstance()
@@ -181,12 +120,8 @@ public class SettingsFragment extends Fragment {
 		
 		Intent intent = new Intent(requireContext(), MainActivity.class);
 		startActivity(intent);
-	
+		
 	}
-	
-	//------------------------------------------------------//
-	// ------------------Navigation & UI------------------- //
-	//------------------------------------------------------//
 	
 	public void updateUIWhenCreating() {
 		//Get picture URL from Firebase
@@ -239,16 +174,16 @@ public class SettingsFragment extends Fragment {
 				});
 	}
 	
-	//------------------------------------------------------//
-	// 9-----------------      Data     ------------------- //
-	//------------------------------------------------------//
-	
 	@Nullable
 	protected FirebaseUser getCurrentUser() {
 		return FirebaseAuth
 				.getInstance()
 				.getCurrentUser();
 	}
+	
+	//------------------------------------------------------//
+	// ------------------Navigation & UI------------------- //
+	//------------------------------------------------------//
 	
 	public void seekBarManagement() {
 		binding.seekBar2.setMax(5000);
@@ -277,6 +212,70 @@ public class SettingsFragment extends Fragment {
 				
 			}
 		});
+	}
+	
+	//------------------------------------------------------//
+	// 9-----------------      Data     ------------------- //
+	//------------------------------------------------------//
+	
+	protected OnFailureListener onFailureListener() {
+		return new OnFailureListener() {
+			@Override
+			public void onFailure(@NonNull Exception e) {
+				Toast
+						.makeText(requireContext(), getString(R.string.error_unknown_error), Toast.LENGTH_LONG)
+						.show();
+			}
+		};
+	}
+	
+	private void updateUsernameInFirebase() {
+		binding.settingsFragmentButtonUpdate.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				EditText usernameEdit = binding.settingsFragmentEditTextUsername;
+				String username = usernameEdit
+						.getText()
+						.toString();
+				FirebaseUser user = FirebaseAuth
+						.getInstance()
+						.getCurrentUser();
+				
+				if (user != null) {
+					if (!username.isEmpty() && !username.equals(getString(R.string.info_no_username_found))) {
+						UserHelper
+								.updateUsername(username, user.getUid())
+								.addOnFailureListener(onFailureListener())
+								.addOnSuccessListener(new OnSuccessListener<Void>() {
+									@Override
+									public void onSuccess(Void parameterVoid) {
+										FirebaseUser user = FirebaseAuth
+												.getInstance()
+												.getCurrentUser();
+										
+										UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+												.setDisplayName(username)
+												.build();
+										
+										user
+												.updateProfile(profileUpdates)
+												.addOnCompleteListener(new OnCompleteListener<Void>() {
+													@Override
+													public void onComplete(@NonNull Task<Void> task) {
+														if (task.isSuccessful()) {
+															Toast
+																	.makeText(requireContext(), "username is update", Toast.LENGTH_LONG)
+																	.show();
+														}
+													}
+												});
+									}
+								});
+					}
+				}
+			}
+		});
+		
 	}
 }
 

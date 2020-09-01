@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
 	private              StringBuilder       mResult;
 	private              double              latitude, longitude;
 	
-
 	//------------------------------------------------------//
 	// ------------------   LifeCycle   ------------------- //
 	//------------------------------------------------------//
@@ -119,20 +118,14 @@ public class MainActivity extends AppCompatActivity {
 	}
 	
 	@Override
-	protected void onResume() {
-		super.onResume();
-		updateWithUserStatus();
+	public boolean onSupportNavigateUp() {
+		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+		return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
 	}
 	
 	//------------------------------------------------------//
 	// ------------------   Functions   ------------------- //
 	//------------------------------------------------------//
-	
-	@Override
-	public boolean onSupportNavigateUp() {
-		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-		return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
-	}
 	
 	public void getTokenFCM() {
 		FirebaseInstanceId
@@ -155,10 +148,6 @@ public class MainActivity extends AppCompatActivity {
 				});
 	}
 	
-	//------------------------------------------------------//
-	// ------------------Navigation & UI------------------- //
-	//------------------------------------------------------//
-	
 	public void navigationDrawerNavigationInitialize() {
 		
 		//Navigation drawer menu
@@ -169,6 +158,10 @@ public class MainActivity extends AppCompatActivity {
 		NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 		NavigationUI.setupWithNavController(mActivityMainBinding.navView, navController);
 	}
+	
+	//------------------------------------------------------//
+	// ------------------Navigation & UI------------------- //
+	//------------------------------------------------------//
 	
 	public void bottomNavigationInitialize() {
 		//Bottom navigation menu
@@ -358,10 +351,12 @@ public class MainActivity extends AppCompatActivity {
 		
 		return false;
 	}
-	public double getDouble(final SharedPreferences prefs,
-	                        final String key,
-	                        final double defaultValue) {
-		return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
+	
+	@Nullable
+	protected FirebaseUser getCurrentUser() {
+		return FirebaseAuth
+				.getInstance()
+				.getCurrentUser();
 	}
 	
 	public void updateUIWhenCreating() {
@@ -433,17 +428,6 @@ public class MainActivity extends AppCompatActivity {
 				.addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
 	}
 	
-	@Nullable
-	protected FirebaseUser getCurrentUser() {
-		return FirebaseAuth
-				.getInstance()
-				.getCurrentUser();
-	}
-	
-	//------------------------------------------------------//
-	// 9-----------------      Data     ------------------- //
-	//------------------------------------------------------//
-	
 	private void intentDetailsRestaurant(String placeID) {
 		RestaurantsRepository.getInstance().mRestaurantsApiInterfaceService
 				.getResponseOfPlaceDetailsRestaurants(placeID, BuildConfig.apiKey)
@@ -488,9 +472,15 @@ public class MainActivity extends AppCompatActivity {
 				});
 	}
 	
-	// --------------------
-	// ERROR HANDLER
-	// --------------------
+	public double getDouble(final SharedPreferences prefs,
+	                        final String key,
+	                        final double defaultValue) {
+		return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
+	}
+	
+	//------------------------------------------------------//
+	// 9-----------------      Data     ------------------- //
+	//------------------------------------------------------//
 	
 	//TODO could be share with SettingsFragment
 	// Create OnCompleteListener called after tasks ended
@@ -508,6 +498,16 @@ public class MainActivity extends AppCompatActivity {
 					break;
 			}
 		};
+	}
+	
+	// --------------------
+	// ERROR HANDLER
+	// --------------------
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		updateWithUserStatus();
 	}
 	
 	protected OnFailureListener onFailureListener() {

@@ -106,7 +106,6 @@ public class NotificationsService extends FirebaseMessagingService {
 												}
 												messagePart2 = "Retrouvez y " + totalWorkmates;
 											}
-
 											
 											String messagePart1 = "Bonjour " + username + ", vous avez sélectionné " + restaurantName + " comme restaurant pour ce midi.";
 											message = messagePart1;
@@ -134,7 +133,6 @@ public class NotificationsService extends FirebaseMessagingService {
 		// 1 - Create an Intent that will be shown when user will click on the Notification
 		Intent        intent        = new Intent(this, MainActivity.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-
 		
 		// 3 - Create a Channel (Android 8)
 		String channelId = getString(R.string.default_notification_channel_id);
