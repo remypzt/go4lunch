@@ -391,6 +391,7 @@ public class MainActivity extends AppCompatActivity {
 		               : this
 				               .getCurrentUser()
 				               .getEmail();
+		
 		String username = TextUtils.isEmpty(this
 				                                    .getCurrentUser()
 				                                    .getDisplayName())
@@ -403,6 +404,7 @@ public class MainActivity extends AppCompatActivity {
 		header.profileActivityEditTextUsername.setText(username);
 		header.profileActivityTextViewEmail.setText(email);
 		
+		//BUG
 		// 7 - Get additional data from Firestore (Username)
 		UserHelper
 				.getUser(this

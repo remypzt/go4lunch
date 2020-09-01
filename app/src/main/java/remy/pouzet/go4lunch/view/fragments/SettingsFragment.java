@@ -19,10 +19,13 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import remy.pouzet.go4lunch.R;
@@ -121,12 +124,29 @@ public class SettingsFragment extends Fragment {
 								.addOnSuccessListener(new OnSuccessListener<Void>() {
 									@Override
 									public void onSuccess(Void parameterVoid) {
-										Toast
-												.makeText(requireContext(), "username is update", Toast.LENGTH_LONG)
-												.show();
+										FirebaseUser user = FirebaseAuth
+												.getInstance()
+												.getCurrentUser();
+										
+										UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+												.setDisplayName(username)
+												.build();
+										
+										user
+												.updateProfile(profileUpdates)
+												.addOnCompleteListener(new OnCompleteListener<Void>() {
+													@Override
+													public void onComplete(@NonNull Task<Void> task) {
+														if (task.isSuccessful()) {
+															Toast
+																	.makeText(requireContext(), "username is update", Toast.LENGTH_LONG)
+																	.show();
+														}
+													}
+												});
+										
 									}
 								});
-						
 					}
 				}
 			}
