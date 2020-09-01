@@ -42,58 +42,88 @@ public class NotificationsService extends FirebaseMessagingService {
 					.getUid();
 			if (remoteMessage.getNotification() != null) {
 				getDatasFromFireBase(uid);
-
-//				String message = remoteMessage
-//						.getNotification()
-//						.getBody();
-
-//				this.sendVisualNotification("test");
 			}
 		}
 	}
 	
 	private void getDatasFromFireBase(String uid) {
-		
 		UserHelper
 				.getUser(uid)
 				.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 					@Override
 					public void onSuccess(DocumentSnapshot documentSnapshot) {
 						User currentUser = documentSnapshot.toObject(User.class);
-						String username = TextUtils.isEmpty(currentUser.getUsername())
-						                  ? getString(R.string.info_no_username_found)
-						                  : currentUser.getUsername();
-						
-						String restaurantName = TextUtils.isEmpty(currentUser.getUsername())
-						                        ? getString(R.string.info_no_username_found)
-						                        : currentUser.getNameRestaurant();
 						
 						String placeID = TextUtils.isEmpty(currentUser.getUsername())
 						                 ? getString(R.string.info_no_username_found)
 						                 : currentUser.getPlaceID();
 						
+						String username = TextUtils.isEmpty(currentUser.getUsername())
+						                  ? getString(R.string.info_no_username_found)
+						                  : currentUser.getUsername();
+						
+						String restaurantName = TextUtils.isEmpty(currentUser.getUsername())
+						                        ? null
+						                        : currentUser.getNameRestaurant();
+						
 						String restaurantAdress = TextUtils.isEmpty(currentUser.getUsername())
 						                          ? getString(R.string.info_no_username_found)
 						                          : currentUser.getAdressRestaurant();
 						
-						UserHelper
-								.getInterestedUsers("user", placeID)
-								.get()
-								.addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-									@Override
-									public void onSuccess(QuerySnapshot parameterQueryDocumentSnapshots) {
-//								DocumentSnapshot doc =
-//								parameterQueryDocumentSnapshots.getDocuments().get(0).get().
-
-//								String message = "Bonjour" + username + ", vous avez sélectionné " + restaurantName + "comme restaurant pour ce midi. Retrouvez y " + workmatesNames + " à " + restaurantAdress;
+						if (restaurantName != null) {
+							UserHelper
+									.getInterestedUsers("user", placeID)
+									.get()
+									.addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+										@Override
+										public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+											String        message;
+											String        messagePart2   = null;
+											StringBuilder totalWorkmates = new StringBuilder();
+											if (queryDocumentSnapshots
+													    .getDocuments()
+													    .size() > 0) {
+												for (int i = 0;
+												     i <= queryDocumentSnapshots
+														          .getDocuments()
+														          .size() - 1;
+												     i++) {
+													DocumentSnapshot doc = queryDocumentSnapshots
+															.getDocuments()
+															.get(i);
+													User user = doc.toObject(User.class);
+//											if (!user.getUsername().equals(username)){
+													if (i == queryDocumentSnapshots
+															         .getDocuments()
+															         .size() - 1) {
+														totalWorkmates.append("et " + user.getUsername() + ".");
+													} else {
+														totalWorkmates.append(user.getUsername() + ", ");
+													}
+//											}
+												}
+												messagePart2 = "Retrouvez y " + totalWorkmates;
+											}
 //
-//								sendVisualNotification(message);
-									}
-								});
+											
+											String messagePart1 = "Bonjour " + username + ", vous avez sélectionné " + restaurantName + " comme restaurant pour ce midi.";
+											message = messagePart1;
+											if (messagePart2 != null) {
+												message = messagePart1 + messagePart2;
+												if (restaurantAdress != null) {
+													String messagePart3 = " à " + restaurantAdress;
+													message = messagePart1 + messagePart2 + messagePart3;
+												}
+											}
+											sendVisualNotification(message);
+										}
+									});
+						} else {
+							String message = "Vous n'avez pas sélectionné de restaurant où manger pour ce midi";
+							sendVisualNotification(message);
+						}
 						
-						String workmatesNames = String.valueOf(UserHelper.getInterestedUsers("user", placeID));
-
-//
+	
 //						List<String> datasFromFireBaseList = new ArrayList<>();
 //						datasFromFireBaseList.add(username);
 //						datasFromFireBaseList.add(restaurantName);
@@ -110,11 +140,10 @@ public class NotificationsService extends FirebaseMessagingService {
 		// 1 - Create an Intent that will be shown when user will click on the Notification
 		Intent        intent        = new Intent(this, MainActivity.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-		
-		// 2 - Create a Style for the Notification
-		NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-		inboxStyle.setBigContentTitle(getString(R.string.notification_title));
-		inboxStyle.addLine(messageBody);
+
+//		// 2 - Create a Style for the Notification
+//		NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+//		inboxStyle.addLine(messageBody);
 		
 		// 3 - Create a Channel (Android 8)
 		String channelId = getString(R.string.default_notification_channel_id);
@@ -123,11 +152,10 @@ public class NotificationsService extends FirebaseMessagingService {
 		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId)
 				.setSmallIcon(R.drawable.go4)
 				.setContentTitle(getString(R.string.app_name))
-				.setContentText(getString(R.string.notification_title))
 				.setAutoCancel(true)
 				.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
 				.setContentIntent(pendingIntent)
-				.setStyle(inboxStyle);
+				.setStyle(new NotificationCompat.BigTextStyle().bigText(messageBody));
 		
 		// 5 - Add the Notification to the Notification Manager and show it.
 		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
