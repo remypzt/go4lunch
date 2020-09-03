@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
 	private static final int                 SIGN_OUT_TASK      = 10;
 	private static final int                 DELETE_USER_TASK   = 20;
 	private static final String              TAG                = MainActivity.class.getSimpleName();
-	// Creating identifier to identify REST REQUEST (Update username)
 	private static final int                 UPDATE_USERNAME    = 30;
 	public               SharedPreferences   mPreferences;
 	public               User                currentUser;

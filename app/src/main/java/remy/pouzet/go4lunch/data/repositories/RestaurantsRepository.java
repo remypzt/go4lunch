@@ -60,9 +60,7 @@ public class RestaurantsRepository {
 					public void onResponse(Call<ResponseOfRestaurantsList> call,
 					                       Response<ResponseOfRestaurantsList> response) {
 						if (response.isSuccessful()) {
-							
 							getRestaurantsDetails(UtilsForRestaurantsList.generateRestaurantsFromRestaurantsList(response.body()), userLat, userLng);
-							
 						} else {
 							restaurants.setValue(null);
 						}
@@ -193,7 +191,6 @@ public class RestaurantsRepository {
 		} else {
 			distance = df3.format(locationOrigin.distanceTo(locationDestination)) + " m";
 		}
-		
 		return distance;
 	}
 	
