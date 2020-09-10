@@ -25,4 +25,5 @@ public class ExampleInstrumentedTest {
 				.getTargetContext();
 		assertEquals("remy.pouzet.go4lunch", appContext.getPackageName());
 	}
+	
 }
