@@ -13,6 +13,7 @@
         android:layout_height="200dp"
         android:contentDescription="picture_illustrating_the_restaurant"
         android:src="@drawable/flou"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

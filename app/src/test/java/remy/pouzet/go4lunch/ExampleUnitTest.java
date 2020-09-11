@@ -6,8 +6,10 @@ import org.junit.Test;
 
 import remy.pouzet.go4lunch.data.service.realAPI.POJOdetailsRestaurants.ResponseOfPlaceDetailsRestaurants;
 import remy.pouzet.go4lunch.data.service.realAPI.POJOdetailsRestaurants.Result;
+import remy.pouzet.go4lunch.view.activities.MainActivity;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -29,6 +31,15 @@ public class ExampleUnitTest {
 		TestCase.assertEquals("test", localResponseOfPlaceDetailsRestaurants
 				.getResult()
 				.getName());
+	}
+	
+	@Test
+	public void testGetDetailsRestaurantActivity() throws
+	                                               Exception {
+		MainActivity localMainActivity = mock(MainActivity.class);
+
+//		when(localMainActivity.currentUserBis).then(FirebaseAuth.getInstance());
+	
 	}
 
 //	@Test

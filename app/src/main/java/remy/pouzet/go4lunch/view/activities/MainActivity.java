@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 	private static final int                 UPDATE_USERNAME    = 30;
 	public               SharedPreferences   mPreferences;
 	public               User                currentUser;
+	public               FirebaseUser        currentUserBis;
 	public               String              firestorePlaceID;
 	private              ActivityMainBinding mActivityMainBinding;
 	private              AppBarMainBinding   mAppBarMainBinding;
@@ -101,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		mActivityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
 		setContentView(mActivityMainBinding.getRoot());
+		currentUserBis = null;
 		
 		Toolbar toolbar = mActivityMainBinding.mainToolbar.toolbar;
 		mSearchView = mActivityMainBinding.mainToolbar.placesAutocompleteSearchBarContainer;
@@ -227,7 +229,8 @@ public class MainActivity extends AppCompatActivity {
 	
 	private void updateWithUserStatus() {
 		// Binding header xml element with viewbinding
-		if (this.getCurrentUser() != null) {
+		currentUserBis = this.getCurrentUser();
+		if (currentUserBis != null) {
 			updateUIWhenCreating();
 		} else {
 			passByLoginActivity();
