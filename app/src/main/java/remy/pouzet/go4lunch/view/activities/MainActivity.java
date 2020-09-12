@@ -321,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
 						          .getQuery()
 						          .toString())
 				.build();
+		
 		placesClient
 				.findAutocompletePredictions(request)
 				.addOnSuccessListener(response -> {
@@ -350,7 +351,6 @@ public class MainActivity extends AppCompatActivity {
 								.show();
 					}
 				});
-		
 		return false;
 	}
 	
@@ -509,7 +509,10 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-//		updateWithUserStatus();
+		currentUserBis = this.getCurrentUser();
+		if (currentUserBis != null) {
+			updateUIWhenCreating();
+		}
 	}
 	
 	protected OnFailureListener onFailureListener() {
