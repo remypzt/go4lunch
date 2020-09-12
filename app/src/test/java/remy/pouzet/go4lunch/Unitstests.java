@@ -41,8 +41,7 @@ public class Unitstests {
 		RestaurantsRepository localRestaurantsRepository = new RestaurantsRepository();
 
 //		TestCase.assertTrue(localRestaurantsRepository.openingStatus());
-//
-//
+	
 	}
 	
 	@Test
