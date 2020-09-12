@@ -39,7 +39,7 @@ public class RestaurantsRepository {
 	private double                            latitude, longitude, destinationLat, destinationLng;
 	private float unformatedDistance;
 	
-	private RestaurantsRepository() {
+	public RestaurantsRepository() {
 		mRestaurantsApiInterfaceService = RetrofitService.cteateService(RestaurantsApiInterfaceService.class);
 		restaurants                     = new MutableLiveData<>();
 	}
@@ -205,11 +205,8 @@ public class RestaurantsRepository {
 								                                                                                                         .getResult()
 								                                                                                                         .getOpeningHours()
 								                                                                                                         .getOpenNow() != null) {
-			if (response
-					.body()
-					.getResult()
-					.getOpeningHours()
-					.getOpenNow()) {
+			
+			if (openingStatus(response)) {
 				status = "ouvert";
 			} else {
 				status = "fermé";
@@ -218,6 +215,14 @@ public class RestaurantsRepository {
 			status = "horaires indisponibles";
 		}
 		return status;
+	}
+	
+	public boolean openingStatus(Response<ResponseOfPlaceDetailsRestaurants> response) {
+		return response
+				.body()
+				.getResult()
+				.getOpeningHours()
+				.getOpenNow();
 	}
 	
 	public String getLocation() {

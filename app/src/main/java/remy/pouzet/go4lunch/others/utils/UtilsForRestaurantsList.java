@@ -25,7 +25,7 @@ public class UtilsForRestaurantsList {
 		return restauraurantsListRestaurants;
 	}
 	
-	private static Restaurant addArticleFromRestaurantsList(Result resultsItemOfRestaurantsList) {
+	public static Restaurant addArticleFromRestaurantsList(Result resultsItemOfRestaurantsList) {
 		return new Restaurant(resultsItemOfRestaurantsList.getPlaceId(), "multimediaUrl", "Name", "Adress", "Horair", "Distance", 1, 2, "phone number", "website", resultsItemOfRestaurantsList
 				.getGeometry()
 				.getLocation()

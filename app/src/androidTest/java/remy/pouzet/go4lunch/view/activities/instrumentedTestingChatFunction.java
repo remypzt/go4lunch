@@ -73,12 +73,7 @@ public class instrumentedTestingChatFunction {
 		appCompatButton4.perform(click());
 		Thread.sleep(1500);
 		
-		ViewInteraction textView = onView(allOf(
-//				withId(R.id.activity_chat_item_message_container_text_message_container_text_view),
-				withText(query)
-//				,
-//		                                        isDisplayed()
-		                                       ));
+		ViewInteraction textView = onView(allOf(withText(query)));
 		textView.check(matches(withText(query)));
 		
 	}
