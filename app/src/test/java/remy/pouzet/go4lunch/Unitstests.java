@@ -49,7 +49,7 @@ public class Unitstests {
 	public void testingDistance() {
 		RestaurantsRepository localRestaurantsRepository = new RestaurantsRepository();
 		String                test                       = localRestaurantsRepository.getDistance(37.3026313, -121.864222, 37.2586033, -121.845295);
-
+		TestCase.assertEquals("000 m", test);
 //		TestCase.assertEquals("5.2 km", test);
 	}
 	
